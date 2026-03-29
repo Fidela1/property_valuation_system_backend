@@ -6,8 +6,6 @@ import "dotenv/config";   // ← This line loads .env automatically
 import { PrismaClient } from '../generated/client';  // adjust path as needed
 import { PrismaPg } from '@prisma/adapter-pg';
 
-// Optional: Log to confirm it's loaded (remove later)
-console.log('Loaded DATABASE_URL:', process.env.DATABASE_URL ? 'Yes' : 'No – missing!');
 
 const globalForPrisma = global as unknown as { prisma?: PrismaClient };
 
@@ -27,12 +25,7 @@ if (globalForPrisma.prisma) {
     // No SSL needed for local Postgres usually
   });
 
-  prisma = new PrismaClient({
-    adapter,
-    log: process.env.NODE_ENV === 'development' 
-      ? ['query', 'info', 'warn', 'error'] 
-      : ['error'],
-  });
+  prisma = new PrismaClient({ adapter });
 
   if (process.env.NODE_ENV !== 'production') {
     globalForPrisma.prisma = prisma;
