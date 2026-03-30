@@ -1,19 +1,47 @@
-import express from 'express'
-import cors from 'cors'
-import "dotenv/config"; 
-import serverRoute from './routes/server.route'
-import { globalErrorHandler } from './middleware/err.middleware';
+// backend/src/server.ts
 
-const app = express()
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import authRoutes from './routes/auth.route';
+import { seedAdmin } from './utils/seedAdmin';
 
-app.use(cors());
+dotenv.config();
+
+const app = express();
+
+app.use(cors({
+  origin: "*",
+  credentials: true
+}));
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-const PORT = process.env.PORT || 3030;
+// Routes
+app.use('/api/auth', authRoutes);
 
-app.use("/api/v1", serverRoute)
-app.use(globalErrorHandler);
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    message: 'Property Valuation API is running 🚀' 
+  });
+});
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+// Seed admin on server start
+const startServer = async () => {
+  try {
+    await seedAdmin();
+
+    const PORT = process.env.PORT || 3030;
+    app.listen(PORT, () => {
+      console.log(` Server running on http://localhost:${PORT}`);
+    });
+
+  } catch (error) {
+    console.error(" Failed to start server:", error);
+  }
+};
+
+startServer();

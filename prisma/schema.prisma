@@ -13,8 +13,10 @@ datasource db {
 }
 
 enum Role {
-  USER
-  AGENT
+  BUYER 
+  OWNER
+  SUPERVISOR
+  DATA_COLLECTOR 
   ADMIN
 }
 
@@ -23,7 +25,7 @@ enum Role {
   name       String?
   email      String     @unique
   phone      String?    @unique
-  role       Role       @default(USER)
+  role       Role       @default(BUYER)
   password   String
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
