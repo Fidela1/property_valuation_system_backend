@@ -12,23 +12,148 @@ datasource db {
   provider = "postgresql"
 }
 
+
 enum Role {
-  BUYER 
+  BUYER
   OWNER
   SUPERVISOR
-  DATA_COLLECTOR 
+  DATA_COLLECTOR
   ADMIN
 }
 
-  model User {
-  id         String     @id @default(uuid())
-  name       String?
-  email      String     @unique
-  phone      String?    @unique
-  role       Role       @default(BUYER)
-  password   String
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
 
+enum PropertyStatus {
+  ACTIVE
+  PENDING
+  SOLD
+  RENTED
+  ARCHIVED
+}
+
+// ============================================
+// MODELS
+// ============================================
+
+model User {
+  id         String   @id @default(uuid())
+  name       String?
+  email      String   @unique
+  phone      String?  @unique
+  role       Role     @default(BUYER)
+  password   String
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  properties       Property[]       @relation("OwnerProperties")
+  sellerRequest    SellerRequest?
+  auditLogs        AuditLog[]
+
+  @@map("users")
+}
+
+model Property {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  price       Float
+  province    String
+  district    String
+  sector      String?
+  cell        String?
+  village     String?
+  street      String?
+
+  fullAddress String?
+  latitude    Float?
+  longitude   Float?
+  
+  bedrooms    Int?
+  bathrooms   Float?
+  squareFeet  Int?
+  propertyType String?
+  
+  status      PropertyStatus @default(ACTIVE)
+  ownerId     String
+  owner       User         @relation("OwnerProperties", fields: [ownerId], references: [id])
+  images      PropertyImage[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("properties")
+}
+
+model PropertyImage {
+  id          String   @id @default(uuid())
+  propertyId  String
+  property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  
+  url         String
+  publicId    String?
+  altText     String?
+  caption     String?
+  order       Int      @default(0)
+  isFeatured  Boolean  @default(false)
+  
+  fileSize    Int?
+  mimeType    String?
+  width       Int?
+  height      Int?
+  
+  uploadedBy  String
+  uploadedAt  DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([propertyId])
+  @@index([order])
+  @@index([isFeatured])
+  @@map("property_images")
+}
+
+model SellerRequest {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id])
+  
+  reason          String
+  propertyAddress String?
+  agreeToTerms    Boolean @default(false)
+  
+  status          ApplicationStatus @default(PENDING)
+  
+  reviewedBy      String?
+  reviewedAt      DateTime?
+  rejectionReason String?
+  
+  autoApproved    Boolean @default(false)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("seller_requests")
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  
+  action     String
+  entityType String
+  entityId   String?
+  details    Json?
+  ipAddress  String?
+  
+  createdAt  DateTime @default(now())
+  
+  @@index([userId])
+  @@index([action])
+  @@map("audit_logs")
+}

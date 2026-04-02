@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { AppError } from '../utils/AppError';
+
 
 export const globalErrorHandler = (
   err: any,
@@ -26,7 +26,6 @@ export const globalErrorHandler = (
     return;
   }
 
-  // Unexpected crash 
   console.error('[UNHANDLED ERROR]', err);
   res.status(500).json({
     success: false,

@@ -8,12 +8,11 @@ import { generateToken } from '../utils/token';
         const {name, email, phone, password} = req.body;
         
     const user = await authService.createUser(name, email, phone, password);
-    const token = generateToken(user.id, user.email, user.role);
 
     return res.status(201).json({
         success: true,
         message: "User created successfully",
-        data: {user, token}
+        data: {user}
         })
     } catch (err) {
       next(err)
@@ -32,11 +31,12 @@ export const login = async (req: Request, res: Response) => {
     }
 
     const user = await authService.userLogin(email, password);
-
+    const token = generateToken(user.id, user.email, user.role);
     return res.status(200).json({
       success: true,
       message: "Login successful",
       data: {
+        token,
         user: {
           id: user.id,
           name: user.name,
@@ -44,8 +44,7 @@ export const login = async (req: Request, res: Response) => {
           phone: user.phone,
           role: user.role
         },
-        
-        note: "Use the token you received during registration"
+
       }
     });
 
