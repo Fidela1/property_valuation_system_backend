@@ -18,3 +18,23 @@ export const Role = {
 } as const
 
 export type Role = (typeof Role)[keyof typeof Role]
+
+
+export const ApplicationStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type ApplicationStatus = (typeof ApplicationStatus)[keyof typeof ApplicationStatus]
+
+
+export const PropertyStatus = {
+  ACTIVE: 'ACTIVE',
+  PENDING: 'PENDING',
+  SOLD: 'SOLD',
+  RENTED: 'RENTED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type PropertyStatus = (typeof PropertyStatus)[keyof typeof PropertyStatus]

@@ -44,3 +44,23 @@ export { Prisma }
  * 
  */
 export type User = Prisma.UserModel
+/**
+ * Model Property
+ * 
+ */
+export type Property = Prisma.PropertyModel
+/**
+ * Model PropertyImage
+ * 
+ */
+export type PropertyImage = Prisma.PropertyImageModel
+/**
+ * Model SellerRequest
+ * 
+ */
+export type SellerRequest = Prisma.SellerRequestModel
+/**
+ * Model AuditLog
+ * 
+ */
+export type AuditLog = Prisma.AuditLogModel

@@ -33,7 +33,7 @@ export const userLogin = async (email: string, password: string) => {
   });
   
   if (!user) {
-    throw new Error("Invalid email or password");
+    throw new Error("User doesn't exist");
   }
 
   const isPasswordValid = await comparePassword(password, user.password);

@@ -1,9 +1,6 @@
-// src/config/prisma.ts
-// ────────────────────────────────────────────────
-// Load .env FIRST – before anything else uses process.env
-import "dotenv/config";   // ← This line loads .env automatically
+import "dotenv/config";   
 
-import { PrismaClient } from '../generated/client';  // adjust path as needed
+import { PrismaClient } from '../generated/client'; 
 import { PrismaPg } from '@prisma/adapter-pg';
 
 
@@ -22,7 +19,7 @@ if (globalForPrisma.prisma) {
 
   const adapter = new PrismaPg({
     connectionString,
-    // No SSL needed for local Postgres usually
+    
   });
 
   prisma = new PrismaClient({ adapter });
