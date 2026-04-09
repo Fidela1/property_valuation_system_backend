@@ -1,5 +1,8 @@
 import { Request, Response } from 'express';
-import { postProperty, getPropertiesByLocation } from '../services/property.service';
+import { postPropertyService, 
+         getAllPropertiesService,
+        getPropertiesByUserIdService,
+        deletePropertyByIdService} from '../services/property.service';
 
 export async function createPropertyListing(req: Request, res: Response) {
   try {
@@ -72,7 +75,7 @@ export async function createPropertyListing(req: Request, res: Response) {
       });
     }
 
-    const result = await postProperty(
+    const result = await postPropertyService(
       userId,
       {
         title: title.trim(),
@@ -130,30 +133,104 @@ export async function createPropertyListing(req: Request, res: Response) {
   }
 }
 
-export async function getProperties(req: Request, res: Response) {
+// src/controllers/property.controller.ts
+
+export async function getAllProperties(req: Request, res: Response) {
   try {
-    const { province, district, sector, minPrice, maxPrice, page, limit } = req.query;
+    // ✅ Get query parameters
+    const { page, limit, province, district, minPrice, maxPrice } = req.query;
     
-    const result = await getPropertiesByLocation({
-      province: province as string,
-      district: district as string,
-      sector: sector as string,
-      minPrice: minPrice ? Number(minPrice) : undefined,
-      maxPrice: maxPrice ? Number(maxPrice) : undefined,
-      page: page ? Number(page) : 1,
-      limit: limit ? Number(limit) : 10
-    });
+    // ✅ Validate pagination parameters
+    const pageNum = Math.max(1, page ? Number(page) : 1);  // Minimum 1
+    const limitNum = Math.min(100, Math.max(1, limit ? Number(limit) : 10)); // Between 1-100
     
-    res.json({
+    // ✅ Validate price filters
+    const minPriceNum = minPrice ? Number(minPrice) : undefined;
+    const maxPriceNum = maxPrice ? Number(maxPrice) : undefined;
+    
+    if ((minPriceNum && isNaN(minPriceNum)) || (maxPriceNum && isNaN(maxPriceNum))) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid price filter. Price must be a number.'
+      });
+    }
+    
+    // ✅ Build filters object
+    const filters = {
+      page: pageNum,
+      limit: limitNum,
+      province: province as string || undefined,
+      district: district as string || undefined,
+      minPrice: minPriceNum,
+      maxPrice: maxPriceNum
+    };
+    
+    // ✅ Call service
+    const result = await getAllPropertiesService(filters);
+    
+    // ✅ Always return success (even if empty)
+    res.status(200).json({
       success: true,
-      data: result
+      data: result.properties,
+      pagination: result.pagination
     });
     
-  } catch (error: any) {
-    console.error('Get properties error:', error);
+  } catch (error) {
+    console.error('Get all properties error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to fetch properties'
     });
   }
+}
+
+export async function getMyProperty(req: Request, res: Response){
+  try{
+    const userId = req.user?.id;
+
+    if(!userId){
+      return res.status(401).json({ error: "Unauthorized"})
+    }
+    const result = await getPropertiesByUserIdService(userId);
+
+    res.status(200).json({
+      success: true,
+      result,
+    })
+  }
+  catch(error){
+    console.error('Get my properties error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch your properties'
+    });
+  }
+}
+
+export async function deletePropertyById(req: Request, res: Response){
+  try{
+    const userId = req.user?.id;
+    const propertyId = req.params.id as string;
+    if(!userId){
+      return res.status(401).json({ error: "Unauthorized"})
+    }
+    if(!propertyId){
+      return res.status(401).json({error: "Property ID is required"})
+    }
+    
+    const result = await deletePropertyByIdService(propertyId, userId);
+
+    res.status(200).json({
+      success: true,
+      message: 'Property deleted successfully'
+
+    })
+
+  } catch(error){
+    
+   res.status(401).json({
+      success: false,
+      message: 'Failed to delete property'
+    })
+}
 }
