@@ -21,7 +21,7 @@ export interface CreatePropertyInput {
   images?: any[];
 }
 
-export async function createProperty(userId: string, data: CreatePropertyInput) {
+export async function createPropertyService(userId: string, data: CreatePropertyInput) {
   
   const fullAddress = buildRwandaAddress({
     street: data.street,
@@ -32,7 +32,7 @@ export async function createProperty(userId: string, data: CreatePropertyInput) 
     province: data.province
   });
   
-  console.log('🏠 Creating property at:', fullAddress);
+  console.log('Creating property at:', fullAddress);
   
   const coordinates = await geocodeRwandaAddress({
     district: data.district,
@@ -87,7 +87,7 @@ export async function createProperty(userId: string, data: CreatePropertyInput) 
   return property;
 }
 
-export async function postProperty(userId: string, data: CreatePropertyInput, ipAddress?: string) {
+export async function postPropertyService(userId: string, data: CreatePropertyInput, ipAddress?: string) {
   
   const user = await prisma.user.findUnique({
     where: { id: userId }
@@ -108,7 +108,7 @@ export async function postProperty(userId: string, data: CreatePropertyInput, ip
     console.log(` User ${userId} upgraded from ${user.role} to OWNER`);
   }
 
-  const property = await createProperty(userId, data);
+  const property = await createPropertyService(userId, data);
 
   await prisma.auditLog.create({
     data: {
@@ -135,26 +135,35 @@ export async function postProperty(userId: string, data: CreatePropertyInput, ip
   };
 }
 
-// Get properties by location (filter by province/district)
-export async function getPropertiesByLocation(filters: {
+// src/services/property.service.ts
+
+// ✅ ONE function that does everything
+export async function getAllPropertiesService(filters?: {
+  page?: number;
+  limit?: number;
   province?: string;
   district?: string;
   sector?: string;
   minPrice?: number;
   maxPrice?: number;
-  page?: number;
-  limit?: number;
+  bedrooms?: number;
+  propertyType?: string;
 }) {
-  const { page = 1, limit = 10, ...whereFilters } = filters;
+  const page = filters?.page || 1;
+  const limit = filters?.limit || 10;
   const skip = (page - 1) * limit;
   
-  const where: any = {};
+  // Build where clause dynamically
+  const where: any = { status: 'ACTIVE' };
   
-  if (whereFilters.province) where.province = whereFilters.province;
-  if (whereFilters.district) where.district = whereFilters.district;
-  if (whereFilters.sector) where.sector = whereFilters.sector;
-  if (whereFilters.minPrice) where.price = { gte: whereFilters.minPrice };
-  if (whereFilters.maxPrice) where.price = { ...where.price, lte: whereFilters.maxPrice };
+  // Add filters ONLY if they are provided
+  if (filters?.province) where.province = filters.province;
+  if (filters?.district) where.district = filters.district;
+  if (filters?.sector) where.sector = filters.sector;
+  if (filters?.minPrice) where.price = { gte: filters.minPrice };
+  if (filters?.maxPrice) where.price = { ...where.price, lte: filters.maxPrice };
+  if (filters?.bedrooms) where.bedrooms = filters.bedrooms;
+  if (filters?.propertyType) where.propertyType = filters.propertyType;
   
   const [properties, total] = await Promise.all([
     prisma.property.findMany({
@@ -178,11 +187,48 @@ export async function getPropertiesByLocation(filters: {
       page,
       limit,
       total,
-      pages: Math.ceil(total / limit)
+      totalPages: Math.ceil(total / limit)
     }
   };
 }
 
-export async function getPropertyById(userId: String) {
-   
+export async function getPropertiesByUserIdService(userId: string, status?: string) {
+  const where: any = {
+    ownerId: userId
+  };
+
+  if (status) {
+    where.status = status;
+  }
+  
+  const properties = await prisma.property.findMany({
+    where,
+    include: {
+      images: {
+        where: { isFeatured: true },
+        take: 1,
+        select: {
+          id: true,
+          url: true,
+          altText: true
+        }
+      }
+    },
+    orderBy: { createdAt: 'desc' }
+  });
+  
+  return {
+    properties,
+    total: properties.length
+  };
+}
+
+export async function deletePropertyByIdService(propertyId: string, userId: string){
+  const properties = await prisma.property.delete({
+    where: {
+      id: propertyId,
+      ownerId: userId
+    }
+  })
+  return properties;
 }

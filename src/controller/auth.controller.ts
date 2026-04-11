@@ -1,21 +1,35 @@
 import { Request, Response, NextFunction } from 'express';
 import * as authService from '../services/auth.services'
 import { generateToken } from '../utils/token';
+import { AppError } from '../utils/AppError';
 
  export const createUser = async (req: Request, res: Response, next: NextFunction) => {
 
     try {
         const {name, email, phone, password} = req.body;
+
         
     const user = await authService.createUser(name, email, phone, password);
+
 
     return res.status(201).json({
         success: true,
         message: "User created successfully",
         data: {user}
         })
-    } catch (err) {
-      next(err)
+    } catch (error) {
+       if (error instanceof AppError) {
+    return res.status(error.statusCode).json({
+      success: false,
+      error: error.message
+    });
+  }
+
+  console.error(error);
+  res.status(500).json({
+    success: false,
+    error: 'Internal server error'
+  });
     }  
  }
 
