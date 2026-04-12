@@ -1,5 +1,8 @@
 {
   "name": "property_valuation_system_backend",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "version": "1.0.0",
   "description": "",
   "main": "app.ts",
@@ -18,8 +21,12 @@
   },
   "homepage": "https://github.com/Fidela1/property_valuation_system_backend#readme",
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/express-session": "^1.18.2",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.1.0",
+    "@types/passport": "^1.0.17",
+    "@types/passport-google-oauth20": "^2.0.17",
     "nodemon": "^3.1.14",
     "prisma": "^7.5.0",
     "ts-node-dev": "^2.0.0",
@@ -33,14 +40,18 @@
     "@types/express": "^5.0.6",
     "@types/node": "^25.5.0",
     "axios": "^1.14.0",
+    "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
     "cloudinary": "^1.41.3",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
+    "express-session": "^1.19.0",
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.1.1",
     "multer-storage-cloudinary": "^4.0.0",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
     "pg": "^8.20.0"
   }
 }

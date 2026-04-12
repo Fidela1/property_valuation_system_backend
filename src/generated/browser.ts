@@ -23,20 +23,40 @@ export * from './enums';
  */
 export type User = Prisma.UserModel
 /**
+ * Model Image
+ * 
+ */
+export type Image = Prisma.ImageModel
+/**
  * Model Property
  * 
  */
 export type Property = Prisma.PropertyModel
 /**
- * Model PropertyImage
+ * Model Assignment
  * 
  */
-export type PropertyImage = Prisma.PropertyImageModel
+export type Assignment = Prisma.AssignmentModel
 /**
- * Model SellerRequest
+ * Model FieldData
  * 
  */
-export type SellerRequest = Prisma.SellerRequestModel
+export type FieldData = Prisma.FieldDataModel
+/**
+ * Model Review
+ * 
+ */
+export type Review = Prisma.ReviewModel
+/**
+ * Model SavedProperty
+ * 
+ */
+export type SavedProperty = Prisma.SavedPropertyModel
+/**
+ * Model Inquiry
+ * 
+ */
+export type Inquiry = Prisma.InquiryModel
 /**
  * Model AuditLog
  * 

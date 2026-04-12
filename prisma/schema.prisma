@@ -1,7 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
   provider = "prisma-client"
@@ -14,146 +11,327 @@ datasource db {
 
 
 enum Role {
-  BUYER
-  OWNER
-  SUPERVISOR
+  CLIENT
   DATA_COLLECTOR
+  SUPERVISOR
   ADMIN
 }
 
-enum ApplicationStatus {
-  PENDING
-  APPROVED
-  REJECTED
-}
-
 enum PropertyStatus {
-  ACTIVE
   PENDING
+  ASSIGNED
+  IN_FIELDWORK
+  UNDER_REVIEW
+  NEEDS_REVISION
+  APPROVED
+  PUBLISHED
   SOLD
-  RENTED
   ARCHIVED
 }
 
-// ============================================
-// MODELS
-// ============================================
+enum Condition {
+  EXCELLENT
+  GOOD
+  FAIR
+  NEEDS_RENOVATION
+}
+
+enum PropertyType {
+  HOUSE
+  APARTMENT
+  VILLA
+  LAND
+  COMMERCIAL
+}
+
+enum RoadAccessType {
+  PAVED
+  UNPAVED
+  DIRT
+  UNDER_CONSTRUCTION
+}
+
+enum ReviewDecision {
+  APPROVED
+  NEEDS_REVISION
+  REJECTED
+}
+
+enum ValuationMethod {
+  AI
+  MANUAL
+}
+
+enum InquiryStatus {
+  PENDING
+  RESPONDED
+  CLOSED
+}
+
+// USER MODELS
 
 model User {
-  id         String   @id @default(uuid())
-  name       String?
-  email      String   @unique
-  phone      String?  @unique
-  role       Role     @default(BUYER)
-  password   String
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  name          String
+  phone         String?
+  role          Role      @default(CLIENT)
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
-  // Relations
-  properties       Property[]       @relation("OwnerProperties")
-  sellerRequest    SellerRequest?
-  auditLogs        AuditLog[]
+  properties          Property[]    @relation("ClientProperties")
 
+  assignments         Assignment[]  @relation("CollectorAssignments")
+
+  reviews             Review[]      @relation("SupervisorReviews")
+
+  employees           User[]        @relation("AdminAddsEmployee")
+  addedBy             User?         @relation("AdminAddsEmployee", fields: [addedById], references: [id])
+  addedById           String?
+
+  assignedProperties  Assignment[]  @relation("AdminAssignments")
+
+  savedProperties     SavedProperty[]
+
+  uploadedImages      Image[]       @relation("ImageUploader")
+
+  auditLogs           AuditLog[]
+
+  @@index([email])
+  @@index([role])
   @@map("users")
 }
 
+// ============================================
+// IMAGE MODEL (separate table)
+
+
+model Image {
+  id          String    @id @default(cuid())
+  url         String    // Cloudinary or local URL
+  publicId    String?   // Cloudinary public ID for deletion
+  filename    String?   // Original filename
+  fileSize    Int?      // Size in bytes
+  mimeType    String?   // image/jpeg, image/png, etc.
+  width       Int?      // Image width in pixels
+  height      Int?      // Image height in pixels
+  altText     String?   // Accessibility description
+  isFeatured  Boolean   @default(false)  // Main image for the property
+  order       Int       @default(0)      // Display order
+  uploadedAt  DateTime  @default(now())
+
+  // Who uploaded this image
+  uploadedBy  String
+  uploader    User      @relation("ImageUploader", fields: [uploadedBy], references: [id])
+
+  // Which property this image belongs to
+  propertyId  String?
+  property    Property? @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@index([propertyId])
+  @@index([uploadedBy])
+  @@index([isFeatured])
+  @@map("images")
+}
+
+
+// PROPERTY MODELS
+
 model Property {
-  id          String   @id @default(uuid())
-  title       String
-  description String?
-  price       Float
-  province    String
-  district    String
-  sector      String?
-  cell        String?
-  village     String?
-  street      String?
+  id            String          @id @default(cuid())
+  upiNumber     String          @unique
+  idOrTin       String
+  phoneNumber   String
+  ownerName     String
+  country       String          @default("Rwanda")
+  province      String
+  district      String
+  sector        String
+  cell          String
+  village       String
+  status        PropertyStatus  @default(PENDING)
 
-  fullAddress String?
-  latitude    Float?
-  longitude   Float?
-  
-  bedrooms    Int?
-  bathrooms   Float?
-  squareFeet  Int?
-  propertyType String?
-  
-  status      PropertyStatus @default(ACTIVE)
-  ownerId     String
-  owner       User         @relation("OwnerProperties", fields: [ownerId], references: [id])
-  images      PropertyImage[]
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  aiValuation   Float?
+  aiConfidence  Float?
+  aiFactors     Json?
 
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  publishedAt   DateTime?
+  soldAt        DateTime?
+  archivedAt    DateTime?
+  statusChangedAt DateTime?
+
+  client        User            @relation("ClientProperties", fields: [clientId], references: [id])
+  clientId      String
+
+  fieldData     FieldData?
+
+  assignment    Assignment?
+
+  reviews       Review[]
+
+  images        Image[]
+
+  savedBy       SavedProperty[]
+  inquiries     Inquiry[]
+
+  @@index([status])
+  @@index([clientId])
+  @@index([province, district])
+  @@index([createdAt])
   @@map("properties")
 }
 
-model PropertyImage {
-  id          String   @id @default(uuid())
-  propertyId  String
-  property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-  
-  url         String
-  publicId    String?
-  altText     String?
-  caption     String?
-  order       Int      @default(0)
-  isFeatured  Boolean  @default(false)
-  
-  fileSize    Int?
-  mimeType    String?
-  width       Int?
-  height      Int?
-  
-  uploadedBy  String
-  uploadedAt  DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
+// ASSIGNMENT MODEL
+
+model Assignment {
+  id                  String    @id @default(cuid())
+  assignedAt          DateTime  @default(now())
+  emailSentAt         DateTime?
+  verifiedAt          DateTime?
+  verificationToken   String    @unique @default(cuid())
+  notes               String?
+
+  property            Property  @relation(fields: [propertyId], references: [id])
+  propertyId          String    @unique
+
+  collector           User      @relation("CollectorAssignments", fields: [collectorId], references: [id])
+  collectorId         String
+
+  assignedBy          User?     @relation("AdminAssignments", fields: [assignedById], references: [id])
+  assignedById        String?
+
+  @@index([collectorId])
+  @@index([assignedById])
+  @@index([verificationToken])
+  @@index([assignedAt])
+  @@map("assignments")
+}
+
+// FIELD DATA
+
+model FieldData {
+  id                  String          @id @default(cuid())
+
+  // GPS Data
+  latitude            Float
+  longitude           Float
+  gpsCapturedAt       DateTime?
+  gpsAccuracy         Float?
+
+  propertyType        PropertyType?
+  condition           Condition?
+  bedrooms            Int?
+  bathrooms           Float?
+  landSize            Float?
+  buildingSize        Float?
+  yearBuilt           Int?
+  parkingSpaces       Int?            @default(0)
+
+  nearestSchoolKm     Float?
+  nearestHospitalKm   Float?
+  nearestTransportKm  Float?
+  nearestMarketKm     Float?
+  roadAccessType      RoadAccessType?
+
+  valuationAmount     Float?
+  valuationConfidence Float?
+  valuationMethod     ValuationMethod?
+
+  notes               String?
+
+  submittedAt         DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+
+  property            Property        @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId          String          @unique
+
   @@index([propertyId])
-  @@index([order])
-  @@index([isFeatured])
-  @@map("property_images")
+  @@index([submittedAt])
+  @@map("field_data")
 }
 
-model SellerRequest {
-  id          String   @id @default(uuid())
-  userId      String   @unique
-  user        User     @relation(fields: [userId], references: [id])
-  
-  reason          String
-  propertyAddress String?
-  agreeToTerms    Boolean @default(false)
-  
-  status          ApplicationStatus @default(PENDING)
-  
-  reviewedBy      String?
-  reviewedAt      DateTime?
-  rejectionReason String?
-  
-  autoApproved    Boolean @default(false)
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+// REVIEW MODEL
 
-  @@map("seller_requests")
+model Review {
+  id            String          @id @default(cuid())
+  comment       String
+  decision      ReviewDecision
+  createdAt     DateTime        @default(now())
+
+  property      Property        @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId    String
+
+  supervisor    User            @relation("SupervisorReviews", fields: [supervisorId], references: [id])
+  supervisorId  String
+
+  @@index([propertyId])
+  @@index([supervisorId])
+  @@index([createdAt])
+  @@map("reviews")
 }
+
+// SAVED PROPERTIES
+
+model SavedProperty {
+  id          String    @id @default(cuid())
+  notes       String?
+  createdAt   DateTime  @default(now())
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+
+  property    Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId  String
+
+  @@unique([userId, propertyId])
+  @@index([userId])
+  @@map("saved_properties")
+}
+
+// INQUIRIES
+
+model Inquiry {
+  id            String        @id @default(cuid())
+  buyerName     String
+  buyerEmail    String
+  buyerPhone    String?
+  message       String
+  status        InquiryStatus @default(PENDING)
+  response      String?
+  respondedAt   DateTime?
+  createdAt     DateTime      @default(now())
+
+  property      Property      @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId    String
+
+  @@index([propertyId])
+  @@index([status])
+  @@map("inquiries")
+}
+
+// AUDIT LOGS
 
 model AuditLog {
-  id         String   @id @default(uuid())
-  userId     String
-  user       User     @relation(fields: [userId], references: [id])
-  
-  action     String
-  entityType String
-  entityId   String?
-  details    Json?
-  ipAddress  String?
-  
-  createdAt  DateTime @default(now())
-  
+  id          String    @id @default(cuid())
+  action      String
+  entityType  String
+  entityId    String?
+  oldStatus   String?
+  newStatus   String?
+  details     Json?
+  ipAddress   String?
+  createdAt   DateTime  @default(now())
+
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String
+
   @@index([userId])
   @@index([action])
+  @@index([entityType, entityId])
+  @@index([createdAt])
   @@map("audit_logs")
 }

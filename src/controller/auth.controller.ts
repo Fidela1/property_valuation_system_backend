@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import * as authService from '../services/auth.services'
 import { generateToken } from '../utils/token';
 import { AppError } from '../utils/AppError';
+import passport from 'passport';
 
  export const createUser = async (req: Request, res: Response, next: NextFunction) => {
 
@@ -69,4 +70,32 @@ export const login = async (req: Request, res: Response) => {
       message: err.message || "Invalid email or password"
     });
   }
+};
+export const googleAuth = passport.authenticate('google', {
+  scope: ['profile', 'email']
+});
+
+// ============================================
+// GOOGLE LOGIN - Handle Google's response
+// ============================================
+export const googleAuthCallback = (req: Request, res: Response, next: any) => {
+  passport.authenticate('google', { session: false }, async (err: any, user: any) => {
+    if (err || !user) {
+      console.error('Google auth error:', err);
+      return res.redirect(`http://localhost:3000/login?error=google_auth_failed`);
+    }
+
+    try {
+      const result = await authService.handleGoogleAuthService(user);
+      const token = generateToken(result.data.user.id, result.data.user.email, result.data.user.role);
+      const userData = encodeURIComponent(JSON.stringify(result.data.user));
+      
+      return res.redirect(
+        `http://localhost:3000/auth/callback?token=${token}&user=${userData}`
+      );
+    } catch (error) {
+      console.error('Token generation error:', error);
+      return res.redirect(`http://localhost:3000/login?error=token_generation_failed`);
+    }
+  })(req, res, next);
 };
