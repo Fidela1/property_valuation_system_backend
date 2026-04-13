@@ -52,9 +52,13 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  Image: 'Image',
   Property: 'Property',
-  PropertyImage: 'PropertyImage',
-  SellerRequest: 'SellerRequest',
+  Assignment: 'Assignment',
+  FieldData: 'FieldData',
+  Review: 'Review',
+  SavedProperty: 'SavedProperty',
+  Inquiry: 'Inquiry',
   AuditLog: 'AuditLog'
 } as const
 
@@ -76,93 +80,164 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const UserScalarFieldEnum = {
   id: 'id',
-  name: 'name',
   email: 'email',
+  password: 'password',
+  name: 'name',
   phone: 'phone',
   role: 'role',
-  password: 'password',
+  isActive: 'isActive',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  addedById: 'addedById'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const ImageScalarFieldEnum = {
+  id: 'id',
+  url: 'url',
+  publicId: 'publicId',
+  filename: 'filename',
+  fileSize: 'fileSize',
+  mimeType: 'mimeType',
+  width: 'width',
+  height: 'height',
+  altText: 'altText',
+  isFeatured: 'isFeatured',
+  order: 'order',
+  uploadedAt: 'uploadedAt',
+  uploadedBy: 'uploadedBy',
+  propertyId: 'propertyId'
+} as const
+
+export type ImageScalarFieldEnum = (typeof ImageScalarFieldEnum)[keyof typeof ImageScalarFieldEnum]
+
+
 export const PropertyScalarFieldEnum = {
   id: 'id',
-  title: 'title',
-  description: 'description',
-  price: 'price',
+  upiNumber: 'upiNumber',
+  idOrTin: 'idOrTin',
+  phoneNumber: 'phoneNumber',
+  ownerName: 'ownerName',
+  country: 'country',
   province: 'province',
   district: 'district',
   sector: 'sector',
   cell: 'cell',
   village: 'village',
-  street: 'street',
-  fullAddress: 'fullAddress',
-  latitude: 'latitude',
-  longitude: 'longitude',
-  bedrooms: 'bedrooms',
-  bathrooms: 'bathrooms',
-  squareFeet: 'squareFeet',
-  propertyType: 'propertyType',
   status: 'status',
-  ownerId: 'ownerId',
+  aiValuation: 'aiValuation',
+  aiConfidence: 'aiConfidence',
+  aiFactors: 'aiFactors',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  publishedAt: 'publishedAt',
+  soldAt: 'soldAt',
+  archivedAt: 'archivedAt',
+  statusChangedAt: 'statusChangedAt',
+  clientId: 'clientId'
 } as const
 
 export type PropertyScalarFieldEnum = (typeof PropertyScalarFieldEnum)[keyof typeof PropertyScalarFieldEnum]
 
 
-export const PropertyImageScalarFieldEnum = {
+export const AssignmentScalarFieldEnum = {
   id: 'id',
+  assignedAt: 'assignedAt',
+  emailSentAt: 'emailSentAt',
+  verifiedAt: 'verifiedAt',
+  verificationToken: 'verificationToken',
+  notes: 'notes',
   propertyId: 'propertyId',
-  url: 'url',
-  publicId: 'publicId',
-  altText: 'altText',
-  caption: 'caption',
-  order: 'order',
-  isFeatured: 'isFeatured',
-  fileSize: 'fileSize',
-  mimeType: 'mimeType',
-  width: 'width',
-  height: 'height',
-  uploadedBy: 'uploadedBy',
-  uploadedAt: 'uploadedAt',
-  updatedAt: 'updatedAt'
+  collectorId: 'collectorId',
+  assignedById: 'assignedById'
 } as const
 
-export type PropertyImageScalarFieldEnum = (typeof PropertyImageScalarFieldEnum)[keyof typeof PropertyImageScalarFieldEnum]
+export type AssignmentScalarFieldEnum = (typeof AssignmentScalarFieldEnum)[keyof typeof AssignmentScalarFieldEnum]
 
 
-export const SellerRequestScalarFieldEnum = {
+export const FieldDataScalarFieldEnum = {
   id: 'id',
-  userId: 'userId',
-  reason: 'reason',
-  propertyAddress: 'propertyAddress',
-  agreeToTerms: 'agreeToTerms',
-  status: 'status',
-  reviewedBy: 'reviewedBy',
-  reviewedAt: 'reviewedAt',
-  rejectionReason: 'rejectionReason',
-  autoApproved: 'autoApproved',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  latitude: 'latitude',
+  longitude: 'longitude',
+  gpsCapturedAt: 'gpsCapturedAt',
+  gpsAccuracy: 'gpsAccuracy',
+  propertyType: 'propertyType',
+  condition: 'condition',
+  bedrooms: 'bedrooms',
+  bathrooms: 'bathrooms',
+  landSize: 'landSize',
+  buildingSize: 'buildingSize',
+  yearBuilt: 'yearBuilt',
+  parkingSpaces: 'parkingSpaces',
+  nearestSchoolKm: 'nearestSchoolKm',
+  nearestHospitalKm: 'nearestHospitalKm',
+  nearestTransportKm: 'nearestTransportKm',
+  nearestMarketKm: 'nearestMarketKm',
+  roadAccessType: 'roadAccessType',
+  valuationAmount: 'valuationAmount',
+  valuationConfidence: 'valuationConfidence',
+  valuationMethod: 'valuationMethod',
+  notes: 'notes',
+  submittedAt: 'submittedAt',
+  updatedAt: 'updatedAt',
+  propertyId: 'propertyId'
 } as const
 
-export type SellerRequestScalarFieldEnum = (typeof SellerRequestScalarFieldEnum)[keyof typeof SellerRequestScalarFieldEnum]
+export type FieldDataScalarFieldEnum = (typeof FieldDataScalarFieldEnum)[keyof typeof FieldDataScalarFieldEnum]
+
+
+export const ReviewScalarFieldEnum = {
+  id: 'id',
+  comment: 'comment',
+  decision: 'decision',
+  createdAt: 'createdAt',
+  propertyId: 'propertyId',
+  supervisorId: 'supervisorId'
+} as const
+
+export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
+
+
+export const SavedPropertyScalarFieldEnum = {
+  id: 'id',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  userId: 'userId',
+  propertyId: 'propertyId'
+} as const
+
+export type SavedPropertyScalarFieldEnum = (typeof SavedPropertyScalarFieldEnum)[keyof typeof SavedPropertyScalarFieldEnum]
+
+
+export const InquiryScalarFieldEnum = {
+  id: 'id',
+  buyerName: 'buyerName',
+  buyerEmail: 'buyerEmail',
+  buyerPhone: 'buyerPhone',
+  message: 'message',
+  status: 'status',
+  response: 'response',
+  respondedAt: 'respondedAt',
+  createdAt: 'createdAt',
+  propertyId: 'propertyId'
+} as const
+
+export type InquiryScalarFieldEnum = (typeof InquiryScalarFieldEnum)[keyof typeof InquiryScalarFieldEnum]
 
 
 export const AuditLogScalarFieldEnum = {
   id: 'id',
-  userId: 'userId',
   action: 'action',
   entityType: 'entityType',
   entityId: 'entityId',
+  oldStatus: 'oldStatus',
+  newStatus: 'newStatus',
   details: 'details',
   ipAddress: 'ipAddress',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  userId: 'userId'
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]

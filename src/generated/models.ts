@@ -9,8 +9,12 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User'
+export type * from './models/Image'
 export type * from './models/Property'
-export type * from './models/PropertyImage'
-export type * from './models/SellerRequest'
+export type * from './models/Assignment'
+export type * from './models/FieldData'
+export type * from './models/Review'
+export type * from './models/SavedProperty'
+export type * from './models/Inquiry'
 export type * from './models/AuditLog'
 export type * from './commonInputTypes'

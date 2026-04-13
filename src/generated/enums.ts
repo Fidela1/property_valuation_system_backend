@@ -10,31 +10,82 @@
 */
 
 export const Role = {
-  BUYER: 'BUYER',
-  OWNER: 'OWNER',
-  SUPERVISOR: 'SUPERVISOR',
+  CLIENT: 'CLIENT',
   DATA_COLLECTOR: 'DATA_COLLECTOR',
+  SUPERVISOR: 'SUPERVISOR',
   ADMIN: 'ADMIN'
 } as const
 
 export type Role = (typeof Role)[keyof typeof Role]
 
 
-export const ApplicationStatus = {
-  PENDING: 'PENDING',
-  APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED'
-} as const
-
-export type ApplicationStatus = (typeof ApplicationStatus)[keyof typeof ApplicationStatus]
-
-
 export const PropertyStatus = {
-  ACTIVE: 'ACTIVE',
   PENDING: 'PENDING',
+  ASSIGNED: 'ASSIGNED',
+  IN_FIELDWORK: 'IN_FIELDWORK',
+  UNDER_REVIEW: 'UNDER_REVIEW',
+  NEEDS_REVISION: 'NEEDS_REVISION',
+  APPROVED: 'APPROVED',
+  PUBLISHED: 'PUBLISHED',
   SOLD: 'SOLD',
-  RENTED: 'RENTED',
   ARCHIVED: 'ARCHIVED'
 } as const
 
 export type PropertyStatus = (typeof PropertyStatus)[keyof typeof PropertyStatus]
+
+
+export const Condition = {
+  EXCELLENT: 'EXCELLENT',
+  GOOD: 'GOOD',
+  FAIR: 'FAIR',
+  NEEDS_RENOVATION: 'NEEDS_RENOVATION'
+} as const
+
+export type Condition = (typeof Condition)[keyof typeof Condition]
+
+
+export const PropertyType = {
+  HOUSE: 'HOUSE',
+  APARTMENT: 'APARTMENT',
+  VILLA: 'VILLA',
+  LAND: 'LAND',
+  COMMERCIAL: 'COMMERCIAL'
+} as const
+
+export type PropertyType = (typeof PropertyType)[keyof typeof PropertyType]
+
+
+export const RoadAccessType = {
+  PAVED: 'PAVED',
+  UNPAVED: 'UNPAVED',
+  DIRT: 'DIRT',
+  UNDER_CONSTRUCTION: 'UNDER_CONSTRUCTION'
+} as const
+
+export type RoadAccessType = (typeof RoadAccessType)[keyof typeof RoadAccessType]
+
+
+export const ReviewDecision = {
+  APPROVED: 'APPROVED',
+  NEEDS_REVISION: 'NEEDS_REVISION',
+  REJECTED: 'REJECTED'
+} as const
+
+export type ReviewDecision = (typeof ReviewDecision)[keyof typeof ReviewDecision]
+
+
+export const ValuationMethod = {
+  AI: 'AI',
+  MANUAL: 'MANUAL'
+} as const
+
+export type ValuationMethod = (typeof ValuationMethod)[keyof typeof ValuationMethod]
+
+
+export const InquiryStatus = {
+  PENDING: 'PENDING',
+  RESPONDED: 'RESPONDED',
+  CLOSED: 'CLOSED'
+} as const
+
+export type InquiryStatus = (typeof InquiryStatus)[keyof typeof InquiryStatus]
