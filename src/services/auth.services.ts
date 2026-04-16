@@ -23,6 +23,7 @@ export const createUser = async (name: string, email: string, phone: string, pas
       phone,
       password: hashed
     },
+    
   });
 
   return user;

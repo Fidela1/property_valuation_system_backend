@@ -68,6 +68,13 @@ enum InquiryStatus {
   CLOSED
 }
 
+enum InvitationStatus {
+  PENDING
+  COMPLETED  // User created account
+  EXPIRED
+  CANCELLED
+}
+
 // USER MODELS
 
 model User {
@@ -78,8 +85,13 @@ model User {
   phone         String?
   role          Role      @default(CLIENT)
   isActive      Boolean   @default(true)
+  isEmailVerified Boolean @default(false)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+
+  addedById           String?
+  addedBy             User?         @relation("AdminAddsEmployee", fields: [addedById], references: [id])
+  
 
   properties          Property[]    @relation("ClientProperties")
 
@@ -88,8 +100,8 @@ model User {
   reviews             Review[]      @relation("SupervisorReviews")
 
   employees           User[]        @relation("AdminAddsEmployee")
-  addedBy             User?         @relation("AdminAddsEmployee", fields: [addedById], references: [id])
-  addedById           String?
+   invitationsCreated  Invitation[]   @relation("AdminCreatesInvitation")
+  
 
   assignedProperties  Assignment[]  @relation("AdminAssignments")
 
@@ -102,6 +114,28 @@ model User {
   @@index([email])
   @@index([role])
   @@map("users")
+}
+
+model Invitation {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String
+  phone         String?
+  role          Role
+  token         String   @unique
+  expiresAt     DateTime
+  status        InvitationStatus @default(PENDING)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+   createdById   String
+  createdBy     User     @relation("AdminCreatesInvitation", fields: [createdById], references: [id])
+  
+  
+  @@index([token])
+  @@index([email])
+  @@index([status])
+  @@map("invitations")
 }
 
 // ============================================

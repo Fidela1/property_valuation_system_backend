@@ -35,15 +35,14 @@ passport.use(
               email,
               name: profile.displayName || 'Google User',
               password: hashedPasswordValue,
-              // ✅ Omit phone field entirely (don't include it)
               role: 'CLIENT',
               isActive: true,
             }
           });
           
-          console.log(`✅ New user created via Google: ${email}`);
+          console.log(`New user created via Google: ${email}`);
         } else {
-          console.log(`✅ Existing user logged in via Google: ${email}`);
+          console.log(`Existing user logged in via Google: ${email}`);
         }
 
         return done(null, user);

@@ -22,12 +22,11 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false,  // Set to true if using HTTPS
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    secure: false, 
+    maxAge: 24 * 60 * 60 * 1000 
   }
 }));
 
-// ✅ Passport middleware (must come after session)
 app.use(passport.initialize());
 app.use(passport.session());
 
