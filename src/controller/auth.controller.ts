@@ -8,11 +8,9 @@ import passport from 'passport';
 
     try {
         const {name, email, phone, password} = req.body;
-
         
     const user = await authService.createUser(name, email, phone, password);
-
-
+    
     return res.status(201).json({
         success: true,
         message: "User created successfully",
@@ -75,9 +73,6 @@ export const googleAuth = passport.authenticate('google', {
   scope: ['profile', 'email']
 });
 
-// ============================================
-// GOOGLE LOGIN - Handle Google's response
-// ============================================
 export const googleAuthCallback = (req: Request, res: Response, next: any) => {
   passport.authenticate('google', { session: false }, async (err: any, user: any) => {
     if (err || !user) {

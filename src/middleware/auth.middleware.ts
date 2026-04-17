@@ -1,22 +1,17 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: {
-        id: string;
-        email: string;
-        role: string;
-      };
-    }
-  }
+export interface AuthRequest extends Request {
+  authenticatedUser?: {
+    id: string;
+    email: string;
+    role: string;
+  };
 }
 
 const JWT_SECRET = process.env.JWT_SECRET || '52257f096b9e118455b8d6e35042fdac50261d2cd8afc87244e1eea016e63323';
 
-// Middleware to check if user is logged in
-export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
+export const authenticate = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers.authorization;
     
@@ -42,7 +37,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
       role: string;
     };
 
-    req.user = {
+    req.authenticatedUser = {
       id: decoded.id,
       email: decoded.email,
       role: decoded.role
@@ -65,12 +60,12 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 };
 
 export const authorize = (...allowedRoles: string[]) => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    if (!req.user) {
+  return (req: AuthRequest, res: Response, next: NextFunction) => {
+    if (!req.authenticatedUser) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
     
-    if (!allowedRoles.includes(req.user.role)) {
+    if (!allowedRoles.includes(req.authenticatedUser.role)) {
       return res.status(403).json({ 
         error: `Access denied. Requires role: ${allowedRoles.join(' or ')}` 
       });

@@ -32,6 +32,7 @@ export type UserMinAggregateOutputType = {
   phone: string | null
   role: $Enums.Role | null
   isActive: boolean | null
+  isEmailVerified: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
   addedById: string | null
@@ -45,6 +46,7 @@ export type UserMaxAggregateOutputType = {
   phone: string | null
   role: $Enums.Role | null
   isActive: boolean | null
+  isEmailVerified: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
   addedById: string | null
@@ -58,6 +60,7 @@ export type UserCountAggregateOutputType = {
   phone: number
   role: number
   isActive: number
+  isEmailVerified: number
   createdAt: number
   updatedAt: number
   addedById: number
@@ -73,6 +76,7 @@ export type UserMinAggregateInputType = {
   phone?: true
   role?: true
   isActive?: true
+  isEmailVerified?: true
   createdAt?: true
   updatedAt?: true
   addedById?: true
@@ -86,6 +90,7 @@ export type UserMaxAggregateInputType = {
   phone?: true
   role?: true
   isActive?: true
+  isEmailVerified?: true
   createdAt?: true
   updatedAt?: true
   addedById?: true
@@ -99,6 +104,7 @@ export type UserCountAggregateInputType = {
   phone?: true
   role?: true
   isActive?: true
+  isEmailVerified?: true
   createdAt?: true
   updatedAt?: true
   addedById?: true
@@ -185,6 +191,7 @@ export type UserGroupByOutputType = {
   phone: string | null
   role: $Enums.Role
   isActive: boolean
+  isEmailVerified: boolean
   createdAt: Date
   updatedAt: Date
   addedById: string | null
@@ -219,14 +226,16 @@ export type UserWhereInput = {
   phone?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   isActive?: Prisma.BoolFilter<"User"> | boolean
+  isEmailVerified?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   addedById?: Prisma.StringNullableFilter<"User"> | string | null
+  addedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   properties?: Prisma.PropertyListRelationFilter
   assignments?: Prisma.AssignmentListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
   employees?: Prisma.UserListRelationFilter
-  addedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  invitationsCreated?: Prisma.InvitationListRelationFilter
   assignedProperties?: Prisma.AssignmentListRelationFilter
   savedProperties?: Prisma.SavedPropertyListRelationFilter
   uploadedImages?: Prisma.ImageListRelationFilter
@@ -241,14 +250,16 @@ export type UserOrderByWithRelationInput = {
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  isEmailVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   addedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  addedBy?: Prisma.UserOrderByWithRelationInput
   properties?: Prisma.PropertyOrderByRelationAggregateInput
   assignments?: Prisma.AssignmentOrderByRelationAggregateInput
   reviews?: Prisma.ReviewOrderByRelationAggregateInput
   employees?: Prisma.UserOrderByRelationAggregateInput
-  addedBy?: Prisma.UserOrderByWithRelationInput
+  invitationsCreated?: Prisma.InvitationOrderByRelationAggregateInput
   assignedProperties?: Prisma.AssignmentOrderByRelationAggregateInput
   savedProperties?: Prisma.SavedPropertyOrderByRelationAggregateInput
   uploadedImages?: Prisma.ImageOrderByRelationAggregateInput
@@ -266,14 +277,16 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   phone?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   isActive?: Prisma.BoolFilter<"User"> | boolean
+  isEmailVerified?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   addedById?: Prisma.StringNullableFilter<"User"> | string | null
+  addedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   properties?: Prisma.PropertyListRelationFilter
   assignments?: Prisma.AssignmentListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
   employees?: Prisma.UserListRelationFilter
-  addedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  invitationsCreated?: Prisma.InvitationListRelationFilter
   assignedProperties?: Prisma.AssignmentListRelationFilter
   savedProperties?: Prisma.SavedPropertyListRelationFilter
   uploadedImages?: Prisma.ImageListRelationFilter
@@ -288,6 +301,7 @@ export type UserOrderByWithAggregationInput = {
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  isEmailVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   addedById?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -307,6 +321,7 @@ export type UserScalarWhereWithAggregatesInput = {
   phone?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
   isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  isEmailVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   addedById?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
@@ -320,13 +335,15 @@ export type UserCreateInput = {
   phone?: string | null
   role?: $Enums.Role
   isActive?: boolean
+  isEmailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  addedBy?: Prisma.UserCreateNestedOneWithoutEmployeesInput
   properties?: Prisma.PropertyCreateNestedManyWithoutClientInput
   assignments?: Prisma.AssignmentCreateNestedManyWithoutCollectorInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutSupervisorInput
   employees?: Prisma.UserCreateNestedManyWithoutAddedByInput
-  addedBy?: Prisma.UserCreateNestedOneWithoutEmployeesInput
+  invitationsCreated?: Prisma.InvitationCreateNestedManyWithoutCreatedByInput
   assignedProperties?: Prisma.AssignmentCreateNestedManyWithoutAssignedByInput
   savedProperties?: Prisma.SavedPropertyCreateNestedManyWithoutUserInput
   uploadedImages?: Prisma.ImageCreateNestedManyWithoutUploaderInput
@@ -341,6 +358,7 @@ export type UserUncheckedCreateInput = {
   phone?: string | null
   role?: $Enums.Role
   isActive?: boolean
+  isEmailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   addedById?: string | null
@@ -348,6 +366,7 @@ export type UserUncheckedCreateInput = {
   assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutCollectorInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutSupervisorInput
   employees?: Prisma.UserUncheckedCreateNestedManyWithoutAddedByInput
+  invitationsCreated?: Prisma.InvitationUncheckedCreateNestedManyWithoutCreatedByInput
   assignedProperties?: Prisma.AssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   savedProperties?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutUserInput
   uploadedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutUploaderInput
@@ -362,13 +381,15 @@ export type UserUpdateInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  addedBy?: Prisma.UserUpdateOneWithoutEmployeesNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutClientNestedInput
   assignments?: Prisma.AssignmentUpdateManyWithoutCollectorNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutSupervisorNestedInput
   employees?: Prisma.UserUpdateManyWithoutAddedByNestedInput
-  addedBy?: Prisma.UserUpdateOneWithoutEmployeesNestedInput
+  invitationsCreated?: Prisma.InvitationUpdateManyWithoutCreatedByNestedInput
   assignedProperties?: Prisma.AssignmentUpdateManyWithoutAssignedByNestedInput
   savedProperties?: Prisma.SavedPropertyUpdateManyWithoutUserNestedInput
   uploadedImages?: Prisma.ImageUpdateManyWithoutUploaderNestedInput
@@ -383,6 +404,7 @@ export type UserUncheckedUpdateInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   addedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -390,6 +412,7 @@ export type UserUncheckedUpdateInput = {
   assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutCollectorNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutSupervisorNestedInput
   employees?: Prisma.UserUncheckedUpdateManyWithoutAddedByNestedInput
+  invitationsCreated?: Prisma.InvitationUncheckedUpdateManyWithoutCreatedByNestedInput
   assignedProperties?: Prisma.AssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   savedProperties?: Prisma.SavedPropertyUncheckedUpdateManyWithoutUserNestedInput
   uploadedImages?: Prisma.ImageUncheckedUpdateManyWithoutUploaderNestedInput
@@ -404,6 +427,7 @@ export type UserCreateManyInput = {
   phone?: string | null
   role?: $Enums.Role
   isActive?: boolean
+  isEmailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   addedById?: string | null
@@ -417,6 +441,7 @@ export type UserUpdateManyMutationInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -429,20 +454,21 @@ export type UserUncheckedUpdateManyInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   addedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
 }
 
 export type UserListRelationFilter = {
   every?: Prisma.UserWhereInput
   some?: Prisma.UserWhereInput
   none?: Prisma.UserWhereInput
-}
-
-export type UserNullableScalarRelationFilter = {
-  is?: Prisma.UserWhereInput | null
-  isNot?: Prisma.UserWhereInput | null
 }
 
 export type UserOrderByRelationAggregateInput = {
@@ -457,6 +483,7 @@ export type UserCountOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   role?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  isEmailVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   addedById?: Prisma.SortOrder
@@ -470,6 +497,7 @@ export type UserMaxOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   role?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  isEmailVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   addedById?: Prisma.SortOrder
@@ -483,6 +511,7 @@ export type UserMinOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   role?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  isEmailVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   addedById?: Prisma.SortOrder
@@ -493,17 +522,17 @@ export type UserScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput
 }
 
+export type UserCreateNestedOneWithoutEmployeesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEmployeesInput, Prisma.UserUncheckedCreateWithoutEmployeesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmployeesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
 export type UserCreateNestedManyWithoutAddedByInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutAddedByInput, Prisma.UserUncheckedCreateWithoutAddedByInput> | Prisma.UserCreateWithoutAddedByInput[] | Prisma.UserUncheckedCreateWithoutAddedByInput[]
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutAddedByInput | Prisma.UserCreateOrConnectWithoutAddedByInput[]
   createMany?: Prisma.UserCreateManyAddedByInputEnvelope
   connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-}
-
-export type UserCreateNestedOneWithoutEmployeesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutEmployeesInput, Prisma.UserUncheckedCreateWithoutEmployeesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmployeesInput
-  connect?: Prisma.UserWhereUniqueInput
 }
 
 export type UserUncheckedCreateNestedManyWithoutAddedByInput = {
@@ -533,6 +562,16 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
+export type UserUpdateOneWithoutEmployeesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEmployeesInput, Prisma.UserUncheckedCreateWithoutEmployeesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmployeesInput
+  upsert?: Prisma.UserUpsertWithoutEmployeesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEmployeesInput, Prisma.UserUpdateWithoutEmployeesInput>, Prisma.UserUncheckedUpdateWithoutEmployeesInput>
+}
+
 export type UserUpdateManyWithoutAddedByNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutAddedByInput, Prisma.UserUncheckedCreateWithoutAddedByInput> | Prisma.UserCreateWithoutAddedByInput[] | Prisma.UserUncheckedCreateWithoutAddedByInput[]
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutAddedByInput | Prisma.UserCreateOrConnectWithoutAddedByInput[]
@@ -547,16 +586,6 @@ export type UserUpdateManyWithoutAddedByNestedInput = {
   deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
 }
 
-export type UserUpdateOneWithoutEmployeesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutEmployeesInput, Prisma.UserUncheckedCreateWithoutEmployeesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmployeesInput
-  upsert?: Prisma.UserUpsertWithoutEmployeesInput
-  disconnect?: Prisma.UserWhereInput | boolean
-  delete?: Prisma.UserWhereInput | boolean
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEmployeesInput, Prisma.UserUpdateWithoutEmployeesInput>, Prisma.UserUncheckedUpdateWithoutEmployeesInput>
-}
-
 export type UserUncheckedUpdateManyWithoutAddedByNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutAddedByInput, Prisma.UserUncheckedCreateWithoutAddedByInput> | Prisma.UserCreateWithoutAddedByInput[] | Prisma.UserUncheckedCreateWithoutAddedByInput[]
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutAddedByInput | Prisma.UserCreateOrConnectWithoutAddedByInput[]
@@ -569,6 +598,20 @@ export type UserUncheckedUpdateManyWithoutAddedByNestedInput = {
   update?: Prisma.UserUpdateWithWhereUniqueWithoutAddedByInput | Prisma.UserUpdateWithWhereUniqueWithoutAddedByInput[]
   updateMany?: Prisma.UserUpdateManyWithWhereWithoutAddedByInput | Prisma.UserUpdateManyWithWhereWithoutAddedByInput[]
   deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserCreateNestedOneWithoutInvitationsCreatedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInvitationsCreatedInput, Prisma.UserUncheckedCreateWithoutInvitationsCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvitationsCreatedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutInvitationsCreatedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInvitationsCreatedInput, Prisma.UserUncheckedCreateWithoutInvitationsCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvitationsCreatedInput
+  upsert?: Prisma.UserUpsertWithoutInvitationsCreatedInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInvitationsCreatedInput, Prisma.UserUpdateWithoutInvitationsCreatedInput>, Prisma.UserUncheckedUpdateWithoutInvitationsCreatedInput>
 }
 
 export type UserCreateNestedOneWithoutUploadedImagesInput = {
@@ -671,6 +714,55 @@ export type UserUpdateOneRequiredWithoutAuditLogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.UserUpdateWithoutAuditLogsInput>, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
 }
 
+export type UserCreateWithoutEmployeesInput = {
+  id?: string
+  email: string
+  password: string
+  name: string
+  phone?: string | null
+  role?: $Enums.Role
+  isActive?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  addedBy?: Prisma.UserCreateNestedOneWithoutEmployeesInput
+  properties?: Prisma.PropertyCreateNestedManyWithoutClientInput
+  assignments?: Prisma.AssignmentCreateNestedManyWithoutCollectorInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutSupervisorInput
+  invitationsCreated?: Prisma.InvitationCreateNestedManyWithoutCreatedByInput
+  assignedProperties?: Prisma.AssignmentCreateNestedManyWithoutAssignedByInput
+  savedProperties?: Prisma.SavedPropertyCreateNestedManyWithoutUserInput
+  uploadedImages?: Prisma.ImageCreateNestedManyWithoutUploaderInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutEmployeesInput = {
+  id?: string
+  email: string
+  password: string
+  name: string
+  phone?: string | null
+  role?: $Enums.Role
+  isActive?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  addedById?: string | null
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutClientInput
+  assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutCollectorInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutSupervisorInput
+  invitationsCreated?: Prisma.InvitationUncheckedCreateNestedManyWithoutCreatedByInput
+  assignedProperties?: Prisma.AssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+  savedProperties?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutUserInput
+  uploadedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutUploaderInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutEmployeesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutEmployeesInput, Prisma.UserUncheckedCreateWithoutEmployeesInput>
+}
+
 export type UserCreateWithoutAddedByInput = {
   id?: string
   email: string
@@ -679,12 +771,14 @@ export type UserCreateWithoutAddedByInput = {
   phone?: string | null
   role?: $Enums.Role
   isActive?: boolean
+  isEmailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   properties?: Prisma.PropertyCreateNestedManyWithoutClientInput
   assignments?: Prisma.AssignmentCreateNestedManyWithoutCollectorInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutSupervisorInput
   employees?: Prisma.UserCreateNestedManyWithoutAddedByInput
+  invitationsCreated?: Prisma.InvitationCreateNestedManyWithoutCreatedByInput
   assignedProperties?: Prisma.AssignmentCreateNestedManyWithoutAssignedByInput
   savedProperties?: Prisma.SavedPropertyCreateNestedManyWithoutUserInput
   uploadedImages?: Prisma.ImageCreateNestedManyWithoutUploaderInput
@@ -699,12 +793,14 @@ export type UserUncheckedCreateWithoutAddedByInput = {
   phone?: string | null
   role?: $Enums.Role
   isActive?: boolean
+  isEmailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutClientInput
   assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutCollectorInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutSupervisorInput
   employees?: Prisma.UserUncheckedCreateNestedManyWithoutAddedByInput
+  invitationsCreated?: Prisma.InvitationUncheckedCreateNestedManyWithoutCreatedByInput
   assignedProperties?: Prisma.AssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   savedProperties?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutUserInput
   uploadedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutUploaderInput
@@ -721,49 +817,59 @@ export type UserCreateManyAddedByInputEnvelope = {
   skipDuplicates?: boolean
 }
 
-export type UserCreateWithoutEmployeesInput = {
-  id?: string
-  email: string
-  password: string
-  name: string
-  phone?: string | null
-  role?: $Enums.Role
-  isActive?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  properties?: Prisma.PropertyCreateNestedManyWithoutClientInput
-  assignments?: Prisma.AssignmentCreateNestedManyWithoutCollectorInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutSupervisorInput
-  addedBy?: Prisma.UserCreateNestedOneWithoutEmployeesInput
-  assignedProperties?: Prisma.AssignmentCreateNestedManyWithoutAssignedByInput
-  savedProperties?: Prisma.SavedPropertyCreateNestedManyWithoutUserInput
-  uploadedImages?: Prisma.ImageCreateNestedManyWithoutUploaderInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutEmployeesInput = {
-  id?: string
-  email: string
-  password: string
-  name: string
-  phone?: string | null
-  role?: $Enums.Role
-  isActive?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  addedById?: string | null
-  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutClientInput
-  assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutCollectorInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutSupervisorInput
-  assignedProperties?: Prisma.AssignmentUncheckedCreateNestedManyWithoutAssignedByInput
-  savedProperties?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutUserInput
-  uploadedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutUploaderInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutEmployeesInput = {
-  where: Prisma.UserWhereUniqueInput
+export type UserUpsertWithoutEmployeesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutEmployeesInput, Prisma.UserUncheckedUpdateWithoutEmployeesInput>
   create: Prisma.XOR<Prisma.UserCreateWithoutEmployeesInput, Prisma.UserUncheckedCreateWithoutEmployeesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutEmployeesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutEmployeesInput, Prisma.UserUncheckedUpdateWithoutEmployeesInput>
+}
+
+export type UserUpdateWithoutEmployeesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  addedBy?: Prisma.UserUpdateOneWithoutEmployeesNestedInput
+  properties?: Prisma.PropertyUpdateManyWithoutClientNestedInput
+  assignments?: Prisma.AssignmentUpdateManyWithoutCollectorNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutSupervisorNestedInput
+  invitationsCreated?: Prisma.InvitationUpdateManyWithoutCreatedByNestedInput
+  assignedProperties?: Prisma.AssignmentUpdateManyWithoutAssignedByNestedInput
+  savedProperties?: Prisma.SavedPropertyUpdateManyWithoutUserNestedInput
+  uploadedImages?: Prisma.ImageUpdateManyWithoutUploaderNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutEmployeesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  addedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutClientNestedInput
+  assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutCollectorNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutSupervisorNestedInput
+  invitationsCreated?: Prisma.InvitationUncheckedUpdateManyWithoutCreatedByNestedInput
+  assignedProperties?: Prisma.AssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+  savedProperties?: Prisma.SavedPropertyUncheckedUpdateManyWithoutUserNestedInput
+  uploadedImages?: Prisma.ImageUncheckedUpdateManyWithoutUploaderNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithWhereUniqueWithoutAddedByInput = {
@@ -793,23 +899,73 @@ export type UserScalarWhereInput = {
   phone?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   isActive?: Prisma.BoolFilter<"User"> | boolean
+  isEmailVerified?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   addedById?: Prisma.StringNullableFilter<"User"> | string | null
 }
 
-export type UserUpsertWithoutEmployeesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutEmployeesInput, Prisma.UserUncheckedUpdateWithoutEmployeesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutEmployeesInput, Prisma.UserUncheckedCreateWithoutEmployeesInput>
+export type UserCreateWithoutInvitationsCreatedInput = {
+  id?: string
+  email: string
+  password: string
+  name: string
+  phone?: string | null
+  role?: $Enums.Role
+  isActive?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  addedBy?: Prisma.UserCreateNestedOneWithoutEmployeesInput
+  properties?: Prisma.PropertyCreateNestedManyWithoutClientInput
+  assignments?: Prisma.AssignmentCreateNestedManyWithoutCollectorInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutSupervisorInput
+  employees?: Prisma.UserCreateNestedManyWithoutAddedByInput
+  assignedProperties?: Prisma.AssignmentCreateNestedManyWithoutAssignedByInput
+  savedProperties?: Prisma.SavedPropertyCreateNestedManyWithoutUserInput
+  uploadedImages?: Prisma.ImageCreateNestedManyWithoutUploaderInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutInvitationsCreatedInput = {
+  id?: string
+  email: string
+  password: string
+  name: string
+  phone?: string | null
+  role?: $Enums.Role
+  isActive?: boolean
+  isEmailVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  addedById?: string | null
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutClientInput
+  assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutCollectorInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutSupervisorInput
+  employees?: Prisma.UserUncheckedCreateNestedManyWithoutAddedByInput
+  assignedProperties?: Prisma.AssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+  savedProperties?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutUserInput
+  uploadedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutUploaderInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutInvitationsCreatedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutInvitationsCreatedInput, Prisma.UserUncheckedCreateWithoutInvitationsCreatedInput>
+}
+
+export type UserUpsertWithoutInvitationsCreatedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutInvitationsCreatedInput, Prisma.UserUncheckedUpdateWithoutInvitationsCreatedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInvitationsCreatedInput, Prisma.UserUncheckedCreateWithoutInvitationsCreatedInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutEmployeesInput = {
+export type UserUpdateToOneWithWhereWithoutInvitationsCreatedInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutEmployeesInput, Prisma.UserUncheckedUpdateWithoutEmployeesInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutInvitationsCreatedInput, Prisma.UserUncheckedUpdateWithoutInvitationsCreatedInput>
 }
 
-export type UserUpdateWithoutEmployeesInput = {
+export type UserUpdateWithoutInvitationsCreatedInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
@@ -817,19 +973,21 @@ export type UserUpdateWithoutEmployeesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  addedBy?: Prisma.UserUpdateOneWithoutEmployeesNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutClientNestedInput
   assignments?: Prisma.AssignmentUpdateManyWithoutCollectorNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutSupervisorNestedInput
-  addedBy?: Prisma.UserUpdateOneWithoutEmployeesNestedInput
+  employees?: Prisma.UserUpdateManyWithoutAddedByNestedInput
   assignedProperties?: Prisma.AssignmentUpdateManyWithoutAssignedByNestedInput
   savedProperties?: Prisma.SavedPropertyUpdateManyWithoutUserNestedInput
   uploadedImages?: Prisma.ImageUpdateManyWithoutUploaderNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutEmployeesInput = {
+export type UserUncheckedUpdateWithoutInvitationsCreatedInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
@@ -837,12 +995,14 @@ export type UserUncheckedUpdateWithoutEmployeesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   addedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutClientNestedInput
   assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutCollectorNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutSupervisorNestedInput
+  employees?: Prisma.UserUncheckedUpdateManyWithoutAddedByNestedInput
   assignedProperties?: Prisma.AssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   savedProperties?: Prisma.SavedPropertyUncheckedUpdateManyWithoutUserNestedInput
   uploadedImages?: Prisma.ImageUncheckedUpdateManyWithoutUploaderNestedInput
@@ -857,13 +1017,15 @@ export type UserCreateWithoutUploadedImagesInput = {
   phone?: string | null
   role?: $Enums.Role
   isActive?: boolean
+  isEmailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  addedBy?: Prisma.UserCreateNestedOneWithoutEmployeesInput
   properties?: Prisma.PropertyCreateNestedManyWithoutClientInput
   assignments?: Prisma.AssignmentCreateNestedManyWithoutCollectorInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutSupervisorInput
   employees?: Prisma.UserCreateNestedManyWithoutAddedByInput
-  addedBy?: Prisma.UserCreateNestedOneWithoutEmployeesInput
+  invitationsCreated?: Prisma.InvitationCreateNestedManyWithoutCreatedByInput
   assignedProperties?: Prisma.AssignmentCreateNestedManyWithoutAssignedByInput
   savedProperties?: Prisma.SavedPropertyCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
@@ -877,6 +1039,7 @@ export type UserUncheckedCreateWithoutUploadedImagesInput = {
   phone?: string | null
   role?: $Enums.Role
   isActive?: boolean
+  isEmailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   addedById?: string | null
@@ -884,6 +1047,7 @@ export type UserUncheckedCreateWithoutUploadedImagesInput = {
   assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutCollectorInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutSupervisorInput
   employees?: Prisma.UserUncheckedCreateNestedManyWithoutAddedByInput
+  invitationsCreated?: Prisma.InvitationUncheckedCreateNestedManyWithoutCreatedByInput
   assignedProperties?: Prisma.AssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   savedProperties?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
@@ -913,13 +1077,15 @@ export type UserUpdateWithoutUploadedImagesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  addedBy?: Prisma.UserUpdateOneWithoutEmployeesNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutClientNestedInput
   assignments?: Prisma.AssignmentUpdateManyWithoutCollectorNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutSupervisorNestedInput
   employees?: Prisma.UserUpdateManyWithoutAddedByNestedInput
-  addedBy?: Prisma.UserUpdateOneWithoutEmployeesNestedInput
+  invitationsCreated?: Prisma.InvitationUpdateManyWithoutCreatedByNestedInput
   assignedProperties?: Prisma.AssignmentUpdateManyWithoutAssignedByNestedInput
   savedProperties?: Prisma.SavedPropertyUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
@@ -933,6 +1099,7 @@ export type UserUncheckedUpdateWithoutUploadedImagesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   addedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -940,6 +1107,7 @@ export type UserUncheckedUpdateWithoutUploadedImagesInput = {
   assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutCollectorNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutSupervisorNestedInput
   employees?: Prisma.UserUncheckedUpdateManyWithoutAddedByNestedInput
+  invitationsCreated?: Prisma.InvitationUncheckedUpdateManyWithoutCreatedByNestedInput
   assignedProperties?: Prisma.AssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   savedProperties?: Prisma.SavedPropertyUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
@@ -953,12 +1121,14 @@ export type UserCreateWithoutPropertiesInput = {
   phone?: string | null
   role?: $Enums.Role
   isActive?: boolean
+  isEmailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  addedBy?: Prisma.UserCreateNestedOneWithoutEmployeesInput
   assignments?: Prisma.AssignmentCreateNestedManyWithoutCollectorInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutSupervisorInput
   employees?: Prisma.UserCreateNestedManyWithoutAddedByInput
-  addedBy?: Prisma.UserCreateNestedOneWithoutEmployeesInput
+  invitationsCreated?: Prisma.InvitationCreateNestedManyWithoutCreatedByInput
   assignedProperties?: Prisma.AssignmentCreateNestedManyWithoutAssignedByInput
   savedProperties?: Prisma.SavedPropertyCreateNestedManyWithoutUserInput
   uploadedImages?: Prisma.ImageCreateNestedManyWithoutUploaderInput
@@ -973,12 +1143,14 @@ export type UserUncheckedCreateWithoutPropertiesInput = {
   phone?: string | null
   role?: $Enums.Role
   isActive?: boolean
+  isEmailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   addedById?: string | null
   assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutCollectorInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutSupervisorInput
   employees?: Prisma.UserUncheckedCreateNestedManyWithoutAddedByInput
+  invitationsCreated?: Prisma.InvitationUncheckedCreateNestedManyWithoutCreatedByInput
   assignedProperties?: Prisma.AssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   savedProperties?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutUserInput
   uploadedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutUploaderInput
@@ -1009,12 +1181,14 @@ export type UserUpdateWithoutPropertiesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  addedBy?: Prisma.UserUpdateOneWithoutEmployeesNestedInput
   assignments?: Prisma.AssignmentUpdateManyWithoutCollectorNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutSupervisorNestedInput
   employees?: Prisma.UserUpdateManyWithoutAddedByNestedInput
-  addedBy?: Prisma.UserUpdateOneWithoutEmployeesNestedInput
+  invitationsCreated?: Prisma.InvitationUpdateManyWithoutCreatedByNestedInput
   assignedProperties?: Prisma.AssignmentUpdateManyWithoutAssignedByNestedInput
   savedProperties?: Prisma.SavedPropertyUpdateManyWithoutUserNestedInput
   uploadedImages?: Prisma.ImageUpdateManyWithoutUploaderNestedInput
@@ -1029,12 +1203,14 @@ export type UserUncheckedUpdateWithoutPropertiesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   addedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutCollectorNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutSupervisorNestedInput
   employees?: Prisma.UserUncheckedUpdateManyWithoutAddedByNestedInput
+  invitationsCreated?: Prisma.InvitationUncheckedUpdateManyWithoutCreatedByNestedInput
   assignedProperties?: Prisma.AssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   savedProperties?: Prisma.SavedPropertyUncheckedUpdateManyWithoutUserNestedInput
   uploadedImages?: Prisma.ImageUncheckedUpdateManyWithoutUploaderNestedInput
@@ -1049,12 +1225,14 @@ export type UserCreateWithoutAssignmentsInput = {
   phone?: string | null
   role?: $Enums.Role
   isActive?: boolean
+  isEmailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  addedBy?: Prisma.UserCreateNestedOneWithoutEmployeesInput
   properties?: Prisma.PropertyCreateNestedManyWithoutClientInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutSupervisorInput
   employees?: Prisma.UserCreateNestedManyWithoutAddedByInput
-  addedBy?: Prisma.UserCreateNestedOneWithoutEmployeesInput
+  invitationsCreated?: Prisma.InvitationCreateNestedManyWithoutCreatedByInput
   assignedProperties?: Prisma.AssignmentCreateNestedManyWithoutAssignedByInput
   savedProperties?: Prisma.SavedPropertyCreateNestedManyWithoutUserInput
   uploadedImages?: Prisma.ImageCreateNestedManyWithoutUploaderInput
@@ -1069,12 +1247,14 @@ export type UserUncheckedCreateWithoutAssignmentsInput = {
   phone?: string | null
   role?: $Enums.Role
   isActive?: boolean
+  isEmailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   addedById?: string | null
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutClientInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutSupervisorInput
   employees?: Prisma.UserUncheckedCreateNestedManyWithoutAddedByInput
+  invitationsCreated?: Prisma.InvitationUncheckedCreateNestedManyWithoutCreatedByInput
   assignedProperties?: Prisma.AssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   savedProperties?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutUserInput
   uploadedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutUploaderInput
@@ -1094,13 +1274,15 @@ export type UserCreateWithoutAssignedPropertiesInput = {
   phone?: string | null
   role?: $Enums.Role
   isActive?: boolean
+  isEmailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  addedBy?: Prisma.UserCreateNestedOneWithoutEmployeesInput
   properties?: Prisma.PropertyCreateNestedManyWithoutClientInput
   assignments?: Prisma.AssignmentCreateNestedManyWithoutCollectorInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutSupervisorInput
   employees?: Prisma.UserCreateNestedManyWithoutAddedByInput
-  addedBy?: Prisma.UserCreateNestedOneWithoutEmployeesInput
+  invitationsCreated?: Prisma.InvitationCreateNestedManyWithoutCreatedByInput
   savedProperties?: Prisma.SavedPropertyCreateNestedManyWithoutUserInput
   uploadedImages?: Prisma.ImageCreateNestedManyWithoutUploaderInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
@@ -1114,6 +1296,7 @@ export type UserUncheckedCreateWithoutAssignedPropertiesInput = {
   phone?: string | null
   role?: $Enums.Role
   isActive?: boolean
+  isEmailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   addedById?: string | null
@@ -1121,6 +1304,7 @@ export type UserUncheckedCreateWithoutAssignedPropertiesInput = {
   assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutCollectorInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutSupervisorInput
   employees?: Prisma.UserUncheckedCreateNestedManyWithoutAddedByInput
+  invitationsCreated?: Prisma.InvitationUncheckedCreateNestedManyWithoutCreatedByInput
   savedProperties?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutUserInput
   uploadedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutUploaderInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
@@ -1150,12 +1334,14 @@ export type UserUpdateWithoutAssignmentsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  addedBy?: Prisma.UserUpdateOneWithoutEmployeesNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutClientNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutSupervisorNestedInput
   employees?: Prisma.UserUpdateManyWithoutAddedByNestedInput
-  addedBy?: Prisma.UserUpdateOneWithoutEmployeesNestedInput
+  invitationsCreated?: Prisma.InvitationUpdateManyWithoutCreatedByNestedInput
   assignedProperties?: Prisma.AssignmentUpdateManyWithoutAssignedByNestedInput
   savedProperties?: Prisma.SavedPropertyUpdateManyWithoutUserNestedInput
   uploadedImages?: Prisma.ImageUpdateManyWithoutUploaderNestedInput
@@ -1170,12 +1356,14 @@ export type UserUncheckedUpdateWithoutAssignmentsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   addedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutClientNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutSupervisorNestedInput
   employees?: Prisma.UserUncheckedUpdateManyWithoutAddedByNestedInput
+  invitationsCreated?: Prisma.InvitationUncheckedUpdateManyWithoutCreatedByNestedInput
   assignedProperties?: Prisma.AssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   savedProperties?: Prisma.SavedPropertyUncheckedUpdateManyWithoutUserNestedInput
   uploadedImages?: Prisma.ImageUncheckedUpdateManyWithoutUploaderNestedInput
@@ -1201,13 +1389,15 @@ export type UserUpdateWithoutAssignedPropertiesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  addedBy?: Prisma.UserUpdateOneWithoutEmployeesNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutClientNestedInput
   assignments?: Prisma.AssignmentUpdateManyWithoutCollectorNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutSupervisorNestedInput
   employees?: Prisma.UserUpdateManyWithoutAddedByNestedInput
-  addedBy?: Prisma.UserUpdateOneWithoutEmployeesNestedInput
+  invitationsCreated?: Prisma.InvitationUpdateManyWithoutCreatedByNestedInput
   savedProperties?: Prisma.SavedPropertyUpdateManyWithoutUserNestedInput
   uploadedImages?: Prisma.ImageUpdateManyWithoutUploaderNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
@@ -1221,6 +1411,7 @@ export type UserUncheckedUpdateWithoutAssignedPropertiesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   addedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1228,6 +1419,7 @@ export type UserUncheckedUpdateWithoutAssignedPropertiesInput = {
   assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutCollectorNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutSupervisorNestedInput
   employees?: Prisma.UserUncheckedUpdateManyWithoutAddedByNestedInput
+  invitationsCreated?: Prisma.InvitationUncheckedUpdateManyWithoutCreatedByNestedInput
   savedProperties?: Prisma.SavedPropertyUncheckedUpdateManyWithoutUserNestedInput
   uploadedImages?: Prisma.ImageUncheckedUpdateManyWithoutUploaderNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
@@ -1241,12 +1433,14 @@ export type UserCreateWithoutReviewsInput = {
   phone?: string | null
   role?: $Enums.Role
   isActive?: boolean
+  isEmailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  addedBy?: Prisma.UserCreateNestedOneWithoutEmployeesInput
   properties?: Prisma.PropertyCreateNestedManyWithoutClientInput
   assignments?: Prisma.AssignmentCreateNestedManyWithoutCollectorInput
   employees?: Prisma.UserCreateNestedManyWithoutAddedByInput
-  addedBy?: Prisma.UserCreateNestedOneWithoutEmployeesInput
+  invitationsCreated?: Prisma.InvitationCreateNestedManyWithoutCreatedByInput
   assignedProperties?: Prisma.AssignmentCreateNestedManyWithoutAssignedByInput
   savedProperties?: Prisma.SavedPropertyCreateNestedManyWithoutUserInput
   uploadedImages?: Prisma.ImageCreateNestedManyWithoutUploaderInput
@@ -1261,12 +1455,14 @@ export type UserUncheckedCreateWithoutReviewsInput = {
   phone?: string | null
   role?: $Enums.Role
   isActive?: boolean
+  isEmailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   addedById?: string | null
   properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutClientInput
   assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutCollectorInput
   employees?: Prisma.UserUncheckedCreateNestedManyWithoutAddedByInput
+  invitationsCreated?: Prisma.InvitationUncheckedCreateNestedManyWithoutCreatedByInput
   assignedProperties?: Prisma.AssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   savedProperties?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutUserInput
   uploadedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutUploaderInput
@@ -1297,12 +1493,14 @@ export type UserUpdateWithoutReviewsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  addedBy?: Prisma.UserUpdateOneWithoutEmployeesNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutClientNestedInput
   assignments?: Prisma.AssignmentUpdateManyWithoutCollectorNestedInput
   employees?: Prisma.UserUpdateManyWithoutAddedByNestedInput
-  addedBy?: Prisma.UserUpdateOneWithoutEmployeesNestedInput
+  invitationsCreated?: Prisma.InvitationUpdateManyWithoutCreatedByNestedInput
   assignedProperties?: Prisma.AssignmentUpdateManyWithoutAssignedByNestedInput
   savedProperties?: Prisma.SavedPropertyUpdateManyWithoutUserNestedInput
   uploadedImages?: Prisma.ImageUpdateManyWithoutUploaderNestedInput
@@ -1317,12 +1515,14 @@ export type UserUncheckedUpdateWithoutReviewsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   addedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutClientNestedInput
   assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutCollectorNestedInput
   employees?: Prisma.UserUncheckedUpdateManyWithoutAddedByNestedInput
+  invitationsCreated?: Prisma.InvitationUncheckedUpdateManyWithoutCreatedByNestedInput
   assignedProperties?: Prisma.AssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   savedProperties?: Prisma.SavedPropertyUncheckedUpdateManyWithoutUserNestedInput
   uploadedImages?: Prisma.ImageUncheckedUpdateManyWithoutUploaderNestedInput
@@ -1337,13 +1537,15 @@ export type UserCreateWithoutSavedPropertiesInput = {
   phone?: string | null
   role?: $Enums.Role
   isActive?: boolean
+  isEmailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  addedBy?: Prisma.UserCreateNestedOneWithoutEmployeesInput
   properties?: Prisma.PropertyCreateNestedManyWithoutClientInput
   assignments?: Prisma.AssignmentCreateNestedManyWithoutCollectorInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutSupervisorInput
   employees?: Prisma.UserCreateNestedManyWithoutAddedByInput
-  addedBy?: Prisma.UserCreateNestedOneWithoutEmployeesInput
+  invitationsCreated?: Prisma.InvitationCreateNestedManyWithoutCreatedByInput
   assignedProperties?: Prisma.AssignmentCreateNestedManyWithoutAssignedByInput
   uploadedImages?: Prisma.ImageCreateNestedManyWithoutUploaderInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
@@ -1357,6 +1559,7 @@ export type UserUncheckedCreateWithoutSavedPropertiesInput = {
   phone?: string | null
   role?: $Enums.Role
   isActive?: boolean
+  isEmailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   addedById?: string | null
@@ -1364,6 +1567,7 @@ export type UserUncheckedCreateWithoutSavedPropertiesInput = {
   assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutCollectorInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutSupervisorInput
   employees?: Prisma.UserUncheckedCreateNestedManyWithoutAddedByInput
+  invitationsCreated?: Prisma.InvitationUncheckedCreateNestedManyWithoutCreatedByInput
   assignedProperties?: Prisma.AssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   uploadedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutUploaderInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
@@ -1393,13 +1597,15 @@ export type UserUpdateWithoutSavedPropertiesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  addedBy?: Prisma.UserUpdateOneWithoutEmployeesNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutClientNestedInput
   assignments?: Prisma.AssignmentUpdateManyWithoutCollectorNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutSupervisorNestedInput
   employees?: Prisma.UserUpdateManyWithoutAddedByNestedInput
-  addedBy?: Prisma.UserUpdateOneWithoutEmployeesNestedInput
+  invitationsCreated?: Prisma.InvitationUpdateManyWithoutCreatedByNestedInput
   assignedProperties?: Prisma.AssignmentUpdateManyWithoutAssignedByNestedInput
   uploadedImages?: Prisma.ImageUpdateManyWithoutUploaderNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
@@ -1413,6 +1619,7 @@ export type UserUncheckedUpdateWithoutSavedPropertiesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   addedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1420,6 +1627,7 @@ export type UserUncheckedUpdateWithoutSavedPropertiesInput = {
   assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutCollectorNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutSupervisorNestedInput
   employees?: Prisma.UserUncheckedUpdateManyWithoutAddedByNestedInput
+  invitationsCreated?: Prisma.InvitationUncheckedUpdateManyWithoutCreatedByNestedInput
   assignedProperties?: Prisma.AssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   uploadedImages?: Prisma.ImageUncheckedUpdateManyWithoutUploaderNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
@@ -1433,13 +1641,15 @@ export type UserCreateWithoutAuditLogsInput = {
   phone?: string | null
   role?: $Enums.Role
   isActive?: boolean
+  isEmailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  addedBy?: Prisma.UserCreateNestedOneWithoutEmployeesInput
   properties?: Prisma.PropertyCreateNestedManyWithoutClientInput
   assignments?: Prisma.AssignmentCreateNestedManyWithoutCollectorInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutSupervisorInput
   employees?: Prisma.UserCreateNestedManyWithoutAddedByInput
-  addedBy?: Prisma.UserCreateNestedOneWithoutEmployeesInput
+  invitationsCreated?: Prisma.InvitationCreateNestedManyWithoutCreatedByInput
   assignedProperties?: Prisma.AssignmentCreateNestedManyWithoutAssignedByInput
   savedProperties?: Prisma.SavedPropertyCreateNestedManyWithoutUserInput
   uploadedImages?: Prisma.ImageCreateNestedManyWithoutUploaderInput
@@ -1453,6 +1663,7 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   phone?: string | null
   role?: $Enums.Role
   isActive?: boolean
+  isEmailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   addedById?: string | null
@@ -1460,6 +1671,7 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   assignments?: Prisma.AssignmentUncheckedCreateNestedManyWithoutCollectorInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutSupervisorInput
   employees?: Prisma.UserUncheckedCreateNestedManyWithoutAddedByInput
+  invitationsCreated?: Prisma.InvitationUncheckedCreateNestedManyWithoutCreatedByInput
   assignedProperties?: Prisma.AssignmentUncheckedCreateNestedManyWithoutAssignedByInput
   savedProperties?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutUserInput
   uploadedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutUploaderInput
@@ -1489,13 +1701,15 @@ export type UserUpdateWithoutAuditLogsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  addedBy?: Prisma.UserUpdateOneWithoutEmployeesNestedInput
   properties?: Prisma.PropertyUpdateManyWithoutClientNestedInput
   assignments?: Prisma.AssignmentUpdateManyWithoutCollectorNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutSupervisorNestedInput
   employees?: Prisma.UserUpdateManyWithoutAddedByNestedInput
-  addedBy?: Prisma.UserUpdateOneWithoutEmployeesNestedInput
+  invitationsCreated?: Prisma.InvitationUpdateManyWithoutCreatedByNestedInput
   assignedProperties?: Prisma.AssignmentUpdateManyWithoutAssignedByNestedInput
   savedProperties?: Prisma.SavedPropertyUpdateManyWithoutUserNestedInput
   uploadedImages?: Prisma.ImageUpdateManyWithoutUploaderNestedInput
@@ -1509,6 +1723,7 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   addedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1516,6 +1731,7 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutCollectorNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutSupervisorNestedInput
   employees?: Prisma.UserUncheckedUpdateManyWithoutAddedByNestedInput
+  invitationsCreated?: Prisma.InvitationUncheckedUpdateManyWithoutCreatedByNestedInput
   assignedProperties?: Prisma.AssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   savedProperties?: Prisma.SavedPropertyUncheckedUpdateManyWithoutUserNestedInput
   uploadedImages?: Prisma.ImageUncheckedUpdateManyWithoutUploaderNestedInput
@@ -1529,6 +1745,7 @@ export type UserCreateManyAddedByInput = {
   phone?: string | null
   role?: $Enums.Role
   isActive?: boolean
+  isEmailVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1541,12 +1758,14 @@ export type UserUpdateWithoutAddedByInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   properties?: Prisma.PropertyUpdateManyWithoutClientNestedInput
   assignments?: Prisma.AssignmentUpdateManyWithoutCollectorNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutSupervisorNestedInput
   employees?: Prisma.UserUpdateManyWithoutAddedByNestedInput
+  invitationsCreated?: Prisma.InvitationUpdateManyWithoutCreatedByNestedInput
   assignedProperties?: Prisma.AssignmentUpdateManyWithoutAssignedByNestedInput
   savedProperties?: Prisma.SavedPropertyUpdateManyWithoutUserNestedInput
   uploadedImages?: Prisma.ImageUpdateManyWithoutUploaderNestedInput
@@ -1561,12 +1780,14 @@ export type UserUncheckedUpdateWithoutAddedByInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   properties?: Prisma.PropertyUncheckedUpdateManyWithoutClientNestedInput
   assignments?: Prisma.AssignmentUncheckedUpdateManyWithoutCollectorNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutSupervisorNestedInput
   employees?: Prisma.UserUncheckedUpdateManyWithoutAddedByNestedInput
+  invitationsCreated?: Prisma.InvitationUncheckedUpdateManyWithoutCreatedByNestedInput
   assignedProperties?: Prisma.AssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
   savedProperties?: Prisma.SavedPropertyUncheckedUpdateManyWithoutUserNestedInput
   uploadedImages?: Prisma.ImageUncheckedUpdateManyWithoutUploaderNestedInput
@@ -1581,6 +1802,7 @@ export type UserUncheckedUpdateManyWithoutAddedByInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1595,6 +1817,7 @@ export type UserCountOutputType = {
   assignments: number
   reviews: number
   employees: number
+  invitationsCreated: number
   assignedProperties: number
   savedProperties: number
   uploadedImages: number
@@ -1606,6 +1829,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   assignments?: boolean | UserCountOutputTypeCountAssignmentsArgs
   reviews?: boolean | UserCountOutputTypeCountReviewsArgs
   employees?: boolean | UserCountOutputTypeCountEmployeesArgs
+  invitationsCreated?: boolean | UserCountOutputTypeCountInvitationsCreatedArgs
   assignedProperties?: boolean | UserCountOutputTypeCountAssignedPropertiesArgs
   savedProperties?: boolean | UserCountOutputTypeCountSavedPropertiesArgs
   uploadedImages?: boolean | UserCountOutputTypeCountUploadedImagesArgs
@@ -1653,6 +1877,13 @@ export type UserCountOutputTypeCountEmployeesArgs<ExtArgs extends runtime.Types.
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountInvitationsCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvitationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountAssignedPropertiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AssignmentWhereInput
 }
@@ -1687,14 +1918,16 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   phone?: boolean
   role?: boolean
   isActive?: boolean
+  isEmailVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   addedById?: boolean
+  addedBy?: boolean | Prisma.User$addedByArgs<ExtArgs>
   properties?: boolean | Prisma.User$propertiesArgs<ExtArgs>
   assignments?: boolean | Prisma.User$assignmentsArgs<ExtArgs>
   reviews?: boolean | Prisma.User$reviewsArgs<ExtArgs>
   employees?: boolean | Prisma.User$employeesArgs<ExtArgs>
-  addedBy?: boolean | Prisma.User$addedByArgs<ExtArgs>
+  invitationsCreated?: boolean | Prisma.User$invitationsCreatedArgs<ExtArgs>
   assignedProperties?: boolean | Prisma.User$assignedPropertiesArgs<ExtArgs>
   savedProperties?: boolean | Prisma.User$savedPropertiesArgs<ExtArgs>
   uploadedImages?: boolean | Prisma.User$uploadedImagesArgs<ExtArgs>
@@ -1710,6 +1943,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   phone?: boolean
   role?: boolean
   isActive?: boolean
+  isEmailVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   addedById?: boolean
@@ -1724,6 +1958,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   phone?: boolean
   role?: boolean
   isActive?: boolean
+  isEmailVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   addedById?: boolean
@@ -1738,18 +1973,20 @@ export type UserSelectScalar = {
   phone?: boolean
   role?: boolean
   isActive?: boolean
+  isEmailVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   addedById?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "name" | "phone" | "role" | "isActive" | "createdAt" | "updatedAt" | "addedById", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "name" | "phone" | "role" | "isActive" | "isEmailVerified" | "createdAt" | "updatedAt" | "addedById", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  addedBy?: boolean | Prisma.User$addedByArgs<ExtArgs>
   properties?: boolean | Prisma.User$propertiesArgs<ExtArgs>
   assignments?: boolean | Prisma.User$assignmentsArgs<ExtArgs>
   reviews?: boolean | Prisma.User$reviewsArgs<ExtArgs>
   employees?: boolean | Prisma.User$employeesArgs<ExtArgs>
-  addedBy?: boolean | Prisma.User$addedByArgs<ExtArgs>
+  invitationsCreated?: boolean | Prisma.User$invitationsCreatedArgs<ExtArgs>
   assignedProperties?: boolean | Prisma.User$assignedPropertiesArgs<ExtArgs>
   savedProperties?: boolean | Prisma.User$savedPropertiesArgs<ExtArgs>
   uploadedImages?: boolean | Prisma.User$uploadedImagesArgs<ExtArgs>
@@ -1766,11 +2003,12 @@ export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
+    addedBy: Prisma.$UserPayload<ExtArgs> | null
     properties: Prisma.$PropertyPayload<ExtArgs>[]
     assignments: Prisma.$AssignmentPayload<ExtArgs>[]
     reviews: Prisma.$ReviewPayload<ExtArgs>[]
     employees: Prisma.$UserPayload<ExtArgs>[]
-    addedBy: Prisma.$UserPayload<ExtArgs> | null
+    invitationsCreated: Prisma.$InvitationPayload<ExtArgs>[]
     assignedProperties: Prisma.$AssignmentPayload<ExtArgs>[]
     savedProperties: Prisma.$SavedPropertyPayload<ExtArgs>[]
     uploadedImages: Prisma.$ImagePayload<ExtArgs>[]
@@ -1784,6 +2022,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     phone: string | null
     role: $Enums.Role
     isActive: boolean
+    isEmailVerified: boolean
     createdAt: Date
     updatedAt: Date
     addedById: string | null
@@ -2181,11 +2420,12 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  addedBy<T extends Prisma.User$addedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$addedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   properties<T extends Prisma.User$propertiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$propertiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   assignments<T extends Prisma.User$assignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reviews<T extends Prisma.User$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   employees<T extends Prisma.User$employeesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$employeesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  addedBy<T extends Prisma.User$addedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$addedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  invitationsCreated<T extends Prisma.User$invitationsCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$invitationsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   assignedProperties<T extends Prisma.User$assignedPropertiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assignedPropertiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   savedProperties<T extends Prisma.User$savedPropertiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$savedPropertiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SavedPropertyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   uploadedImages<T extends Prisma.User$uploadedImagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$uploadedImagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2226,6 +2466,7 @@ export interface UserFieldRefs {
   readonly phone: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'Role'>
   readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
+  readonly isEmailVerified: Prisma.FieldRef<"User", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly addedById: Prisma.FieldRef<"User", 'String'>
@@ -2630,6 +2871,25 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
+ * User.addedBy
+ */
+export type User$addedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+}
+
+/**
  * User.properties
  */
 export type User$propertiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2726,22 +2986,27 @@ export type User$employeesArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * User.addedBy
+ * User.invitationsCreated
  */
-export type User$addedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$invitationsCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the User
+   * Select specific fields to fetch from the Invitation
    */
-  select?: Prisma.UserSelect<ExtArgs> | null
+  select?: Prisma.InvitationSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the User
+   * Omit specific fields from the Invitation
    */
-  omit?: Prisma.UserOmit<ExtArgs> | null
+  omit?: Prisma.InvitationOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
+  include?: Prisma.InvitationInclude<ExtArgs> | null
+  where?: Prisma.InvitationWhereInput
+  orderBy?: Prisma.InvitationOrderByWithRelationInput | Prisma.InvitationOrderByWithRelationInput[]
+  cursor?: Prisma.InvitationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvitationScalarFieldEnum | Prisma.InvitationScalarFieldEnum[]
 }
 
 /**

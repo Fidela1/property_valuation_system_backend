@@ -89,3 +89,13 @@ export const InquiryStatus = {
 } as const
 
 export type InquiryStatus = (typeof InquiryStatus)[keyof typeof InquiryStatus]
+
+
+export const InvitationStatus = {
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED',
+  EXPIRED: 'EXPIRED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type InvitationStatus = (typeof InvitationStatus)[keyof typeof InvitationStatus]
