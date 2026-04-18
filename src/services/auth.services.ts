@@ -1,5 +1,5 @@
 import prisma from '../config/prisma';
-import { hashedPassword, comparePassword } from '../utils/hash'
+import { hashedPassword, comparePassword } from '../utils/hash';
 import { AppError } from '../utils/AppError';
 
 export const createUser = async (name: string, email: string, phone: string, password: string) => {

@@ -1,5 +1,5 @@
 import prisma from '../config/prisma';
-const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
 import { AppError } from '../utils/AppError';
 import { randomBytes } from 'crypto';
 
@@ -64,12 +64,10 @@ const generateInvitationToken = (): string => {
   return randomBytes(32).toString('hex');
 };
 
-// Generate random placeholder password (for admin creation)
 const generatePlaceholderPassword = (): string => {
   return randomBytes(12).toString('hex');
 };
 
-// Role display names for email
 const getRoleDisplayName = (role: string): string => {
   const roleMap: Record<string, string> = {
     'CLIENT': 'Property Owner',
@@ -80,7 +78,6 @@ const getRoleDisplayName = (role: string): string => {
   return roleMap[role] || role;
 };
 
-// Role descriptions for email
 const getRoleDescription = (role: string): string => {
   const descriptionMap: Record<string, string> = {
     'CLIENT': 'You can submit properties for valuation and track their status.',
@@ -91,9 +88,6 @@ const getRoleDescription = (role: string): string => {
   return descriptionMap[role] || '';
 };
 
-// ============================================
-// CREATE INVITATION (Admin creates invitation, no user yet)
-// ============================================
 
 export const createInvitation = async (
   adminId: string,
@@ -153,7 +147,7 @@ export const createInvitation = async (
   // Generate invitation token
   const token = generateInvitationToken();
   const expiresAt = new Date();
-  expiresAt.setDate(expiresAt.getDate() + 7); // 7 days expiry
+  expiresAt.setDate(expiresAt.getDate() + 7); 
   
   // Create invitation
   const invitation = await prisma.invitation.create({
@@ -192,9 +186,8 @@ export const getManageUsers = async (
   
   // Build where clause
    const where: any = {
-    NOT: { id: currentAdminId },  // ✅ Correct
-  role: 'CLIENT',               // Additional filter
-  isActive: true    // ← Exclude current admin from list
+    NOT: { id: currentAdminId },  
+  isActive: true   
   };;
   
   if (role && role !== 'ALL') {
