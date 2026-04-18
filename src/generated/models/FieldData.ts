@@ -36,6 +36,11 @@ export type FieldDataAvgAggregateOutputType = {
   buildingSize: number | null
   yearBuilt: number | null
   parkingSpaces: number | null
+  gardenSize: number | null
+  annexSize: number | null
+  annexBedrooms: number | null
+  annexBathrooms: number | null
+  fenceHeight: number | null
   nearestSchoolKm: number | null
   nearestHospitalKm: number | null
   nearestTransportKm: number | null
@@ -54,6 +59,11 @@ export type FieldDataSumAggregateOutputType = {
   buildingSize: number | null
   yearBuilt: number | null
   parkingSpaces: number | null
+  gardenSize: number | null
+  annexSize: number | null
+  annexBedrooms: number | null
+  annexBathrooms: number | null
+  fenceHeight: number | null
   nearestSchoolKm: number | null
   nearestHospitalKm: number | null
   nearestTransportKm: number | null
@@ -76,6 +86,20 @@ export type FieldDataMinAggregateOutputType = {
   buildingSize: number | null
   yearBuilt: number | null
   parkingSpaces: number | null
+  hasGarden: boolean | null
+  gardenSize: number | null
+  gardenType: string | null
+  hasAnnex: boolean | null
+  annexType: string | null
+  annexSize: number | null
+  annexBedrooms: number | null
+  annexBathrooms: number | null
+  hasGate: boolean | null
+  gateType: string | null
+  gateMaterial: string | null
+  hasFence: boolean | null
+  fenceType: string | null
+  fenceHeight: number | null
   nearestSchoolKm: number | null
   nearestHospitalKm: number | null
   nearestTransportKm: number | null
@@ -104,6 +128,20 @@ export type FieldDataMaxAggregateOutputType = {
   buildingSize: number | null
   yearBuilt: number | null
   parkingSpaces: number | null
+  hasGarden: boolean | null
+  gardenSize: number | null
+  gardenType: string | null
+  hasAnnex: boolean | null
+  annexType: string | null
+  annexSize: number | null
+  annexBedrooms: number | null
+  annexBathrooms: number | null
+  hasGate: boolean | null
+  gateType: string | null
+  gateMaterial: string | null
+  hasFence: boolean | null
+  fenceType: string | null
+  fenceHeight: number | null
   nearestSchoolKm: number | null
   nearestHospitalKm: number | null
   nearestTransportKm: number | null
@@ -132,6 +170,20 @@ export type FieldDataCountAggregateOutputType = {
   buildingSize: number
   yearBuilt: number
   parkingSpaces: number
+  hasGarden: number
+  gardenSize: number
+  gardenType: number
+  hasAnnex: number
+  annexType: number
+  annexSize: number
+  annexBedrooms: number
+  annexBathrooms: number
+  hasGate: number
+  gateType: number
+  gateMaterial: number
+  hasFence: number
+  fenceType: number
+  fenceHeight: number
   nearestSchoolKm: number
   nearestHospitalKm: number
   nearestTransportKm: number
@@ -158,6 +210,11 @@ export type FieldDataAvgAggregateInputType = {
   buildingSize?: true
   yearBuilt?: true
   parkingSpaces?: true
+  gardenSize?: true
+  annexSize?: true
+  annexBedrooms?: true
+  annexBathrooms?: true
+  fenceHeight?: true
   nearestSchoolKm?: true
   nearestHospitalKm?: true
   nearestTransportKm?: true
@@ -176,6 +233,11 @@ export type FieldDataSumAggregateInputType = {
   buildingSize?: true
   yearBuilt?: true
   parkingSpaces?: true
+  gardenSize?: true
+  annexSize?: true
+  annexBedrooms?: true
+  annexBathrooms?: true
+  fenceHeight?: true
   nearestSchoolKm?: true
   nearestHospitalKm?: true
   nearestTransportKm?: true
@@ -198,6 +260,20 @@ export type FieldDataMinAggregateInputType = {
   buildingSize?: true
   yearBuilt?: true
   parkingSpaces?: true
+  hasGarden?: true
+  gardenSize?: true
+  gardenType?: true
+  hasAnnex?: true
+  annexType?: true
+  annexSize?: true
+  annexBedrooms?: true
+  annexBathrooms?: true
+  hasGate?: true
+  gateType?: true
+  gateMaterial?: true
+  hasFence?: true
+  fenceType?: true
+  fenceHeight?: true
   nearestSchoolKm?: true
   nearestHospitalKm?: true
   nearestTransportKm?: true
@@ -226,6 +302,20 @@ export type FieldDataMaxAggregateInputType = {
   buildingSize?: true
   yearBuilt?: true
   parkingSpaces?: true
+  hasGarden?: true
+  gardenSize?: true
+  gardenType?: true
+  hasAnnex?: true
+  annexType?: true
+  annexSize?: true
+  annexBedrooms?: true
+  annexBathrooms?: true
+  hasGate?: true
+  gateType?: true
+  gateMaterial?: true
+  hasFence?: true
+  fenceType?: true
+  fenceHeight?: true
   nearestSchoolKm?: true
   nearestHospitalKm?: true
   nearestTransportKm?: true
@@ -254,6 +344,20 @@ export type FieldDataCountAggregateInputType = {
   buildingSize?: true
   yearBuilt?: true
   parkingSpaces?: true
+  hasGarden?: true
+  gardenSize?: true
+  gardenType?: true
+  hasAnnex?: true
+  annexType?: true
+  annexSize?: true
+  annexBedrooms?: true
+  annexBathrooms?: true
+  hasGate?: true
+  gateType?: true
+  gateMaterial?: true
+  hasFence?: true
+  fenceType?: true
+  fenceHeight?: true
   nearestSchoolKm?: true
   nearestHospitalKm?: true
   nearestTransportKm?: true
@@ -369,6 +473,20 @@ export type FieldDataGroupByOutputType = {
   buildingSize: number | null
   yearBuilt: number | null
   parkingSpaces: number | null
+  hasGarden: boolean | null
+  gardenSize: number | null
+  gardenType: string | null
+  hasAnnex: boolean | null
+  annexType: string | null
+  annexSize: number | null
+  annexBedrooms: number | null
+  annexBathrooms: number | null
+  hasGate: boolean | null
+  gateType: string | null
+  gateMaterial: string | null
+  hasFence: boolean | null
+  fenceType: string | null
+  fenceHeight: number | null
   nearestSchoolKm: number | null
   nearestHospitalKm: number | null
   nearestTransportKm: number | null
@@ -420,6 +538,20 @@ export type FieldDataWhereInput = {
   buildingSize?: Prisma.FloatNullableFilter<"FieldData"> | number | null
   yearBuilt?: Prisma.IntNullableFilter<"FieldData"> | number | null
   parkingSpaces?: Prisma.IntNullableFilter<"FieldData"> | number | null
+  hasGarden?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  gardenSize?: Prisma.FloatNullableFilter<"FieldData"> | number | null
+  gardenType?: Prisma.StringNullableFilter<"FieldData"> | string | null
+  hasAnnex?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  annexType?: Prisma.StringNullableFilter<"FieldData"> | string | null
+  annexSize?: Prisma.FloatNullableFilter<"FieldData"> | number | null
+  annexBedrooms?: Prisma.IntNullableFilter<"FieldData"> | number | null
+  annexBathrooms?: Prisma.FloatNullableFilter<"FieldData"> | number | null
+  hasGate?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  gateType?: Prisma.StringNullableFilter<"FieldData"> | string | null
+  gateMaterial?: Prisma.StringNullableFilter<"FieldData"> | string | null
+  hasFence?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  fenceType?: Prisma.StringNullableFilter<"FieldData"> | string | null
+  fenceHeight?: Prisma.FloatNullableFilter<"FieldData"> | number | null
   nearestSchoolKm?: Prisma.FloatNullableFilter<"FieldData"> | number | null
   nearestHospitalKm?: Prisma.FloatNullableFilter<"FieldData"> | number | null
   nearestTransportKm?: Prisma.FloatNullableFilter<"FieldData"> | number | null
@@ -449,6 +581,20 @@ export type FieldDataOrderByWithRelationInput = {
   buildingSize?: Prisma.SortOrderInput | Prisma.SortOrder
   yearBuilt?: Prisma.SortOrderInput | Prisma.SortOrder
   parkingSpaces?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasGarden?: Prisma.SortOrderInput | Prisma.SortOrder
+  gardenSize?: Prisma.SortOrderInput | Prisma.SortOrder
+  gardenType?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasAnnex?: Prisma.SortOrderInput | Prisma.SortOrder
+  annexType?: Prisma.SortOrderInput | Prisma.SortOrder
+  annexSize?: Prisma.SortOrderInput | Prisma.SortOrder
+  annexBedrooms?: Prisma.SortOrderInput | Prisma.SortOrder
+  annexBathrooms?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasGate?: Prisma.SortOrderInput | Prisma.SortOrder
+  gateType?: Prisma.SortOrderInput | Prisma.SortOrder
+  gateMaterial?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasFence?: Prisma.SortOrderInput | Prisma.SortOrder
+  fenceType?: Prisma.SortOrderInput | Prisma.SortOrder
+  fenceHeight?: Prisma.SortOrderInput | Prisma.SortOrder
   nearestSchoolKm?: Prisma.SortOrderInput | Prisma.SortOrder
   nearestHospitalKm?: Prisma.SortOrderInput | Prisma.SortOrder
   nearestTransportKm?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -482,6 +628,20 @@ export type FieldDataWhereUniqueInput = Prisma.AtLeast<{
   buildingSize?: Prisma.FloatNullableFilter<"FieldData"> | number | null
   yearBuilt?: Prisma.IntNullableFilter<"FieldData"> | number | null
   parkingSpaces?: Prisma.IntNullableFilter<"FieldData"> | number | null
+  hasGarden?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  gardenSize?: Prisma.FloatNullableFilter<"FieldData"> | number | null
+  gardenType?: Prisma.StringNullableFilter<"FieldData"> | string | null
+  hasAnnex?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  annexType?: Prisma.StringNullableFilter<"FieldData"> | string | null
+  annexSize?: Prisma.FloatNullableFilter<"FieldData"> | number | null
+  annexBedrooms?: Prisma.IntNullableFilter<"FieldData"> | number | null
+  annexBathrooms?: Prisma.FloatNullableFilter<"FieldData"> | number | null
+  hasGate?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  gateType?: Prisma.StringNullableFilter<"FieldData"> | string | null
+  gateMaterial?: Prisma.StringNullableFilter<"FieldData"> | string | null
+  hasFence?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  fenceType?: Prisma.StringNullableFilter<"FieldData"> | string | null
+  fenceHeight?: Prisma.FloatNullableFilter<"FieldData"> | number | null
   nearestSchoolKm?: Prisma.FloatNullableFilter<"FieldData"> | number | null
   nearestHospitalKm?: Prisma.FloatNullableFilter<"FieldData"> | number | null
   nearestTransportKm?: Prisma.FloatNullableFilter<"FieldData"> | number | null
@@ -510,6 +670,20 @@ export type FieldDataOrderByWithAggregationInput = {
   buildingSize?: Prisma.SortOrderInput | Prisma.SortOrder
   yearBuilt?: Prisma.SortOrderInput | Prisma.SortOrder
   parkingSpaces?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasGarden?: Prisma.SortOrderInput | Prisma.SortOrder
+  gardenSize?: Prisma.SortOrderInput | Prisma.SortOrder
+  gardenType?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasAnnex?: Prisma.SortOrderInput | Prisma.SortOrder
+  annexType?: Prisma.SortOrderInput | Prisma.SortOrder
+  annexSize?: Prisma.SortOrderInput | Prisma.SortOrder
+  annexBedrooms?: Prisma.SortOrderInput | Prisma.SortOrder
+  annexBathrooms?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasGate?: Prisma.SortOrderInput | Prisma.SortOrder
+  gateType?: Prisma.SortOrderInput | Prisma.SortOrder
+  gateMaterial?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasFence?: Prisma.SortOrderInput | Prisma.SortOrder
+  fenceType?: Prisma.SortOrderInput | Prisma.SortOrder
+  fenceHeight?: Prisma.SortOrderInput | Prisma.SortOrder
   nearestSchoolKm?: Prisma.SortOrderInput | Prisma.SortOrder
   nearestHospitalKm?: Prisma.SortOrderInput | Prisma.SortOrder
   nearestTransportKm?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -546,6 +720,20 @@ export type FieldDataScalarWhereWithAggregatesInput = {
   buildingSize?: Prisma.FloatNullableWithAggregatesFilter<"FieldData"> | number | null
   yearBuilt?: Prisma.IntNullableWithAggregatesFilter<"FieldData"> | number | null
   parkingSpaces?: Prisma.IntNullableWithAggregatesFilter<"FieldData"> | number | null
+  hasGarden?: Prisma.BoolNullableWithAggregatesFilter<"FieldData"> | boolean | null
+  gardenSize?: Prisma.FloatNullableWithAggregatesFilter<"FieldData"> | number | null
+  gardenType?: Prisma.StringNullableWithAggregatesFilter<"FieldData"> | string | null
+  hasAnnex?: Prisma.BoolNullableWithAggregatesFilter<"FieldData"> | boolean | null
+  annexType?: Prisma.StringNullableWithAggregatesFilter<"FieldData"> | string | null
+  annexSize?: Prisma.FloatNullableWithAggregatesFilter<"FieldData"> | number | null
+  annexBedrooms?: Prisma.IntNullableWithAggregatesFilter<"FieldData"> | number | null
+  annexBathrooms?: Prisma.FloatNullableWithAggregatesFilter<"FieldData"> | number | null
+  hasGate?: Prisma.BoolNullableWithAggregatesFilter<"FieldData"> | boolean | null
+  gateType?: Prisma.StringNullableWithAggregatesFilter<"FieldData"> | string | null
+  gateMaterial?: Prisma.StringNullableWithAggregatesFilter<"FieldData"> | string | null
+  hasFence?: Prisma.BoolNullableWithAggregatesFilter<"FieldData"> | boolean | null
+  fenceType?: Prisma.StringNullableWithAggregatesFilter<"FieldData"> | string | null
+  fenceHeight?: Prisma.FloatNullableWithAggregatesFilter<"FieldData"> | number | null
   nearestSchoolKm?: Prisma.FloatNullableWithAggregatesFilter<"FieldData"> | number | null
   nearestHospitalKm?: Prisma.FloatNullableWithAggregatesFilter<"FieldData"> | number | null
   nearestTransportKm?: Prisma.FloatNullableWithAggregatesFilter<"FieldData"> | number | null
@@ -574,6 +762,20 @@ export type FieldDataCreateInput = {
   buildingSize?: number | null
   yearBuilt?: number | null
   parkingSpaces?: number | null
+  hasGarden?: boolean | null
+  gardenSize?: number | null
+  gardenType?: string | null
+  hasAnnex?: boolean | null
+  annexType?: string | null
+  annexSize?: number | null
+  annexBedrooms?: number | null
+  annexBathrooms?: number | null
+  hasGate?: boolean | null
+  gateType?: string | null
+  gateMaterial?: string | null
+  hasFence?: boolean | null
+  fenceType?: string | null
+  fenceHeight?: number | null
   nearestSchoolKm?: number | null
   nearestHospitalKm?: number | null
   nearestTransportKm?: number | null
@@ -602,6 +804,20 @@ export type FieldDataUncheckedCreateInput = {
   buildingSize?: number | null
   yearBuilt?: number | null
   parkingSpaces?: number | null
+  hasGarden?: boolean | null
+  gardenSize?: number | null
+  gardenType?: string | null
+  hasAnnex?: boolean | null
+  annexType?: string | null
+  annexSize?: number | null
+  annexBedrooms?: number | null
+  annexBathrooms?: number | null
+  hasGate?: boolean | null
+  gateType?: string | null
+  gateMaterial?: string | null
+  hasFence?: boolean | null
+  fenceType?: string | null
+  fenceHeight?: number | null
   nearestSchoolKm?: number | null
   nearestHospitalKm?: number | null
   nearestTransportKm?: number | null
@@ -630,6 +846,20 @@ export type FieldDataUpdateInput = {
   buildingSize?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   yearBuilt?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   parkingSpaces?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hasGarden?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  gardenSize?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  gardenType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasAnnex?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  annexType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  annexSize?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  annexBedrooms?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  annexBathrooms?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  hasGate?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  gateType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gateMaterial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasFence?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  fenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fenceHeight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestSchoolKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestHospitalKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestTransportKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -658,6 +888,20 @@ export type FieldDataUncheckedUpdateInput = {
   buildingSize?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   yearBuilt?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   parkingSpaces?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hasGarden?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  gardenSize?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  gardenType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasAnnex?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  annexType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  annexSize?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  annexBedrooms?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  annexBathrooms?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  hasGate?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  gateType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gateMaterial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasFence?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  fenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fenceHeight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestSchoolKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestHospitalKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestTransportKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -686,6 +930,20 @@ export type FieldDataCreateManyInput = {
   buildingSize?: number | null
   yearBuilt?: number | null
   parkingSpaces?: number | null
+  hasGarden?: boolean | null
+  gardenSize?: number | null
+  gardenType?: string | null
+  hasAnnex?: boolean | null
+  annexType?: string | null
+  annexSize?: number | null
+  annexBedrooms?: number | null
+  annexBathrooms?: number | null
+  hasGate?: boolean | null
+  gateType?: string | null
+  gateMaterial?: string | null
+  hasFence?: boolean | null
+  fenceType?: string | null
+  fenceHeight?: number | null
   nearestSchoolKm?: number | null
   nearestHospitalKm?: number | null
   nearestTransportKm?: number | null
@@ -714,6 +972,20 @@ export type FieldDataUpdateManyMutationInput = {
   buildingSize?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   yearBuilt?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   parkingSpaces?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hasGarden?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  gardenSize?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  gardenType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasAnnex?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  annexType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  annexSize?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  annexBedrooms?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  annexBathrooms?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  hasGate?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  gateType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gateMaterial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasFence?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  fenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fenceHeight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestSchoolKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestHospitalKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestTransportKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -741,6 +1013,20 @@ export type FieldDataUncheckedUpdateManyInput = {
   buildingSize?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   yearBuilt?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   parkingSpaces?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hasGarden?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  gardenSize?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  gardenType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasAnnex?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  annexType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  annexSize?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  annexBedrooms?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  annexBathrooms?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  hasGate?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  gateType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gateMaterial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasFence?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  fenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fenceHeight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestSchoolKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestHospitalKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestTransportKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -774,6 +1060,20 @@ export type FieldDataCountOrderByAggregateInput = {
   buildingSize?: Prisma.SortOrder
   yearBuilt?: Prisma.SortOrder
   parkingSpaces?: Prisma.SortOrder
+  hasGarden?: Prisma.SortOrder
+  gardenSize?: Prisma.SortOrder
+  gardenType?: Prisma.SortOrder
+  hasAnnex?: Prisma.SortOrder
+  annexType?: Prisma.SortOrder
+  annexSize?: Prisma.SortOrder
+  annexBedrooms?: Prisma.SortOrder
+  annexBathrooms?: Prisma.SortOrder
+  hasGate?: Prisma.SortOrder
+  gateType?: Prisma.SortOrder
+  gateMaterial?: Prisma.SortOrder
+  hasFence?: Prisma.SortOrder
+  fenceType?: Prisma.SortOrder
+  fenceHeight?: Prisma.SortOrder
   nearestSchoolKm?: Prisma.SortOrder
   nearestHospitalKm?: Prisma.SortOrder
   nearestTransportKm?: Prisma.SortOrder
@@ -798,6 +1098,11 @@ export type FieldDataAvgOrderByAggregateInput = {
   buildingSize?: Prisma.SortOrder
   yearBuilt?: Prisma.SortOrder
   parkingSpaces?: Prisma.SortOrder
+  gardenSize?: Prisma.SortOrder
+  annexSize?: Prisma.SortOrder
+  annexBedrooms?: Prisma.SortOrder
+  annexBathrooms?: Prisma.SortOrder
+  fenceHeight?: Prisma.SortOrder
   nearestSchoolKm?: Prisma.SortOrder
   nearestHospitalKm?: Prisma.SortOrder
   nearestTransportKm?: Prisma.SortOrder
@@ -820,6 +1125,20 @@ export type FieldDataMaxOrderByAggregateInput = {
   buildingSize?: Prisma.SortOrder
   yearBuilt?: Prisma.SortOrder
   parkingSpaces?: Prisma.SortOrder
+  hasGarden?: Prisma.SortOrder
+  gardenSize?: Prisma.SortOrder
+  gardenType?: Prisma.SortOrder
+  hasAnnex?: Prisma.SortOrder
+  annexType?: Prisma.SortOrder
+  annexSize?: Prisma.SortOrder
+  annexBedrooms?: Prisma.SortOrder
+  annexBathrooms?: Prisma.SortOrder
+  hasGate?: Prisma.SortOrder
+  gateType?: Prisma.SortOrder
+  gateMaterial?: Prisma.SortOrder
+  hasFence?: Prisma.SortOrder
+  fenceType?: Prisma.SortOrder
+  fenceHeight?: Prisma.SortOrder
   nearestSchoolKm?: Prisma.SortOrder
   nearestHospitalKm?: Prisma.SortOrder
   nearestTransportKm?: Prisma.SortOrder
@@ -848,6 +1167,20 @@ export type FieldDataMinOrderByAggregateInput = {
   buildingSize?: Prisma.SortOrder
   yearBuilt?: Prisma.SortOrder
   parkingSpaces?: Prisma.SortOrder
+  hasGarden?: Prisma.SortOrder
+  gardenSize?: Prisma.SortOrder
+  gardenType?: Prisma.SortOrder
+  hasAnnex?: Prisma.SortOrder
+  annexType?: Prisma.SortOrder
+  annexSize?: Prisma.SortOrder
+  annexBedrooms?: Prisma.SortOrder
+  annexBathrooms?: Prisma.SortOrder
+  hasGate?: Prisma.SortOrder
+  gateType?: Prisma.SortOrder
+  gateMaterial?: Prisma.SortOrder
+  hasFence?: Prisma.SortOrder
+  fenceType?: Prisma.SortOrder
+  fenceHeight?: Prisma.SortOrder
   nearestSchoolKm?: Prisma.SortOrder
   nearestHospitalKm?: Prisma.SortOrder
   nearestTransportKm?: Prisma.SortOrder
@@ -872,6 +1205,11 @@ export type FieldDataSumOrderByAggregateInput = {
   buildingSize?: Prisma.SortOrder
   yearBuilt?: Prisma.SortOrder
   parkingSpaces?: Prisma.SortOrder
+  gardenSize?: Prisma.SortOrder
+  annexSize?: Prisma.SortOrder
+  annexBedrooms?: Prisma.SortOrder
+  annexBathrooms?: Prisma.SortOrder
+  fenceHeight?: Prisma.SortOrder
   nearestSchoolKm?: Prisma.SortOrder
   nearestHospitalKm?: Prisma.SortOrder
   nearestTransportKm?: Prisma.SortOrder
@@ -928,6 +1266,10 @@ export type NullableEnumConditionFieldUpdateOperationsInput = {
   set?: $Enums.Condition | null
 }
 
+export type NullableBoolFieldUpdateOperationsInput = {
+  set?: boolean | null
+}
+
 export type NullableEnumRoadAccessTypeFieldUpdateOperationsInput = {
   set?: $Enums.RoadAccessType | null
 }
@@ -950,6 +1292,20 @@ export type FieldDataCreateWithoutPropertyInput = {
   buildingSize?: number | null
   yearBuilt?: number | null
   parkingSpaces?: number | null
+  hasGarden?: boolean | null
+  gardenSize?: number | null
+  gardenType?: string | null
+  hasAnnex?: boolean | null
+  annexType?: string | null
+  annexSize?: number | null
+  annexBedrooms?: number | null
+  annexBathrooms?: number | null
+  hasGate?: boolean | null
+  gateType?: string | null
+  gateMaterial?: string | null
+  hasFence?: boolean | null
+  fenceType?: string | null
+  fenceHeight?: number | null
   nearestSchoolKm?: number | null
   nearestHospitalKm?: number | null
   nearestTransportKm?: number | null
@@ -977,6 +1333,20 @@ export type FieldDataUncheckedCreateWithoutPropertyInput = {
   buildingSize?: number | null
   yearBuilt?: number | null
   parkingSpaces?: number | null
+  hasGarden?: boolean | null
+  gardenSize?: number | null
+  gardenType?: string | null
+  hasAnnex?: boolean | null
+  annexType?: string | null
+  annexSize?: number | null
+  annexBedrooms?: number | null
+  annexBathrooms?: number | null
+  hasGate?: boolean | null
+  gateType?: string | null
+  gateMaterial?: string | null
+  hasFence?: boolean | null
+  fenceType?: string | null
+  fenceHeight?: number | null
   nearestSchoolKm?: number | null
   nearestHospitalKm?: number | null
   nearestTransportKm?: number | null
@@ -1020,6 +1390,20 @@ export type FieldDataUpdateWithoutPropertyInput = {
   buildingSize?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   yearBuilt?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   parkingSpaces?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hasGarden?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  gardenSize?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  gardenType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasAnnex?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  annexType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  annexSize?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  annexBedrooms?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  annexBathrooms?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  hasGate?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  gateType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gateMaterial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasFence?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  fenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fenceHeight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestSchoolKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestHospitalKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestTransportKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -1047,6 +1431,20 @@ export type FieldDataUncheckedUpdateWithoutPropertyInput = {
   buildingSize?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   yearBuilt?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   parkingSpaces?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hasGarden?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  gardenSize?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  gardenType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasAnnex?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  annexType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  annexSize?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  annexBedrooms?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  annexBathrooms?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  hasGate?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  gateType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gateMaterial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasFence?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  fenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fenceHeight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestSchoolKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestHospitalKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestTransportKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -1076,6 +1474,20 @@ export type FieldDataSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   buildingSize?: boolean
   yearBuilt?: boolean
   parkingSpaces?: boolean
+  hasGarden?: boolean
+  gardenSize?: boolean
+  gardenType?: boolean
+  hasAnnex?: boolean
+  annexType?: boolean
+  annexSize?: boolean
+  annexBedrooms?: boolean
+  annexBathrooms?: boolean
+  hasGate?: boolean
+  gateType?: boolean
+  gateMaterial?: boolean
+  hasFence?: boolean
+  fenceType?: boolean
+  fenceHeight?: boolean
   nearestSchoolKm?: boolean
   nearestHospitalKm?: boolean
   nearestTransportKm?: boolean
@@ -1105,6 +1517,20 @@ export type FieldDataSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   buildingSize?: boolean
   yearBuilt?: boolean
   parkingSpaces?: boolean
+  hasGarden?: boolean
+  gardenSize?: boolean
+  gardenType?: boolean
+  hasAnnex?: boolean
+  annexType?: boolean
+  annexSize?: boolean
+  annexBedrooms?: boolean
+  annexBathrooms?: boolean
+  hasGate?: boolean
+  gateType?: boolean
+  gateMaterial?: boolean
+  hasFence?: boolean
+  fenceType?: boolean
+  fenceHeight?: boolean
   nearestSchoolKm?: boolean
   nearestHospitalKm?: boolean
   nearestTransportKm?: boolean
@@ -1134,6 +1560,20 @@ export type FieldDataSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   buildingSize?: boolean
   yearBuilt?: boolean
   parkingSpaces?: boolean
+  hasGarden?: boolean
+  gardenSize?: boolean
+  gardenType?: boolean
+  hasAnnex?: boolean
+  annexType?: boolean
+  annexSize?: boolean
+  annexBedrooms?: boolean
+  annexBathrooms?: boolean
+  hasGate?: boolean
+  gateType?: boolean
+  gateMaterial?: boolean
+  hasFence?: boolean
+  fenceType?: boolean
+  fenceHeight?: boolean
   nearestSchoolKm?: boolean
   nearestHospitalKm?: boolean
   nearestTransportKm?: boolean
@@ -1163,6 +1603,20 @@ export type FieldDataSelectScalar = {
   buildingSize?: boolean
   yearBuilt?: boolean
   parkingSpaces?: boolean
+  hasGarden?: boolean
+  gardenSize?: boolean
+  gardenType?: boolean
+  hasAnnex?: boolean
+  annexType?: boolean
+  annexSize?: boolean
+  annexBedrooms?: boolean
+  annexBathrooms?: boolean
+  hasGate?: boolean
+  gateType?: boolean
+  gateMaterial?: boolean
+  hasFence?: boolean
+  fenceType?: boolean
+  fenceHeight?: boolean
   nearestSchoolKm?: boolean
   nearestHospitalKm?: boolean
   nearestTransportKm?: boolean
@@ -1177,7 +1631,7 @@ export type FieldDataSelectScalar = {
   propertyId?: boolean
 }
 
-export type FieldDataOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "latitude" | "longitude" | "gpsCapturedAt" | "gpsAccuracy" | "propertyType" | "condition" | "bedrooms" | "bathrooms" | "landSize" | "buildingSize" | "yearBuilt" | "parkingSpaces" | "nearestSchoolKm" | "nearestHospitalKm" | "nearestTransportKm" | "nearestMarketKm" | "roadAccessType" | "valuationAmount" | "valuationConfidence" | "valuationMethod" | "notes" | "submittedAt" | "updatedAt" | "propertyId", ExtArgs["result"]["fieldData"]>
+export type FieldDataOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "latitude" | "longitude" | "gpsCapturedAt" | "gpsAccuracy" | "propertyType" | "condition" | "bedrooms" | "bathrooms" | "landSize" | "buildingSize" | "yearBuilt" | "parkingSpaces" | "hasGarden" | "gardenSize" | "gardenType" | "hasAnnex" | "annexType" | "annexSize" | "annexBedrooms" | "annexBathrooms" | "hasGate" | "gateType" | "gateMaterial" | "hasFence" | "fenceType" | "fenceHeight" | "nearestSchoolKm" | "nearestHospitalKm" | "nearestTransportKm" | "nearestMarketKm" | "roadAccessType" | "valuationAmount" | "valuationConfidence" | "valuationMethod" | "notes" | "submittedAt" | "updatedAt" | "propertyId", ExtArgs["result"]["fieldData"]>
 export type FieldDataInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   property?: boolean | Prisma.PropertyDefaultArgs<ExtArgs>
 }
@@ -1207,6 +1661,20 @@ export type $FieldDataPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     buildingSize: number | null
     yearBuilt: number | null
     parkingSpaces: number | null
+    hasGarden: boolean | null
+    gardenSize: number | null
+    gardenType: string | null
+    hasAnnex: boolean | null
+    annexType: string | null
+    annexSize: number | null
+    annexBedrooms: number | null
+    annexBathrooms: number | null
+    hasGate: boolean | null
+    gateType: string | null
+    gateMaterial: string | null
+    hasFence: boolean | null
+    fenceType: string | null
+    fenceHeight: number | null
     nearestSchoolKm: number | null
     nearestHospitalKm: number | null
     nearestTransportKm: number | null
@@ -1656,6 +2124,20 @@ export interface FieldDataFieldRefs {
   readonly buildingSize: Prisma.FieldRef<"FieldData", 'Float'>
   readonly yearBuilt: Prisma.FieldRef<"FieldData", 'Int'>
   readonly parkingSpaces: Prisma.FieldRef<"FieldData", 'Int'>
+  readonly hasGarden: Prisma.FieldRef<"FieldData", 'Boolean'>
+  readonly gardenSize: Prisma.FieldRef<"FieldData", 'Float'>
+  readonly gardenType: Prisma.FieldRef<"FieldData", 'String'>
+  readonly hasAnnex: Prisma.FieldRef<"FieldData", 'Boolean'>
+  readonly annexType: Prisma.FieldRef<"FieldData", 'String'>
+  readonly annexSize: Prisma.FieldRef<"FieldData", 'Float'>
+  readonly annexBedrooms: Prisma.FieldRef<"FieldData", 'Int'>
+  readonly annexBathrooms: Prisma.FieldRef<"FieldData", 'Float'>
+  readonly hasGate: Prisma.FieldRef<"FieldData", 'Boolean'>
+  readonly gateType: Prisma.FieldRef<"FieldData", 'String'>
+  readonly gateMaterial: Prisma.FieldRef<"FieldData", 'String'>
+  readonly hasFence: Prisma.FieldRef<"FieldData", 'Boolean'>
+  readonly fenceType: Prisma.FieldRef<"FieldData", 'String'>
+  readonly fenceHeight: Prisma.FieldRef<"FieldData", 'Float'>
   readonly nearestSchoolKm: Prisma.FieldRef<"FieldData", 'Float'>
   readonly nearestHospitalKm: Prisma.FieldRef<"FieldData", 'Float'>
   readonly nearestTransportKm: Prisma.FieldRef<"FieldData", 'Float'>

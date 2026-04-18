@@ -9,25 +9,7 @@ export const countUsers = async () => {
   return await prisma.user.count();
 };
 
-export const countProperties = async () => {
-  return await prisma.property.count();
-};
 
-export const countPropertiesByStatus = async (status: string) => {
-  return await prisma.property.count({
-    where: { status: status as any }
-  });
-};
-
-export const countActiveAssignments = async () => {
-  return await prisma.property.count({
-    where: {
-      status: {
-        in: ['ASSIGNED', 'IN_FIELDWORK']
-      }
-    }
-  });
-};
 
 export const countEmployees = async () => {
   return await prisma.user.count({
