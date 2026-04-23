@@ -356,6 +356,11 @@ export type EnumConditionNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumConditionNullableFilter<$PrismaModel> | $Enums.Condition | null
 }
 
+export type BoolNullableFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedBoolNullableFilter<$PrismaModel> | boolean | null
+}
+
 export type EnumRoadAccessTypeNullableFilter<$PrismaModel = never> = {
   equals?: $Enums.RoadAccessType | Prisma.EnumRoadAccessTypeFieldRefInput<$PrismaModel> | null
   in?: $Enums.RoadAccessType[] | Prisma.ListEnumRoadAccessTypeFieldRefInput<$PrismaModel> | null
@@ -404,6 +409,14 @@ export type EnumConditionNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedEnumConditionNullableFilter<$PrismaModel>
   _max?: Prisma.NestedEnumConditionNullableFilter<$PrismaModel>
+}
+
+export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedBoolNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedBoolNullableFilter<$PrismaModel>
 }
 
 export type EnumRoadAccessTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -766,6 +779,11 @@ export type NestedEnumConditionNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumConditionNullableFilter<$PrismaModel> | $Enums.Condition | null
 }
 
+export type NestedBoolNullableFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedBoolNullableFilter<$PrismaModel> | boolean | null
+}
+
 export type NestedEnumRoadAccessTypeNullableFilter<$PrismaModel = never> = {
   equals?: $Enums.RoadAccessType | Prisma.EnumRoadAccessTypeFieldRefInput<$PrismaModel> | null
   in?: $Enums.RoadAccessType[] | Prisma.ListEnumRoadAccessTypeFieldRefInput<$PrismaModel> | null
@@ -814,6 +832,14 @@ export type NestedEnumConditionNullableWithAggregatesFilter<$PrismaModel = never
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedEnumConditionNullableFilter<$PrismaModel>
   _max?: Prisma.NestedEnumConditionNullableFilter<$PrismaModel>
+}
+
+export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedBoolNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedBoolNullableFilter<$PrismaModel>
 }
 
 export type NestedEnumRoadAccessTypeNullableWithAggregatesFilter<$PrismaModel = never> = {

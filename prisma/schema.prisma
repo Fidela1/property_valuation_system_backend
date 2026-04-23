@@ -265,6 +265,27 @@ model FieldData {
   yearBuilt           Int?
   parkingSpaces       Int?            @default(0)
 
+ hasGarden           Boolean?  @default(false)
+  gardenSize          Float?                        // Square meters
+  gardenType          String?                       // Small, Medium, Large, Luxury
+  
+  // Annex (Guest house, servant quarters, office)
+  hasAnnex            Boolean?  @default(false)
+  annexType           String?                       // Guest house, Servant quarters, Office
+  annexSize           Float?                        // Square meters
+  annexBedrooms       Int?
+  annexBathrooms      Float?
+  
+  // Gate
+  hasGate             Boolean?  @default(false)
+  gateType            String?                       // Sliding, Swing, Automatic, Manual
+  gateMaterial        String?                       // Iron, Wood, Steel, Aluminum
+  
+  // Fence/Wall
+  hasFence            Boolean?  @default(false)
+  fenceType           String?                       // Wall, Chain-link, Barbed wire, Hedge
+  fenceHeight         Float?    
+  
   nearestSchoolKm     Float?
   nearestHospitalKm   Float?
   nearestTransportKm  Float?

@@ -1,0 +1,15 @@
+-- AlterTable
+ALTER TABLE "field_data" ADD COLUMN     "annexBathrooms" DOUBLE PRECISION,
+ADD COLUMN     "annexBedrooms" INTEGER,
+ADD COLUMN     "annexSize" DOUBLE PRECISION,
+ADD COLUMN     "annexType" TEXT,
+ADD COLUMN     "fenceHeight" DOUBLE PRECISION,
+ADD COLUMN     "fenceType" TEXT,
+ADD COLUMN     "gardenSize" DOUBLE PRECISION,
+ADD COLUMN     "gardenType" TEXT,
+ADD COLUMN     "gateMaterial" TEXT,
+ADD COLUMN     "gateType" TEXT,
+ADD COLUMN     "hasAnnex" BOOLEAN DEFAULT false,
+ADD COLUMN     "hasFence" BOOLEAN DEFAULT false,
+ADD COLUMN     "hasGarden" BOOLEAN DEFAULT false,
+ADD COLUMN     "hasGate" BOOLEAN DEFAULT false;

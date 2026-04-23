@@ -2,8 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import * as adminService from '../services/admin.service';
 import { AuthRequest } from '../middleware/auth.middleware';
 import { AppError } from '../utils/AppError';
-import { Prisma } from '@prisma/client';
-
 
 export const getDashboardStats = async (req: AuthRequest, res: Response) => {
   try {
@@ -19,17 +17,9 @@ export const getDashboardStats = async (req: AuthRequest, res: Response) => {
     const [
       totalUsers,
       totalProperties,
-      pendingApplications,
-      activeAssignments,
-      publishedProperties,
       totalEmployees,
-      recentActivities
     ] = await Promise.all([
       adminService.countUsers(),
-      adminService.countProperties(),
-      adminService.countPropertiesByStatus('PENDING'),
-      adminService.countActiveAssignments(),
-      adminService.countPropertiesByStatus('PUBLISHED'),
       adminService.countEmployees(),
       adminService.getRecentActivities()
     ]);
@@ -40,12 +30,9 @@ export const getDashboardStats = async (req: AuthRequest, res: Response) => {
         counts: {
           totalUsers,
           totalProperties,
-          pendingApplications,
-          activeAssignments,
-          publishedProperties,
           totalEmployees
         },
-        recentActivities
+        
       }
     });
   } catch (error) {
@@ -116,23 +103,15 @@ export const createInvitation = async (req: AuthRequest, res: Response) => {
     });
     
   } catch (error) {
-
-   if (error instanceof AppError) {
-      return res.status(error.statusCode).json({
-        success: false,
-        error: error.message
-      });
-    }
-
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === 'P2002') {
-        return res.status(400).json({
-          success: false,
-          error: 'An invitation with this email already exists'
-        });
-      }
-    }
-    }
+  // Handle Prisma unique constraint error
+  if (error instanceof Error && error.message.includes('Unique constraint')) {
+    return res.status(400).json({
+      success: false,
+      error: 'An invitation with this email already exists'
+    });
+  }
+  // ... rest of error handling
+}
 
     res.status(500).json({ 
       success: false, 
@@ -248,3 +227,4 @@ export const deleteUserByAdmin = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, error: 'Failed to delete user' });
   }
 };
+
