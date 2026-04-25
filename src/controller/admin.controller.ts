@@ -110,13 +110,7 @@ export const createInvitation = async (req: AuthRequest, res: Response) => {
       error: 'An invitation with this email already exists'
     });
   }
-  // ... rest of error handling
 }
-
-    res.status(500).json({ 
-      success: false, 
-      error: 'Failed to create invitation. Please try again.'
-    });
   }
 
 export const getManageUsers = async (req: Request, res: Response) => {

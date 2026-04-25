@@ -10,10 +10,6 @@ interface AuthRequest extends Request {
   };
 }
 
-// ============================================
-// GET SUPERVISOR DASHBOARD STATS
-// ============================================
-
 export const getSupervisorStats = async (req: AuthRequest, res: Response) => {
   try {
     const supervisorId = req.authenticatedUser?.id;
@@ -40,10 +36,6 @@ export const getSupervisorStats = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-
-// ============================================
-// GET PENDING PROPERTIES
-// ============================================
 
 export const getPendingProperties = async (req: AuthRequest, res: Response) => {
   try {
@@ -81,10 +73,6 @@ export const getPendingProperties = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// ============================================
-// GET PROPERTIES UNDER REVIEW
-// ============================================
-
 export const getUnderReviewProperties = async (req: AuthRequest, res: Response) => {
   try {
     const supervisorId = req.authenticatedUser?.id;
@@ -121,10 +109,6 @@ export const getUnderReviewProperties = async (req: AuthRequest, res: Response) 
   }
 };
 
-// ============================================
-// GET AVAILABLE DATA COLLECTORS
-// ============================================
-
 export const getAvailableDataCollectors = async (req: AuthRequest, res: Response) => {
   try {
     const supervisorId = req.authenticatedUser?.id;
@@ -151,10 +135,6 @@ export const getAvailableDataCollectors = async (req: AuthRequest, res: Response
     });
   }
 };
-
-// ============================================
-// ASSIGN DATA COLLECTOR
-// ============================================
 
 export const assignDataCollector = async (req: AuthRequest, res: Response) => {
   try {

@@ -60,7 +60,8 @@ export const ModelName = {
   Review: 'Review',
   SavedProperty: 'SavedProperty',
   Inquiry: 'Inquiry',
-  AuditLog: 'AuditLog'
+  AuditLog: 'AuditLog',
+  Report: 'Report'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -117,16 +118,12 @@ export const ImageScalarFieldEnum = {
   id: 'id',
   url: 'url',
   publicId: 'publicId',
-  filename: 'filename',
-  fileSize: 'fileSize',
-  mimeType: 'mimeType',
-  width: 'width',
-  height: 'height',
   altText: 'altText',
   isFeatured: 'isFeatured',
   order: 'order',
-  uploadedAt: 'uploadedAt',
   uploadedBy: 'uploadedBy',
+  fileSize: 'fileSize',
+  mimeType: 'mimeType',
   propertyId: 'propertyId'
 } as const
 
@@ -204,6 +201,14 @@ export const FieldDataScalarFieldEnum = {
   hasFence: 'hasFence',
   fenceType: 'fenceType',
   fenceHeight: 'fenceHeight',
+  hasElectricity: 'hasElectricity',
+  hasWaterSupply: 'hasWaterSupply',
+  hasWaterTank: 'hasWaterTank',
+  floodRisk: 'floodRisk',
+  landSlope: 'landSlope',
+  floorMaterial: 'floorMaterial',
+  roofType: 'roofType',
+  propertyCategory: 'propertyCategory',
   nearestSchoolKm: 'nearestSchoolKm',
   nearestHospitalKm: 'nearestHospitalKm',
   nearestTransportKm: 'nearestTransportKm',
@@ -274,6 +279,25 @@ export const AuditLogScalarFieldEnum = {
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const ReportScalarFieldEnum = {
+  id: 'id',
+  propertyId: 'propertyId',
+  title: 'title',
+  content: 'content',
+  fileUrl: 'fileUrl',
+  fileName: 'fileName',
+  fileSize: 'fileSize',
+  mimeType: 'mimeType',
+  generatedBy: 'generatedBy',
+  isPublished: 'isPublished',
+  version: 'version',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ReportScalarFieldEnum = (typeof ReportScalarFieldEnum)[keyof typeof ReportScalarFieldEnum]
 
 
 export const SortOrder = {

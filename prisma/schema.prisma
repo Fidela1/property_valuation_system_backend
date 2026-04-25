@@ -70,7 +70,7 @@ enum InquiryStatus {
 
 enum InvitationStatus {
   PENDING
-  COMPLETED  // User created account
+  COMPLETED  
   EXPIRED
   CANCELLED
 }
@@ -111,6 +111,9 @@ model User {
 
   auditLogs           AuditLog[]
 
+  generatedReports Report[]
+  
+
   @@index([email])
   @@index([role])
   @@map("users")
@@ -138,35 +141,25 @@ model Invitation {
   @@map("invitations")
 }
 
-// ============================================
-// IMAGE MODEL (separate table)
-
+// image model
 
 model Image {
-  id          String    @id @default(cuid())
-  url         String    // Cloudinary or local URL
-  publicId    String?   // Cloudinary public ID for deletion
-  filename    String?   // Original filename
-  fileSize    Int?      // Size in bytes
-  mimeType    String?   // image/jpeg, image/png, etc.
-  width       Int?      // Image width in pixels
-  height      Int?      // Image height in pixels
-  altText     String?   // Accessibility description
-  isFeatured  Boolean   @default(false)  // Main image for the property
-  order       Int       @default(0)      // Display order
-  uploadedAt  DateTime  @default(now())
-
-  // Who uploaded this image
+   id          String   @id @default(cuid())
+  url         String
+  publicId    String?
+  altText     String?
+  isFeatured  Boolean  @default(false)
+  order       Int      @default(0)
   uploadedBy  String
+  fileSize    Int?
+  mimeType    String?
   uploader    User      @relation("ImageUploader", fields: [uploadedBy], references: [id])
 
-  // Which property this image belongs to
   propertyId  String?
   property    Property? @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   @@index([propertyId])
   @@index([uploadedBy])
-  @@index([isFeatured])
   @@map("images")
 }
 
@@ -211,6 +204,7 @@ model Property {
 
   savedBy       SavedProperty[]
   inquiries     Inquiry[]
+  reports       Report[]
 
   @@index([status])
   @@index([clientId])
@@ -250,7 +244,6 @@ model Assignment {
 model FieldData {
   id                  String          @id @default(cuid())
 
-  // GPS Data
   latitude            Float
   longitude           Float
   gpsCapturedAt       DateTime?
@@ -266,26 +259,28 @@ model FieldData {
   parkingSpaces       Int?            @default(0)
 
  hasGarden           Boolean?  @default(false)
-  gardenSize          Float?                        // Square meters
-  gardenType          String?                       // Small, Medium, Large, Luxury
-  
-  // Annex (Guest house, servant quarters, office)
+  gardenSize          Float?                        
+  gardenType          String?                       
   hasAnnex            Boolean?  @default(false)
-  annexType           String?                       // Guest house, Servant quarters, Office
-  annexSize           Float?                        // Square meters
+  annexType           String?                      
+  annexSize           Float?                        
   annexBedrooms       Int?
   annexBathrooms      Float?
-  
-  // Gate
   hasGate             Boolean?  @default(false)
-  gateType            String?                       // Sliding, Swing, Automatic, Manual
-  gateMaterial        String?                       // Iron, Wood, Steel, Aluminum
-  
-  // Fence/Wall
+  gateType            String?                       
+  gateMaterial        String?                       
   hasFence            Boolean?  @default(false)
-  fenceType           String?                       // Wall, Chain-link, Barbed wire, Hedge
+  fenceType           String?                      
   fenceHeight         Float?    
-  
+  hasElectricity    Boolean? @default(true)
+  hasWaterSupply    Boolean? @default(true)
+  hasWaterTank      Boolean? @default(false)
+  floodRisk         Boolean? @default(false)
+  landSlope         String?   
+  floorMaterial     String?   
+  roofType          String?   
+
+  propertyCategory  String?   
   nearestSchoolKm     Float?
   nearestHospitalKm   Float?
   nearestTransportKm  Float?
@@ -389,4 +384,28 @@ model AuditLog {
   @@index([entityType, entityId])
   @@index([createdAt])
   @@map("audit_logs")
+}
+
+// REPORT MODEL
+
+model Report {
+  id          String   @id @default(cuid())
+  propertyId  String
+  property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  title       String
+  content     String?   // HTML or JSON content
+  fileUrl     String?   // If file is uploaded (PDF/DOCX)
+  fileName    String?   // Original file name
+  fileSize    Int?      // File size in bytes
+  mimeType    String?   // application/pdf, etc.
+  generatedBy String
+  generator   User     @relation(fields: [generatedBy], references: [id])
+  isPublished Boolean  @default(true)
+  version     Int      @default(1)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([propertyId])
+  @@index([generatedBy])
+  @@map("reports")
 }
