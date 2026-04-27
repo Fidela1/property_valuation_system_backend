@@ -359,6 +359,7 @@ export type PropertyWhereInput = {
   images?: Prisma.ImageListRelationFilter
   savedBy?: Prisma.SavedPropertyListRelationFilter
   inquiries?: Prisma.InquiryListRelationFilter
+  reports?: Prisma.ReportListRelationFilter
 }
 
 export type PropertyOrderByWithRelationInput = {
@@ -391,6 +392,7 @@ export type PropertyOrderByWithRelationInput = {
   images?: Prisma.ImageOrderByRelationAggregateInput
   savedBy?: Prisma.SavedPropertyOrderByRelationAggregateInput
   inquiries?: Prisma.InquiryOrderByRelationAggregateInput
+  reports?: Prisma.ReportOrderByRelationAggregateInput
 }
 
 export type PropertyWhereUniqueInput = Prisma.AtLeast<{
@@ -426,6 +428,7 @@ export type PropertyWhereUniqueInput = Prisma.AtLeast<{
   images?: Prisma.ImageListRelationFilter
   savedBy?: Prisma.SavedPropertyListRelationFilter
   inquiries?: Prisma.InquiryListRelationFilter
+  reports?: Prisma.ReportListRelationFilter
 }, "id" | "upiNumber">
 
 export type PropertyOrderByWithAggregationInput = {
@@ -515,6 +518,7 @@ export type PropertyCreateInput = {
   images?: Prisma.ImageCreateNestedManyWithoutPropertyInput
   savedBy?: Prisma.SavedPropertyCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryCreateNestedManyWithoutPropertyInput
+  reports?: Prisma.ReportCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateInput = {
@@ -546,6 +550,7 @@ export type PropertyUncheckedCreateInput = {
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutPropertyInput
   savedBy?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutPropertyInput
+  reports?: Prisma.ReportUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUpdateInput = {
@@ -577,6 +582,7 @@ export type PropertyUpdateInput = {
   images?: Prisma.ImageUpdateManyWithoutPropertyNestedInput
   savedBy?: Prisma.SavedPropertyUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUpdateManyWithoutPropertyNestedInput
+  reports?: Prisma.ReportUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateInput = {
@@ -608,6 +614,7 @@ export type PropertyUncheckedUpdateInput = {
   images?: Prisma.ImageUncheckedUpdateManyWithoutPropertyNestedInput
   savedBy?: Prisma.SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutPropertyNestedInput
+  reports?: Prisma.ReportUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyCreateManyInput = {
@@ -931,6 +938,20 @@ export type PropertyUpdateOneRequiredWithoutInquiriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PropertyUpdateToOneWithWhereWithoutInquiriesInput, Prisma.PropertyUpdateWithoutInquiriesInput>, Prisma.PropertyUncheckedUpdateWithoutInquiriesInput>
 }
 
+export type PropertyCreateNestedOneWithoutReportsInput = {
+  create?: Prisma.XOR<Prisma.PropertyCreateWithoutReportsInput, Prisma.PropertyUncheckedCreateWithoutReportsInput>
+  connectOrCreate?: Prisma.PropertyCreateOrConnectWithoutReportsInput
+  connect?: Prisma.PropertyWhereUniqueInput
+}
+
+export type PropertyUpdateOneRequiredWithoutReportsNestedInput = {
+  create?: Prisma.XOR<Prisma.PropertyCreateWithoutReportsInput, Prisma.PropertyUncheckedCreateWithoutReportsInput>
+  connectOrCreate?: Prisma.PropertyCreateOrConnectWithoutReportsInput
+  upsert?: Prisma.PropertyUpsertWithoutReportsInput
+  connect?: Prisma.PropertyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PropertyUpdateToOneWithWhereWithoutReportsInput, Prisma.PropertyUpdateWithoutReportsInput>, Prisma.PropertyUncheckedUpdateWithoutReportsInput>
+}
+
 export type PropertyCreateWithoutClientInput = {
   id?: string
   upiNumber: string
@@ -959,6 +980,7 @@ export type PropertyCreateWithoutClientInput = {
   images?: Prisma.ImageCreateNestedManyWithoutPropertyInput
   savedBy?: Prisma.SavedPropertyCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryCreateNestedManyWithoutPropertyInput
+  reports?: Prisma.ReportCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutClientInput = {
@@ -989,6 +1011,7 @@ export type PropertyUncheckedCreateWithoutClientInput = {
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutPropertyInput
   savedBy?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutPropertyInput
+  reports?: Prisma.ReportUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutClientInput = {
@@ -1073,6 +1096,7 @@ export type PropertyCreateWithoutImagesInput = {
   reviews?: Prisma.ReviewCreateNestedManyWithoutPropertyInput
   savedBy?: Prisma.SavedPropertyCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryCreateNestedManyWithoutPropertyInput
+  reports?: Prisma.ReportCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutImagesInput = {
@@ -1103,6 +1127,7 @@ export type PropertyUncheckedCreateWithoutImagesInput = {
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPropertyInput
   savedBy?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutPropertyInput
+  reports?: Prisma.ReportUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutImagesInput = {
@@ -1149,6 +1174,7 @@ export type PropertyUpdateWithoutImagesInput = {
   reviews?: Prisma.ReviewUpdateManyWithoutPropertyNestedInput
   savedBy?: Prisma.SavedPropertyUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUpdateManyWithoutPropertyNestedInput
+  reports?: Prisma.ReportUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutImagesInput = {
@@ -1179,6 +1205,7 @@ export type PropertyUncheckedUpdateWithoutImagesInput = {
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPropertyNestedInput
   savedBy?: Prisma.SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutPropertyNestedInput
+  reports?: Prisma.ReportUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyCreateWithoutAssignmentInput = {
@@ -1209,6 +1236,7 @@ export type PropertyCreateWithoutAssignmentInput = {
   images?: Prisma.ImageCreateNestedManyWithoutPropertyInput
   savedBy?: Prisma.SavedPropertyCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryCreateNestedManyWithoutPropertyInput
+  reports?: Prisma.ReportCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutAssignmentInput = {
@@ -1239,6 +1267,7 @@ export type PropertyUncheckedCreateWithoutAssignmentInput = {
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutPropertyInput
   savedBy?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutPropertyInput
+  reports?: Prisma.ReportUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutAssignmentInput = {
@@ -1285,6 +1314,7 @@ export type PropertyUpdateWithoutAssignmentInput = {
   images?: Prisma.ImageUpdateManyWithoutPropertyNestedInput
   savedBy?: Prisma.SavedPropertyUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUpdateManyWithoutPropertyNestedInput
+  reports?: Prisma.ReportUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutAssignmentInput = {
@@ -1315,6 +1345,7 @@ export type PropertyUncheckedUpdateWithoutAssignmentInput = {
   images?: Prisma.ImageUncheckedUpdateManyWithoutPropertyNestedInput
   savedBy?: Prisma.SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutPropertyNestedInput
+  reports?: Prisma.ReportUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyCreateWithoutFieldDataInput = {
@@ -1345,6 +1376,7 @@ export type PropertyCreateWithoutFieldDataInput = {
   images?: Prisma.ImageCreateNestedManyWithoutPropertyInput
   savedBy?: Prisma.SavedPropertyCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryCreateNestedManyWithoutPropertyInput
+  reports?: Prisma.ReportCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutFieldDataInput = {
@@ -1375,6 +1407,7 @@ export type PropertyUncheckedCreateWithoutFieldDataInput = {
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutPropertyInput
   savedBy?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutPropertyInput
+  reports?: Prisma.ReportUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutFieldDataInput = {
@@ -1421,6 +1454,7 @@ export type PropertyUpdateWithoutFieldDataInput = {
   images?: Prisma.ImageUpdateManyWithoutPropertyNestedInput
   savedBy?: Prisma.SavedPropertyUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUpdateManyWithoutPropertyNestedInput
+  reports?: Prisma.ReportUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutFieldDataInput = {
@@ -1451,6 +1485,7 @@ export type PropertyUncheckedUpdateWithoutFieldDataInput = {
   images?: Prisma.ImageUncheckedUpdateManyWithoutPropertyNestedInput
   savedBy?: Prisma.SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutPropertyNestedInput
+  reports?: Prisma.ReportUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyCreateWithoutReviewsInput = {
@@ -1481,6 +1516,7 @@ export type PropertyCreateWithoutReviewsInput = {
   images?: Prisma.ImageCreateNestedManyWithoutPropertyInput
   savedBy?: Prisma.SavedPropertyCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryCreateNestedManyWithoutPropertyInput
+  reports?: Prisma.ReportCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutReviewsInput = {
@@ -1511,6 +1547,7 @@ export type PropertyUncheckedCreateWithoutReviewsInput = {
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutPropertyInput
   savedBy?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutPropertyInput
+  reports?: Prisma.ReportUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutReviewsInput = {
@@ -1557,6 +1594,7 @@ export type PropertyUpdateWithoutReviewsInput = {
   images?: Prisma.ImageUpdateManyWithoutPropertyNestedInput
   savedBy?: Prisma.SavedPropertyUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUpdateManyWithoutPropertyNestedInput
+  reports?: Prisma.ReportUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutReviewsInput = {
@@ -1587,6 +1625,7 @@ export type PropertyUncheckedUpdateWithoutReviewsInput = {
   images?: Prisma.ImageUncheckedUpdateManyWithoutPropertyNestedInput
   savedBy?: Prisma.SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutPropertyNestedInput
+  reports?: Prisma.ReportUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyCreateWithoutSavedByInput = {
@@ -1617,6 +1656,7 @@ export type PropertyCreateWithoutSavedByInput = {
   reviews?: Prisma.ReviewCreateNestedManyWithoutPropertyInput
   images?: Prisma.ImageCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryCreateNestedManyWithoutPropertyInput
+  reports?: Prisma.ReportCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutSavedByInput = {
@@ -1647,6 +1687,7 @@ export type PropertyUncheckedCreateWithoutSavedByInput = {
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPropertyInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutPropertyInput
+  reports?: Prisma.ReportUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutSavedByInput = {
@@ -1693,6 +1734,7 @@ export type PropertyUpdateWithoutSavedByInput = {
   reviews?: Prisma.ReviewUpdateManyWithoutPropertyNestedInput
   images?: Prisma.ImageUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUpdateManyWithoutPropertyNestedInput
+  reports?: Prisma.ReportUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutSavedByInput = {
@@ -1723,6 +1765,7 @@ export type PropertyUncheckedUpdateWithoutSavedByInput = {
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPropertyNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutPropertyNestedInput
+  reports?: Prisma.ReportUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyCreateWithoutInquiriesInput = {
@@ -1753,6 +1796,7 @@ export type PropertyCreateWithoutInquiriesInput = {
   reviews?: Prisma.ReviewCreateNestedManyWithoutPropertyInput
   images?: Prisma.ImageCreateNestedManyWithoutPropertyInput
   savedBy?: Prisma.SavedPropertyCreateNestedManyWithoutPropertyInput
+  reports?: Prisma.ReportCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutInquiriesInput = {
@@ -1783,6 +1827,7 @@ export type PropertyUncheckedCreateWithoutInquiriesInput = {
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPropertyInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutPropertyInput
   savedBy?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
+  reports?: Prisma.ReportUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutInquiriesInput = {
@@ -1829,6 +1874,7 @@ export type PropertyUpdateWithoutInquiriesInput = {
   reviews?: Prisma.ReviewUpdateManyWithoutPropertyNestedInput
   images?: Prisma.ImageUpdateManyWithoutPropertyNestedInput
   savedBy?: Prisma.SavedPropertyUpdateManyWithoutPropertyNestedInput
+  reports?: Prisma.ReportUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutInquiriesInput = {
@@ -1859,6 +1905,147 @@ export type PropertyUncheckedUpdateWithoutInquiriesInput = {
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPropertyNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutPropertyNestedInput
   savedBy?: Prisma.SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
+  reports?: Prisma.ReportUncheckedUpdateManyWithoutPropertyNestedInput
+}
+
+export type PropertyCreateWithoutReportsInput = {
+  id?: string
+  upiNumber: string
+  idOrTin: string
+  phoneNumber: string
+  ownerName: string
+  country?: string
+  province: string
+  district: string
+  sector: string
+  cell: string
+  village: string
+  status?: $Enums.PropertyStatus
+  aiValuation?: number | null
+  aiConfidence?: number | null
+  aiFactors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  publishedAt?: Date | string | null
+  soldAt?: Date | string | null
+  archivedAt?: Date | string | null
+  statusChangedAt?: Date | string | null
+  client: Prisma.UserCreateNestedOneWithoutPropertiesInput
+  fieldData?: Prisma.FieldDataCreateNestedOneWithoutPropertyInput
+  assignment?: Prisma.AssignmentCreateNestedOneWithoutPropertyInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutPropertyInput
+  images?: Prisma.ImageCreateNestedManyWithoutPropertyInput
+  savedBy?: Prisma.SavedPropertyCreateNestedManyWithoutPropertyInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutPropertyInput
+}
+
+export type PropertyUncheckedCreateWithoutReportsInput = {
+  id?: string
+  upiNumber: string
+  idOrTin: string
+  phoneNumber: string
+  ownerName: string
+  country?: string
+  province: string
+  district: string
+  sector: string
+  cell: string
+  village: string
+  status?: $Enums.PropertyStatus
+  aiValuation?: number | null
+  aiConfidence?: number | null
+  aiFactors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  publishedAt?: Date | string | null
+  soldAt?: Date | string | null
+  archivedAt?: Date | string | null
+  statusChangedAt?: Date | string | null
+  clientId: string
+  fieldData?: Prisma.FieldDataUncheckedCreateNestedOneWithoutPropertyInput
+  assignment?: Prisma.AssignmentUncheckedCreateNestedOneWithoutPropertyInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPropertyInput
+  images?: Prisma.ImageUncheckedCreateNestedManyWithoutPropertyInput
+  savedBy?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutPropertyInput
+}
+
+export type PropertyCreateOrConnectWithoutReportsInput = {
+  where: Prisma.PropertyWhereUniqueInput
+  create: Prisma.XOR<Prisma.PropertyCreateWithoutReportsInput, Prisma.PropertyUncheckedCreateWithoutReportsInput>
+}
+
+export type PropertyUpsertWithoutReportsInput = {
+  update: Prisma.XOR<Prisma.PropertyUpdateWithoutReportsInput, Prisma.PropertyUncheckedUpdateWithoutReportsInput>
+  create: Prisma.XOR<Prisma.PropertyCreateWithoutReportsInput, Prisma.PropertyUncheckedCreateWithoutReportsInput>
+  where?: Prisma.PropertyWhereInput
+}
+
+export type PropertyUpdateToOneWithWhereWithoutReportsInput = {
+  where?: Prisma.PropertyWhereInput
+  data: Prisma.XOR<Prisma.PropertyUpdateWithoutReportsInput, Prisma.PropertyUncheckedUpdateWithoutReportsInput>
+}
+
+export type PropertyUpdateWithoutReportsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  upiNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  idOrTin?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerName?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  province?: Prisma.StringFieldUpdateOperationsInput | string
+  district?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  cell?: Prisma.StringFieldUpdateOperationsInput | string
+  village?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
+  aiValuation?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  aiFactors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  client?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
+  fieldData?: Prisma.FieldDataUpdateOneWithoutPropertyNestedInput
+  assignment?: Prisma.AssignmentUpdateOneWithoutPropertyNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutPropertyNestedInput
+  images?: Prisma.ImageUpdateManyWithoutPropertyNestedInput
+  savedBy?: Prisma.SavedPropertyUpdateManyWithoutPropertyNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutPropertyNestedInput
+}
+
+export type PropertyUncheckedUpdateWithoutReportsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  upiNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  idOrTin?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerName?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  province?: Prisma.StringFieldUpdateOperationsInput | string
+  district?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  cell?: Prisma.StringFieldUpdateOperationsInput | string
+  village?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
+  aiValuation?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  aiFactors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  fieldData?: Prisma.FieldDataUncheckedUpdateOneWithoutPropertyNestedInput
+  assignment?: Prisma.AssignmentUncheckedUpdateOneWithoutPropertyNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPropertyNestedInput
+  images?: Prisma.ImageUncheckedUpdateManyWithoutPropertyNestedInput
+  savedBy?: Prisma.SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyCreateManyClientInput = {
@@ -1913,6 +2100,7 @@ export type PropertyUpdateWithoutClientInput = {
   images?: Prisma.ImageUpdateManyWithoutPropertyNestedInput
   savedBy?: Prisma.SavedPropertyUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUpdateManyWithoutPropertyNestedInput
+  reports?: Prisma.ReportUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutClientInput = {
@@ -1943,6 +2131,7 @@ export type PropertyUncheckedUpdateWithoutClientInput = {
   images?: Prisma.ImageUncheckedUpdateManyWithoutPropertyNestedInput
   savedBy?: Prisma.SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutPropertyNestedInput
+  reports?: Prisma.ReportUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateManyWithoutClientInput = {
@@ -1979,6 +2168,7 @@ export type PropertyCountOutputType = {
   images: number
   savedBy: number
   inquiries: number
+  reports: number
 }
 
 export type PropertyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1986,6 +2176,7 @@ export type PropertyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   images?: boolean | PropertyCountOutputTypeCountImagesArgs
   savedBy?: boolean | PropertyCountOutputTypeCountSavedByArgs
   inquiries?: boolean | PropertyCountOutputTypeCountInquiriesArgs
+  reports?: boolean | PropertyCountOutputTypeCountReportsArgs
 }
 
 /**
@@ -2026,6 +2217,13 @@ export type PropertyCountOutputTypeCountInquiriesArgs<ExtArgs extends runtime.Ty
   where?: Prisma.InquiryWhereInput
 }
 
+/**
+ * PropertyCountOutputType without action
+ */
+export type PropertyCountOutputTypeCountReportsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReportWhereInput
+}
+
 
 export type PropertySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2057,6 +2255,7 @@ export type PropertySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   images?: boolean | Prisma.Property$imagesArgs<ExtArgs>
   savedBy?: boolean | Prisma.Property$savedByArgs<ExtArgs>
   inquiries?: boolean | Prisma.Property$inquiriesArgs<ExtArgs>
+  reports?: boolean | Prisma.Property$reportsArgs<ExtArgs>
   _count?: boolean | Prisma.PropertyCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["property"]>
 
@@ -2146,6 +2345,7 @@ export type PropertyInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   images?: boolean | Prisma.Property$imagesArgs<ExtArgs>
   savedBy?: boolean | Prisma.Property$savedByArgs<ExtArgs>
   inquiries?: boolean | Prisma.Property$inquiriesArgs<ExtArgs>
+  reports?: boolean | Prisma.Property$reportsArgs<ExtArgs>
   _count?: boolean | Prisma.PropertyCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PropertyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2165,6 +2365,7 @@ export type $PropertyPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     images: Prisma.$ImagePayload<ExtArgs>[]
     savedBy: Prisma.$SavedPropertyPayload<ExtArgs>[]
     inquiries: Prisma.$InquiryPayload<ExtArgs>[]
+    reports: Prisma.$ReportPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2590,6 +2791,7 @@ export interface Prisma__PropertyClient<T, Null = never, ExtArgs extends runtime
   images<T extends Prisma.Property$imagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$imagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   savedBy<T extends Prisma.Property$savedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$savedByArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SavedPropertyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   inquiries<T extends Prisma.Property$inquiriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$inquiriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InquiryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reports<T extends Prisma.Property$reportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$reportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3173,6 +3375,30 @@ export type Property$inquiriesArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.InquiryScalarFieldEnum | Prisma.InquiryScalarFieldEnum[]
+}
+
+/**
+ * Property.reports
+ */
+export type Property$reportsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Report
+   */
+  select?: Prisma.ReportSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Report
+   */
+  omit?: Prisma.ReportOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReportInclude<ExtArgs> | null
+  where?: Prisma.ReportWhereInput
+  orderBy?: Prisma.ReportOrderByWithRelationInput | Prisma.ReportOrderByWithRelationInput[]
+  cursor?: Prisma.ReportWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ReportScalarFieldEnum | Prisma.ReportScalarFieldEnum[]
 }
 
 /**

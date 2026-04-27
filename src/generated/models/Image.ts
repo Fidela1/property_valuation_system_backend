@@ -27,33 +27,25 @@ export type AggregateImage = {
 }
 
 export type ImageAvgAggregateOutputType = {
-  fileSize: number | null
-  width: number | null
-  height: number | null
   order: number | null
+  fileSize: number | null
 }
 
 export type ImageSumAggregateOutputType = {
-  fileSize: number | null
-  width: number | null
-  height: number | null
   order: number | null
+  fileSize: number | null
 }
 
 export type ImageMinAggregateOutputType = {
   id: string | null
   url: string | null
   publicId: string | null
-  filename: string | null
-  fileSize: number | null
-  mimeType: string | null
-  width: number | null
-  height: number | null
   altText: string | null
   isFeatured: boolean | null
   order: number | null
-  uploadedAt: Date | null
   uploadedBy: string | null
+  fileSize: number | null
+  mimeType: string | null
   propertyId: string | null
 }
 
@@ -61,16 +53,12 @@ export type ImageMaxAggregateOutputType = {
   id: string | null
   url: string | null
   publicId: string | null
-  filename: string | null
-  fileSize: number | null
-  mimeType: string | null
-  width: number | null
-  height: number | null
   altText: string | null
   isFeatured: boolean | null
   order: number | null
-  uploadedAt: Date | null
   uploadedBy: string | null
+  fileSize: number | null
+  mimeType: string | null
   propertyId: string | null
 }
 
@@ -78,49 +66,37 @@ export type ImageCountAggregateOutputType = {
   id: number
   url: number
   publicId: number
-  filename: number
-  fileSize: number
-  mimeType: number
-  width: number
-  height: number
   altText: number
   isFeatured: number
   order: number
-  uploadedAt: number
   uploadedBy: number
+  fileSize: number
+  mimeType: number
   propertyId: number
   _all: number
 }
 
 
 export type ImageAvgAggregateInputType = {
-  fileSize?: true
-  width?: true
-  height?: true
   order?: true
+  fileSize?: true
 }
 
 export type ImageSumAggregateInputType = {
-  fileSize?: true
-  width?: true
-  height?: true
   order?: true
+  fileSize?: true
 }
 
 export type ImageMinAggregateInputType = {
   id?: true
   url?: true
   publicId?: true
-  filename?: true
-  fileSize?: true
-  mimeType?: true
-  width?: true
-  height?: true
   altText?: true
   isFeatured?: true
   order?: true
-  uploadedAt?: true
   uploadedBy?: true
+  fileSize?: true
+  mimeType?: true
   propertyId?: true
 }
 
@@ -128,16 +104,12 @@ export type ImageMaxAggregateInputType = {
   id?: true
   url?: true
   publicId?: true
-  filename?: true
-  fileSize?: true
-  mimeType?: true
-  width?: true
-  height?: true
   altText?: true
   isFeatured?: true
   order?: true
-  uploadedAt?: true
   uploadedBy?: true
+  fileSize?: true
+  mimeType?: true
   propertyId?: true
 }
 
@@ -145,16 +117,12 @@ export type ImageCountAggregateInputType = {
   id?: true
   url?: true
   publicId?: true
-  filename?: true
-  fileSize?: true
-  mimeType?: true
-  width?: true
-  height?: true
   altText?: true
   isFeatured?: true
   order?: true
-  uploadedAt?: true
   uploadedBy?: true
+  fileSize?: true
+  mimeType?: true
   propertyId?: true
   _all?: true
 }
@@ -249,16 +217,12 @@ export type ImageGroupByOutputType = {
   id: string
   url: string
   publicId: string | null
-  filename: string | null
-  fileSize: number | null
-  mimeType: string | null
-  width: number | null
-  height: number | null
   altText: string | null
   isFeatured: boolean
   order: number
-  uploadedAt: Date
   uploadedBy: string
+  fileSize: number | null
+  mimeType: string | null
   propertyId: string | null
   _count: ImageCountAggregateOutputType | null
   _avg: ImageAvgAggregateOutputType | null
@@ -289,16 +253,12 @@ export type ImageWhereInput = {
   id?: Prisma.StringFilter<"Image"> | string
   url?: Prisma.StringFilter<"Image"> | string
   publicId?: Prisma.StringNullableFilter<"Image"> | string | null
-  filename?: Prisma.StringNullableFilter<"Image"> | string | null
-  fileSize?: Prisma.IntNullableFilter<"Image"> | number | null
-  mimeType?: Prisma.StringNullableFilter<"Image"> | string | null
-  width?: Prisma.IntNullableFilter<"Image"> | number | null
-  height?: Prisma.IntNullableFilter<"Image"> | number | null
   altText?: Prisma.StringNullableFilter<"Image"> | string | null
   isFeatured?: Prisma.BoolFilter<"Image"> | boolean
   order?: Prisma.IntFilter<"Image"> | number
-  uploadedAt?: Prisma.DateTimeFilter<"Image"> | Date | string
   uploadedBy?: Prisma.StringFilter<"Image"> | string
+  fileSize?: Prisma.IntNullableFilter<"Image"> | number | null
+  mimeType?: Prisma.StringNullableFilter<"Image"> | string | null
   propertyId?: Prisma.StringNullableFilter<"Image"> | string | null
   uploader?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   property?: Prisma.XOR<Prisma.PropertyNullableScalarRelationFilter, Prisma.PropertyWhereInput> | null
@@ -308,16 +268,12 @@ export type ImageOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   url?: Prisma.SortOrder
   publicId?: Prisma.SortOrderInput | Prisma.SortOrder
-  filename?: Prisma.SortOrderInput | Prisma.SortOrder
-  fileSize?: Prisma.SortOrderInput | Prisma.SortOrder
-  mimeType?: Prisma.SortOrderInput | Prisma.SortOrder
-  width?: Prisma.SortOrderInput | Prisma.SortOrder
-  height?: Prisma.SortOrderInput | Prisma.SortOrder
   altText?: Prisma.SortOrderInput | Prisma.SortOrder
   isFeatured?: Prisma.SortOrder
   order?: Prisma.SortOrder
-  uploadedAt?: Prisma.SortOrder
   uploadedBy?: Prisma.SortOrder
+  fileSize?: Prisma.SortOrderInput | Prisma.SortOrder
+  mimeType?: Prisma.SortOrderInput | Prisma.SortOrder
   propertyId?: Prisma.SortOrderInput | Prisma.SortOrder
   uploader?: Prisma.UserOrderByWithRelationInput
   property?: Prisma.PropertyOrderByWithRelationInput
@@ -330,16 +286,12 @@ export type ImageWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ImageWhereInput | Prisma.ImageWhereInput[]
   url?: Prisma.StringFilter<"Image"> | string
   publicId?: Prisma.StringNullableFilter<"Image"> | string | null
-  filename?: Prisma.StringNullableFilter<"Image"> | string | null
-  fileSize?: Prisma.IntNullableFilter<"Image"> | number | null
-  mimeType?: Prisma.StringNullableFilter<"Image"> | string | null
-  width?: Prisma.IntNullableFilter<"Image"> | number | null
-  height?: Prisma.IntNullableFilter<"Image"> | number | null
   altText?: Prisma.StringNullableFilter<"Image"> | string | null
   isFeatured?: Prisma.BoolFilter<"Image"> | boolean
   order?: Prisma.IntFilter<"Image"> | number
-  uploadedAt?: Prisma.DateTimeFilter<"Image"> | Date | string
   uploadedBy?: Prisma.StringFilter<"Image"> | string
+  fileSize?: Prisma.IntNullableFilter<"Image"> | number | null
+  mimeType?: Prisma.StringNullableFilter<"Image"> | string | null
   propertyId?: Prisma.StringNullableFilter<"Image"> | string | null
   uploader?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   property?: Prisma.XOR<Prisma.PropertyNullableScalarRelationFilter, Prisma.PropertyWhereInput> | null
@@ -349,16 +301,12 @@ export type ImageOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   url?: Prisma.SortOrder
   publicId?: Prisma.SortOrderInput | Prisma.SortOrder
-  filename?: Prisma.SortOrderInput | Prisma.SortOrder
-  fileSize?: Prisma.SortOrderInput | Prisma.SortOrder
-  mimeType?: Prisma.SortOrderInput | Prisma.SortOrder
-  width?: Prisma.SortOrderInput | Prisma.SortOrder
-  height?: Prisma.SortOrderInput | Prisma.SortOrder
   altText?: Prisma.SortOrderInput | Prisma.SortOrder
   isFeatured?: Prisma.SortOrder
   order?: Prisma.SortOrder
-  uploadedAt?: Prisma.SortOrder
   uploadedBy?: Prisma.SortOrder
+  fileSize?: Prisma.SortOrderInput | Prisma.SortOrder
+  mimeType?: Prisma.SortOrderInput | Prisma.SortOrder
   propertyId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ImageCountOrderByAggregateInput
   _avg?: Prisma.ImageAvgOrderByAggregateInput
@@ -374,16 +322,12 @@ export type ImageScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Image"> | string
   url?: Prisma.StringWithAggregatesFilter<"Image"> | string
   publicId?: Prisma.StringNullableWithAggregatesFilter<"Image"> | string | null
-  filename?: Prisma.StringNullableWithAggregatesFilter<"Image"> | string | null
-  fileSize?: Prisma.IntNullableWithAggregatesFilter<"Image"> | number | null
-  mimeType?: Prisma.StringNullableWithAggregatesFilter<"Image"> | string | null
-  width?: Prisma.IntNullableWithAggregatesFilter<"Image"> | number | null
-  height?: Prisma.IntNullableWithAggregatesFilter<"Image"> | number | null
   altText?: Prisma.StringNullableWithAggregatesFilter<"Image"> | string | null
   isFeatured?: Prisma.BoolWithAggregatesFilter<"Image"> | boolean
   order?: Prisma.IntWithAggregatesFilter<"Image"> | number
-  uploadedAt?: Prisma.DateTimeWithAggregatesFilter<"Image"> | Date | string
   uploadedBy?: Prisma.StringWithAggregatesFilter<"Image"> | string
+  fileSize?: Prisma.IntNullableWithAggregatesFilter<"Image"> | number | null
+  mimeType?: Prisma.StringNullableWithAggregatesFilter<"Image"> | string | null
   propertyId?: Prisma.StringNullableWithAggregatesFilter<"Image"> | string | null
 }
 
@@ -391,15 +335,11 @@ export type ImageCreateInput = {
   id?: string
   url: string
   publicId?: string | null
-  filename?: string | null
-  fileSize?: number | null
-  mimeType?: string | null
-  width?: number | null
-  height?: number | null
   altText?: string | null
   isFeatured?: boolean
   order?: number
-  uploadedAt?: Date | string
+  fileSize?: number | null
+  mimeType?: string | null
   uploader: Prisma.UserCreateNestedOneWithoutUploadedImagesInput
   property?: Prisma.PropertyCreateNestedOneWithoutImagesInput
 }
@@ -408,16 +348,12 @@ export type ImageUncheckedCreateInput = {
   id?: string
   url: string
   publicId?: string | null
-  filename?: string | null
-  fileSize?: number | null
-  mimeType?: string | null
-  width?: number | null
-  height?: number | null
   altText?: string | null
   isFeatured?: boolean
   order?: number
-  uploadedAt?: Date | string
   uploadedBy: string
+  fileSize?: number | null
+  mimeType?: string | null
   propertyId?: string | null
 }
 
@@ -425,15 +361,11 @@ export type ImageUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  filename?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   altText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   order?: Prisma.IntFieldUpdateOperationsInput | number
-  uploadedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uploader?: Prisma.UserUpdateOneRequiredWithoutUploadedImagesNestedInput
   property?: Prisma.PropertyUpdateOneWithoutImagesNestedInput
 }
@@ -442,16 +374,12 @@ export type ImageUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  filename?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   altText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   order?: Prisma.IntFieldUpdateOperationsInput | number
-  uploadedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   uploadedBy?: Prisma.StringFieldUpdateOperationsInput | string
+  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   propertyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -459,16 +387,12 @@ export type ImageCreateManyInput = {
   id?: string
   url: string
   publicId?: string | null
-  filename?: string | null
-  fileSize?: number | null
-  mimeType?: string | null
-  width?: number | null
-  height?: number | null
   altText?: string | null
   isFeatured?: boolean
   order?: number
-  uploadedAt?: Date | string
   uploadedBy: string
+  fileSize?: number | null
+  mimeType?: string | null
   propertyId?: string | null
 }
 
@@ -476,31 +400,23 @@ export type ImageUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  filename?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   altText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   order?: Prisma.IntFieldUpdateOperationsInput | number
-  uploadedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ImageUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  filename?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   altText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   order?: Prisma.IntFieldUpdateOperationsInput | number
-  uploadedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   uploadedBy?: Prisma.StringFieldUpdateOperationsInput | string
+  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   propertyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -518,40 +434,30 @@ export type ImageCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   url?: Prisma.SortOrder
   publicId?: Prisma.SortOrder
-  filename?: Prisma.SortOrder
-  fileSize?: Prisma.SortOrder
-  mimeType?: Prisma.SortOrder
-  width?: Prisma.SortOrder
-  height?: Prisma.SortOrder
   altText?: Prisma.SortOrder
   isFeatured?: Prisma.SortOrder
   order?: Prisma.SortOrder
-  uploadedAt?: Prisma.SortOrder
   uploadedBy?: Prisma.SortOrder
+  fileSize?: Prisma.SortOrder
+  mimeType?: Prisma.SortOrder
   propertyId?: Prisma.SortOrder
 }
 
 export type ImageAvgOrderByAggregateInput = {
-  fileSize?: Prisma.SortOrder
-  width?: Prisma.SortOrder
-  height?: Prisma.SortOrder
   order?: Prisma.SortOrder
+  fileSize?: Prisma.SortOrder
 }
 
 export type ImageMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   url?: Prisma.SortOrder
   publicId?: Prisma.SortOrder
-  filename?: Prisma.SortOrder
-  fileSize?: Prisma.SortOrder
-  mimeType?: Prisma.SortOrder
-  width?: Prisma.SortOrder
-  height?: Prisma.SortOrder
   altText?: Prisma.SortOrder
   isFeatured?: Prisma.SortOrder
   order?: Prisma.SortOrder
-  uploadedAt?: Prisma.SortOrder
   uploadedBy?: Prisma.SortOrder
+  fileSize?: Prisma.SortOrder
+  mimeType?: Prisma.SortOrder
   propertyId?: Prisma.SortOrder
 }
 
@@ -559,24 +465,18 @@ export type ImageMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   url?: Prisma.SortOrder
   publicId?: Prisma.SortOrder
-  filename?: Prisma.SortOrder
-  fileSize?: Prisma.SortOrder
-  mimeType?: Prisma.SortOrder
-  width?: Prisma.SortOrder
-  height?: Prisma.SortOrder
   altText?: Prisma.SortOrder
   isFeatured?: Prisma.SortOrder
   order?: Prisma.SortOrder
-  uploadedAt?: Prisma.SortOrder
   uploadedBy?: Prisma.SortOrder
+  fileSize?: Prisma.SortOrder
+  mimeType?: Prisma.SortOrder
   propertyId?: Prisma.SortOrder
 }
 
 export type ImageSumOrderByAggregateInput = {
-  fileSize?: Prisma.SortOrder
-  width?: Prisma.SortOrder
-  height?: Prisma.SortOrder
   order?: Prisma.SortOrder
+  fileSize?: Prisma.SortOrder
 }
 
 export type ImageCreateNestedManyWithoutUploaderInput = {
@@ -621,16 +521,16 @@ export type ImageUncheckedUpdateManyWithoutUploaderNestedInput = {
   deleteMany?: Prisma.ImageScalarWhereInput | Prisma.ImageScalarWhereInput[]
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
+export type IntFieldUpdateOperationsInput = {
+  set?: number
   increment?: number
   decrement?: number
   multiply?: number
   divide?: number
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
   increment?: number
   decrement?: number
   multiply?: number
@@ -683,15 +583,11 @@ export type ImageCreateWithoutUploaderInput = {
   id?: string
   url: string
   publicId?: string | null
-  filename?: string | null
-  fileSize?: number | null
-  mimeType?: string | null
-  width?: number | null
-  height?: number | null
   altText?: string | null
   isFeatured?: boolean
   order?: number
-  uploadedAt?: Date | string
+  fileSize?: number | null
+  mimeType?: string | null
   property?: Prisma.PropertyCreateNestedOneWithoutImagesInput
 }
 
@@ -699,15 +595,11 @@ export type ImageUncheckedCreateWithoutUploaderInput = {
   id?: string
   url: string
   publicId?: string | null
-  filename?: string | null
-  fileSize?: number | null
-  mimeType?: string | null
-  width?: number | null
-  height?: number | null
   altText?: string | null
   isFeatured?: boolean
   order?: number
-  uploadedAt?: Date | string
+  fileSize?: number | null
+  mimeType?: string | null
   propertyId?: string | null
 }
 
@@ -744,16 +636,12 @@ export type ImageScalarWhereInput = {
   id?: Prisma.StringFilter<"Image"> | string
   url?: Prisma.StringFilter<"Image"> | string
   publicId?: Prisma.StringNullableFilter<"Image"> | string | null
-  filename?: Prisma.StringNullableFilter<"Image"> | string | null
-  fileSize?: Prisma.IntNullableFilter<"Image"> | number | null
-  mimeType?: Prisma.StringNullableFilter<"Image"> | string | null
-  width?: Prisma.IntNullableFilter<"Image"> | number | null
-  height?: Prisma.IntNullableFilter<"Image"> | number | null
   altText?: Prisma.StringNullableFilter<"Image"> | string | null
   isFeatured?: Prisma.BoolFilter<"Image"> | boolean
   order?: Prisma.IntFilter<"Image"> | number
-  uploadedAt?: Prisma.DateTimeFilter<"Image"> | Date | string
   uploadedBy?: Prisma.StringFilter<"Image"> | string
+  fileSize?: Prisma.IntNullableFilter<"Image"> | number | null
+  mimeType?: Prisma.StringNullableFilter<"Image"> | string | null
   propertyId?: Prisma.StringNullableFilter<"Image"> | string | null
 }
 
@@ -761,15 +649,11 @@ export type ImageCreateWithoutPropertyInput = {
   id?: string
   url: string
   publicId?: string | null
-  filename?: string | null
-  fileSize?: number | null
-  mimeType?: string | null
-  width?: number | null
-  height?: number | null
   altText?: string | null
   isFeatured?: boolean
   order?: number
-  uploadedAt?: Date | string
+  fileSize?: number | null
+  mimeType?: string | null
   uploader: Prisma.UserCreateNestedOneWithoutUploadedImagesInput
 }
 
@@ -777,16 +661,12 @@ export type ImageUncheckedCreateWithoutPropertyInput = {
   id?: string
   url: string
   publicId?: string | null
-  filename?: string | null
-  fileSize?: number | null
-  mimeType?: string | null
-  width?: number | null
-  height?: number | null
   altText?: string | null
   isFeatured?: boolean
   order?: number
-  uploadedAt?: Date | string
   uploadedBy: string
+  fileSize?: number | null
+  mimeType?: string | null
 }
 
 export type ImageCreateOrConnectWithoutPropertyInput = {
@@ -819,15 +699,11 @@ export type ImageCreateManyUploaderInput = {
   id?: string
   url: string
   publicId?: string | null
-  filename?: string | null
-  fileSize?: number | null
-  mimeType?: string | null
-  width?: number | null
-  height?: number | null
   altText?: string | null
   isFeatured?: boolean
   order?: number
-  uploadedAt?: Date | string
+  fileSize?: number | null
+  mimeType?: string | null
   propertyId?: string | null
 }
 
@@ -835,15 +711,11 @@ export type ImageUpdateWithoutUploaderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  filename?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   altText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   order?: Prisma.IntFieldUpdateOperationsInput | number
-  uploadedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   property?: Prisma.PropertyUpdateOneWithoutImagesNestedInput
 }
 
@@ -851,15 +723,11 @@ export type ImageUncheckedUpdateWithoutUploaderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  filename?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   altText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   order?: Prisma.IntFieldUpdateOperationsInput | number
-  uploadedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   propertyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -867,15 +735,11 @@ export type ImageUncheckedUpdateManyWithoutUploaderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  filename?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   altText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   order?: Prisma.IntFieldUpdateOperationsInput | number
-  uploadedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   propertyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -883,31 +747,23 @@ export type ImageCreateManyPropertyInput = {
   id?: string
   url: string
   publicId?: string | null
-  filename?: string | null
-  fileSize?: number | null
-  mimeType?: string | null
-  width?: number | null
-  height?: number | null
   altText?: string | null
   isFeatured?: boolean
   order?: number
-  uploadedAt?: Date | string
   uploadedBy: string
+  fileSize?: number | null
+  mimeType?: string | null
 }
 
 export type ImageUpdateWithoutPropertyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  filename?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   altText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   order?: Prisma.IntFieldUpdateOperationsInput | number
-  uploadedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uploader?: Prisma.UserUpdateOneRequiredWithoutUploadedImagesNestedInput
 }
 
@@ -915,32 +771,24 @@ export type ImageUncheckedUpdateWithoutPropertyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  filename?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   altText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   order?: Prisma.IntFieldUpdateOperationsInput | number
-  uploadedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   uploadedBy?: Prisma.StringFieldUpdateOperationsInput | string
+  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ImageUncheckedUpdateManyWithoutPropertyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  filename?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   altText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   order?: Prisma.IntFieldUpdateOperationsInput | number
-  uploadedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   uploadedBy?: Prisma.StringFieldUpdateOperationsInput | string
+  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -949,16 +797,12 @@ export type ImageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   id?: boolean
   url?: boolean
   publicId?: boolean
-  filename?: boolean
-  fileSize?: boolean
-  mimeType?: boolean
-  width?: boolean
-  height?: boolean
   altText?: boolean
   isFeatured?: boolean
   order?: boolean
-  uploadedAt?: boolean
   uploadedBy?: boolean
+  fileSize?: boolean
+  mimeType?: boolean
   propertyId?: boolean
   uploader?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   property?: boolean | Prisma.Image$propertyArgs<ExtArgs>
@@ -968,16 +812,12 @@ export type ImageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   url?: boolean
   publicId?: boolean
-  filename?: boolean
-  fileSize?: boolean
-  mimeType?: boolean
-  width?: boolean
-  height?: boolean
   altText?: boolean
   isFeatured?: boolean
   order?: boolean
-  uploadedAt?: boolean
   uploadedBy?: boolean
+  fileSize?: boolean
+  mimeType?: boolean
   propertyId?: boolean
   uploader?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   property?: boolean | Prisma.Image$propertyArgs<ExtArgs>
@@ -987,16 +827,12 @@ export type ImageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   url?: boolean
   publicId?: boolean
-  filename?: boolean
-  fileSize?: boolean
-  mimeType?: boolean
-  width?: boolean
-  height?: boolean
   altText?: boolean
   isFeatured?: boolean
   order?: boolean
-  uploadedAt?: boolean
   uploadedBy?: boolean
+  fileSize?: boolean
+  mimeType?: boolean
   propertyId?: boolean
   uploader?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   property?: boolean | Prisma.Image$propertyArgs<ExtArgs>
@@ -1006,20 +842,16 @@ export type ImageSelectScalar = {
   id?: boolean
   url?: boolean
   publicId?: boolean
-  filename?: boolean
-  fileSize?: boolean
-  mimeType?: boolean
-  width?: boolean
-  height?: boolean
   altText?: boolean
   isFeatured?: boolean
   order?: boolean
-  uploadedAt?: boolean
   uploadedBy?: boolean
+  fileSize?: boolean
+  mimeType?: boolean
   propertyId?: boolean
 }
 
-export type ImageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "url" | "publicId" | "filename" | "fileSize" | "mimeType" | "width" | "height" | "altText" | "isFeatured" | "order" | "uploadedAt" | "uploadedBy" | "propertyId", ExtArgs["result"]["image"]>
+export type ImageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "url" | "publicId" | "altText" | "isFeatured" | "order" | "uploadedBy" | "fileSize" | "mimeType" | "propertyId", ExtArgs["result"]["image"]>
 export type ImageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   uploader?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   property?: boolean | Prisma.Image$propertyArgs<ExtArgs>
@@ -1043,16 +875,12 @@ export type $ImagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     id: string
     url: string
     publicId: string | null
-    filename: string | null
-    fileSize: number | null
-    mimeType: string | null
-    width: number | null
-    height: number | null
     altText: string | null
     isFeatured: boolean
     order: number
-    uploadedAt: Date
     uploadedBy: string
+    fileSize: number | null
+    mimeType: string | null
     propertyId: string | null
   }, ExtArgs["result"]["image"]>
   composites: {}
@@ -1482,16 +1310,12 @@ export interface ImageFieldRefs {
   readonly id: Prisma.FieldRef<"Image", 'String'>
   readonly url: Prisma.FieldRef<"Image", 'String'>
   readonly publicId: Prisma.FieldRef<"Image", 'String'>
-  readonly filename: Prisma.FieldRef<"Image", 'String'>
-  readonly fileSize: Prisma.FieldRef<"Image", 'Int'>
-  readonly mimeType: Prisma.FieldRef<"Image", 'String'>
-  readonly width: Prisma.FieldRef<"Image", 'Int'>
-  readonly height: Prisma.FieldRef<"Image", 'Int'>
   readonly altText: Prisma.FieldRef<"Image", 'String'>
   readonly isFeatured: Prisma.FieldRef<"Image", 'Boolean'>
   readonly order: Prisma.FieldRef<"Image", 'Int'>
-  readonly uploadedAt: Prisma.FieldRef<"Image", 'DateTime'>
   readonly uploadedBy: Prisma.FieldRef<"Image", 'String'>
+  readonly fileSize: Prisma.FieldRef<"Image", 'Int'>
+  readonly mimeType: Prisma.FieldRef<"Image", 'String'>
   readonly propertyId: Prisma.FieldRef<"Image", 'String'>
 }
     

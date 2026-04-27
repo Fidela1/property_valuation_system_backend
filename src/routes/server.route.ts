@@ -5,6 +5,10 @@ import invitationRoute from "./invitation.route"
 import clientRoute from "./client.route"
 import supervisorRoute from "./supervisor.route"
 import collectorRoute from "./collector.route";
+import uploadRoute from "./upload.route";
+import valuationRoute from "./valuation.route"
+import reportRoute from "./report.route"
+
 
 const router = Router();
 
@@ -14,4 +18,8 @@ router.use('/invitation', invitationRoute)
 router.use('/client', clientRoute)
 router.use('/supervisor', supervisorRoute)
 router.use('/collector', collectorRoute)
+router.use('/upload', uploadRoute);
+router.use('/valuation', valuationRoute);
+router.use('/report', reportRoute)
+
 export default router;

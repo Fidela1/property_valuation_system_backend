@@ -89,3 +89,8 @@ export type Inquiry = Prisma.InquiryModel
  * 
  */
 export type AuditLog = Prisma.AuditLogModel
+/**
+ * Model Report
+ * 
+ */
+export type Report = Prisma.ReportModel

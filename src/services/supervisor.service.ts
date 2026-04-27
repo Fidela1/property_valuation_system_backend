@@ -1,10 +1,6 @@
 import prisma from '../config/prisma';
 import { AppError } from '../utils/AppError';
 
-// ============================================
-// GET PENDING PROPERTIES (Unassigned)
-// ============================================
-
 export const getPendingProperties = async (options: {
   page?: number;
   limit?: number;
@@ -54,10 +50,6 @@ export const getPendingProperties = async (options: {
     }
   };
 };
-
-// ============================================
-// GET PROPERTIES UNDER REVIEW
-// ============================================
 
 export const getUnderReviewProperties = async (options: {
   page?: number;
@@ -126,10 +118,6 @@ export const getUnderReviewProperties = async (options: {
   };
 };
 
-// ============================================
-// GET ALL AVAILABLE DATA COLLECTORS
-// ============================================
-
 export const getAvailableDataCollectors = async () => {
   const collectors = await prisma.user.findMany({
     where: {
@@ -160,10 +148,6 @@ export const getAvailableDataCollectors = async () => {
   }));
 };
 
-// ============================================
-// ASSIGN DATA COLLECTOR TO PROPERTY
-// ============================================
-
 export const assignDataCollector = async (
   propertyId: string,
   collectorId: string,
@@ -183,7 +167,6 @@ export const assignDataCollector = async (
     throw new AppError(`Cannot assign: Property status is ${property.status}`, 400);
   }
   
-  // Check if collector exists and has correct role
   const collector = await prisma.user.findUnique({
     where: { id: collectorId }
   });
@@ -195,8 +178,7 @@ export const assignDataCollector = async (
   if (!collector.isActive) {
     throw new AppError('Data collector is inactive', 400);
   }
-  
-  // Create assignment
+
   const assignment = await prisma.assignment.create({
     data: {
       propertyId,
@@ -206,14 +188,12 @@ export const assignDataCollector = async (
       assignedAt: new Date()
     }
   });
-  
-  // Update property status
+
   const updatedProperty = await prisma.property.update({
     where: { id: propertyId },
     data: { status: 'ASSIGNED' }
   });
-  
-  // Log audit
+
   await prisma.auditLog.create({
     data: {
       userId: supervisorId,
@@ -233,10 +213,6 @@ export const assignDataCollector = async (
     property: updatedProperty
   };
 };
-
-// ============================================
-// GET PROPERTY DETAILS FOR REVIEW
-// ============================================
 
 export const getPropertyForReview = async (propertyId: string) => {
   const property = await prisma.property.findUnique({
@@ -282,10 +258,6 @@ export const getPropertyForReview = async (propertyId: string) => {
   return property;
 };
 
-// ============================================
-// APPROVE PROPERTY
-// ============================================
-
 export const approveProperty = async (
   propertyId: string,
   supervisorId: string,
@@ -303,8 +275,7 @@ export const approveProperty = async (
   if (property.status !== 'UNDER_REVIEW') {
     throw new AppError(`Cannot approve: Property status is ${property.status}`, 400);
   }
-  
-  // Create review record
+
   const review = await prisma.review.create({
     data: {
       propertyId,
@@ -314,7 +285,6 @@ export const approveProperty = async (
     }
   });
   
-  // Update property status
   const updatedProperty = await prisma.property.update({
     where: { id: propertyId },
     data: { 
@@ -341,10 +311,6 @@ export const approveProperty = async (
   };
 };
 
-// ============================================
-// REJECT PROPERTY (NEEDS REVISION)
-// ============================================
-
 export const rejectProperty = async (
   propertyId: string,
   supervisorId: string,
@@ -361,8 +327,7 @@ export const rejectProperty = async (
   if (property.status !== 'UNDER_REVIEW') {
     throw new AppError(`Cannot reject: Property status is ${property.status}`, 400);
   }
-  
-  // Create review record
+ 
   const review = await prisma.review.create({
     data: {
       propertyId,
@@ -371,14 +336,12 @@ export const rejectProperty = async (
       decision: 'NEEDS_REVISION'
     }
   });
-  
-  // Update property status
+
   const updatedProperty = await prisma.property.update({
     where: { id: propertyId },
     data: { status: 'NEEDS_REVISION' }
   });
-  
-  // Log audit
+
   await prisma.auditLog.create({
     data: {
       userId: supervisorId,
@@ -394,10 +357,6 @@ export const rejectProperty = async (
     property: updatedProperty
   };
 };
-
-// ============================================
-// PUBLISH APPROVED PROPERTY
-// ============================================
 
 export const publishProperty = async (propertyId: string, supervisorId: string) => {
   const property = await prisma.property.findUnique({
@@ -432,10 +391,6 @@ export const publishProperty = async (propertyId: string, supervisorId: string) 
   
   return updatedProperty;
 };
-
-// ============================================
-// GET SUPERVISOR STATISTICS
-// ============================================
 
 export const getSupervisorStats = async (supervisorId: string) => {
   const [

@@ -393,7 +393,8 @@ export const ModelName = {
   Review: 'Review',
   SavedProperty: 'SavedProperty',
   Inquiry: 'Inquiry',
-  AuditLog: 'AuditLog'
+  AuditLog: 'AuditLog',
+  Report: 'Report'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -409,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "invitation" | "image" | "property" | "assignment" | "fieldData" | "review" | "savedProperty" | "inquiry" | "auditLog"
+    modelProps: "user" | "invitation" | "image" | "property" | "assignment" | "fieldData" | "review" | "savedProperty" | "inquiry" | "auditLog" | "report"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1153,6 +1154,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Report: {
+      payload: Prisma.$ReportPayload<ExtArgs>
+      fields: Prisma.ReportFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ReportFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReportPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ReportFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReportPayload>
+        }
+        findFirst: {
+          args: Prisma.ReportFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReportPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ReportFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReportPayload>
+        }
+        findMany: {
+          args: Prisma.ReportFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReportPayload>[]
+        }
+        create: {
+          args: Prisma.ReportCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReportPayload>
+        }
+        createMany: {
+          args: Prisma.ReportCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ReportCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReportPayload>[]
+        }
+        delete: {
+          args: Prisma.ReportDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReportPayload>
+        }
+        update: {
+          args: Prisma.ReportUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReportPayload>
+        }
+        deleteMany: {
+          args: Prisma.ReportDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ReportUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ReportUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReportPayload>[]
+        }
+        upsert: {
+          args: Prisma.ReportUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReportPayload>
+        }
+        aggregate: {
+          args: Prisma.ReportAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateReport>
+        }
+        groupBy: {
+          args: Prisma.ReportGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ReportGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ReportCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ReportCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1230,16 +1305,12 @@ export const ImageScalarFieldEnum = {
   id: 'id',
   url: 'url',
   publicId: 'publicId',
-  filename: 'filename',
-  fileSize: 'fileSize',
-  mimeType: 'mimeType',
-  width: 'width',
-  height: 'height',
   altText: 'altText',
   isFeatured: 'isFeatured',
   order: 'order',
-  uploadedAt: 'uploadedAt',
   uploadedBy: 'uploadedBy',
+  fileSize: 'fileSize',
+  mimeType: 'mimeType',
   propertyId: 'propertyId'
 } as const
 
@@ -1317,6 +1388,14 @@ export const FieldDataScalarFieldEnum = {
   hasFence: 'hasFence',
   fenceType: 'fenceType',
   fenceHeight: 'fenceHeight',
+  hasElectricity: 'hasElectricity',
+  hasWaterSupply: 'hasWaterSupply',
+  hasWaterTank: 'hasWaterTank',
+  floodRisk: 'floodRisk',
+  landSlope: 'landSlope',
+  floorMaterial: 'floorMaterial',
+  roofType: 'roofType',
+  propertyCategory: 'propertyCategory',
   nearestSchoolKm: 'nearestSchoolKm',
   nearestHospitalKm: 'nearestHospitalKm',
   nearestTransportKm: 'nearestTransportKm',
@@ -1387,6 +1466,25 @@ export const AuditLogScalarFieldEnum = {
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const ReportScalarFieldEnum = {
+  id: 'id',
+  propertyId: 'propertyId',
+  title: 'title',
+  content: 'content',
+  fileUrl: 'fileUrl',
+  fileName: 'fileName',
+  fileSize: 'fileSize',
+  mimeType: 'mimeType',
+  generatedBy: 'generatedBy',
+  isPublished: 'isPublished',
+  version: 'version',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ReportScalarFieldEnum = (typeof ReportScalarFieldEnum)[keyof typeof ReportScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1743,6 +1841,7 @@ export type GlobalOmitConfig = {
   savedProperty?: Prisma.SavedPropertyOmit
   inquiry?: Prisma.InquiryOmit
   auditLog?: Prisma.AuditLogOmit
+  report?: Prisma.ReportOmit
 }
 
 /* Types for Logging */
