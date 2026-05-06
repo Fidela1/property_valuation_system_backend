@@ -8,7 +8,7 @@ import collectorRoute from "./collector.route";
 import uploadRoute from "./upload.route";
 import valuationRoute from "./valuation.route"
 import reportRoute from "./report.route"
-
+import userAnalyticsRoute from "./analytics.route";
 
 const router = Router();
 
@@ -20,6 +20,7 @@ router.use('/supervisor', supervisorRoute)
 router.use('/collector', collectorRoute)
 router.use('/upload', uploadRoute);
 router.use('/valuation', valuationRoute);
-router.use('/report', reportRoute)
+router.use('/report', reportRoute);
+router.use('/user-analytics', userAnalyticsRoute);
 
 export default router;

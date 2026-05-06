@@ -10,7 +10,7 @@ export const createProperty = async (
   data: {
     upiNumber: string;
     ownerName: string;
-    tinNumber: string;
+    idOrTin: string;  
     phoneNumber: string;
     country?: string;
     province: string;
@@ -35,7 +35,7 @@ export const createProperty = async (
     data: {
       upiNumber: data.upiNumber,
       ownerName: data.ownerName,
-      idOrTin: data.tinNumber,
+      idOrTin: data.idOrTin, 
       phoneNumber: data.phoneNumber,
       country: data.country || 'Rwanda',
       province: data.province,

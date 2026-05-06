@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import * as invitationService from '../services/invitation.service';
 import { AppError } from '../utils/AppError';
+import { AuthRequest } from '../middleware/auth.middleware';
 
 export const verifyInvitation = async (req: Request, res: Response) => {
   try {
@@ -93,3 +94,4 @@ export const acceptInvitation = async (req: Request, res: Response) => {
     });
   }
 };
+
