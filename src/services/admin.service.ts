@@ -2,7 +2,7 @@ import prisma from '../config/prisma';
 import bcrypt from 'bcrypt';
 import { AppError } from '../utils/AppError';
 import { randomBytes } from 'crypto';
-
+import { sendEmail, getInvitationEmailTemplate,getRoleUpdateEmailTemplate, getAccountStatusEmailTemplate, getAccountDeletedEmailTemplate } from '../config/email';
 type Role = 'ADMIN' | 'DATA_COLLECTOR' | 'SUPERVISOR';
 
 export const countUsers = async () => {
@@ -50,16 +50,6 @@ const generatePlaceholderPassword = (): string => {
   return randomBytes(12).toString('hex');
 };
 
-const getRoleDisplayName = (role: string): string => {
-  const roleMap: Record<string, string> = {
-    'CLIENT': 'Property Owner',
-    'DATA_COLLECTOR': 'Data Collector',
-    'SUPERVISOR': 'Supervisor',
-    'ADMIN': 'Administrator'
-  };
-  return roleMap[role] || role;
-};
-
 const getRoleDescription = (role: string): string => {
   const descriptionMap: Record<string, string> = {
     'CLIENT': 'You can submit properties for valuation and track their status.',
@@ -69,7 +59,6 @@ const getRoleDescription = (role: string): string => {
   };
   return descriptionMap[role] || '';
 };
-
 
 export const createInvitation = async (
   adminId: string,
@@ -81,11 +70,12 @@ export const createInvitation = async (
   }
 ) => {
 
-   const normalizedEmail = data.email.toLowerCase().trim();
+  const normalizedEmail = data.email.toLowerCase().trim();
+  
   // Check if email already has an active invitation
   const existingInvitation = await prisma.invitation.findFirst({
     where: {
-      email: data.email.toLowerCase().trim(),
+      email: normalizedEmail,
       status: 'PENDING'
     }
   });
@@ -96,10 +86,15 @@ export const createInvitation = async (
   
   // Check if user already exists with this email
   const existingUser = await prisma.user.findUnique({
-    where: { email: data.email.toLowerCase().trim() }
+    where: { email: normalizedEmail }
   });
   
-    const existingExpiredInvitation = await prisma.invitation.findFirst({
+  if (existingUser) {
+    throw new AppError('User with this email already exists', 400);
+  }
+  
+  // Check for expired invitation - delete it and allow new
+  const existingExpiredInvitation = await prisma.invitation.findFirst({
     where: {
       email: normalizedEmail,
       status: 'EXPIRED'
@@ -107,10 +102,13 @@ export const createInvitation = async (
   });
   
   if (existingExpiredInvitation) {
-    throw new AppError(`An invitation for ${normalizedEmail} has expired. Please ask the user to request a new invitation.`, 400);
+    // Delete expired invitation instead of blocking
+    await prisma.invitation.delete({
+      where: { id: existingExpiredInvitation.id }
+    });
   }
   
-  // ✅ Check if email has a cancelled invitation
+  // Handle cancelled invitations - delete the cancelled one and create new
   const existingCancelledInvitation = await prisma.invitation.findFirst({
     where: {
       email: normalizedEmail,
@@ -119,11 +117,10 @@ export const createInvitation = async (
   });
   
   if (existingCancelledInvitation) {
-    throw new AppError(`A previous invitation for ${normalizedEmail} was cancelled. You can send a new invitation.`, 400);
-  }
-
-  if (existingUser) {
-    throw new AppError('User with this email already exists', 400);
+    // Delete the cancelled invitation to allow new one
+    await prisma.invitation.delete({
+      where: { id: existingCancelledInvitation.id }
+    });
   }
   
   // Generate invitation token
@@ -149,14 +146,45 @@ export const createInvitation = async (
   const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
   const invitationLink = `${frontendUrl}/accept-invitation?token=${token}`;
   
+  // ✅ SEND EMAIL WITH THE INVITATION LINK
+  try {
+    // Get role display name for email
+    const roleDisplayName = getRoleDisplayName(data.role);
+    
+    // Send the email
+    await sendEmail({
+      to: data.email,
+      subject: `Invitation to join Property Valuation System as ${roleDisplayName}`,
+      html: getInvitationEmailTemplate(data.name, roleDisplayName, invitationLink),
+    });
+    
+    console.log(`✅ Invitation email sent to ${data.email}`);
+    
+  } catch (emailError) {
+    console.error(`❌ Failed to send invitation email to ${data.email}:`, emailError);
+    // Don't throw error - invitation is created, just log the failure
+    // You might want to notify admin that email failed
+  }
+  
   return {
     invitation,
     invitationLink,
     token
   };
 };
+
+// Helper function for role display names (add if not already in your service)
+const getRoleDisplayName = (role: string): string => {
+  const roleMap: Record<string, string> = {
+    'CLIENT': 'Property Owner',
+    'DATA_COLLECTOR': 'Data Collector',
+    'SUPERVISOR': 'Supervisor',
+    'ADMIN': 'Administrator'
+  };
+  return roleMap[role] || role;
+};
 export const getManageUsers = async (
-    currentAdminId: string,
+  currentAdminId: string,
   options: {
     page: number;
     limit: number;
@@ -166,11 +194,10 @@ export const getManageUsers = async (
   const { page, limit, role, search } = options;
   const skip = (page - 1) * limit;
   
-  // Build where clause
-   const where: any = {
-    NOT: { id: currentAdminId },  
-  isActive: true   
-  };;
+  // Build where clause - DON'T exclude current admin
+  const where: any = {
+    isActive: true
+  };
   
   if (role && role !== 'ALL') {
     where.role = role;
@@ -184,7 +211,7 @@ export const getManageUsers = async (
     ];
   }
   
-  // Get users with pagination
+  // Get users with pagination (include all users)
   const [users, total] = await Promise.all([
     prisma.user.findMany({
       where,
@@ -212,21 +239,23 @@ export const getManageUsers = async (
     prisma.user.count({ where })
   ]);
   
-  // Get summary statistics
+  // Get summary statistics (all users)
   const [
     totalClients,
     totalDataCollectors,
     totalSupervisors,
     totalAdmins,
     activeUsers,
-    inactiveUsers
+    inactiveUsers,
+    totalUsers
   ] = await Promise.all([
     prisma.user.count({ where: { role: 'CLIENT' } }),
     prisma.user.count({ where: { role: 'DATA_COLLECTOR' } }),
     prisma.user.count({ where: { role: 'SUPERVISOR' } }),
     prisma.user.count({ where: { role: 'ADMIN' } }),
     prisma.user.count({ where: { isActive: true } }),
-    prisma.user.count({ where: { isActive: false } })
+    prisma.user.count({ where: { isActive: false } }),
+    prisma.user.count() // Total users including admins
   ]);
   
   return {
@@ -237,7 +266,7 @@ export const getManageUsers = async (
       total,
       totalPages: Math.ceil(total / limit)
     },
-    totalUsers: total,
+    totalUsers, // This will now match dashboard count
     totalClients,
     totalDataCollectors,
     totalSupervisors,
@@ -263,26 +292,41 @@ export const updateUserByAdmin = async (
   });
   
   if (!user) {
-    throw new Error('User not found');
+    throw new AppError('User not found', 404);
   }
   
   // If email is being changed, check if new email already exists
+  let oldEmail = user.email;
+  let roleChanged = false;
+  let oldRole = user.role;
+  let statusChanged = false;
+  let oldStatus = user.isActive;
+  
   if (data.email && data.email !== user.email) {
     const existingUser = await prisma.user.findUnique({
-      where: { email: data.email }
+      where: { email: data.email.toLowerCase().trim() }
     });
     if (existingUser) {
-      throw new Error('Email already exists');
+      throw new AppError('Email already exists', 400);
     }
   }
   
-  // Build update data - only include fields that are provided
-  const updateData: any = {};
+  // Check if role is being changed
+  if (data.role && data.role !== user.role) {
+    roleChanged = true;
+  }
   
+  // Check if status is being changed
+  if (data.isActive !== undefined && data.isActive !== user.isActive) {
+    statusChanged = true;
+  }
+  
+  // Build update data
+  const updateData: any = {};
   if (data.name !== undefined) updateData.name = data.name;
-  if (data.email !== undefined) updateData.email = data.email;
+  if (data.email !== undefined) updateData.email = data.email.toLowerCase().trim();
   if (data.phone !== undefined) updateData.phone = data.phone;
-  if (data.role !== undefined) updateData.role = data.role; // Prisma accepts string for enum
+  if (data.role !== undefined) updateData.role = data.role;
   if (data.isActive !== undefined) updateData.isActive = data.isActive;
   
   // Update user
@@ -301,31 +345,123 @@ export const updateUserByAdmin = async (
     }
   });
   
+  // Send email notification if role changed
+  if (roleChanged && updatedUser.email) {
+    try {
+      const emailHtml = getRoleUpdateEmailTemplate(
+        updatedUser.name || 'User',
+        oldRole,
+        updatedUser.role
+      );
+      
+      await sendEmail({
+        to: updatedUser.email,
+        subject: 'Your Role Has Been Updated - Property Valuation System',
+        html: emailHtml
+      });
+      console.log(`Role update email sent to ${updatedUser.email}`);
+    } catch (emailError) {
+      console.error('Failed to send role update email:', emailError);
+    }
+  }
+  
+  // Send email notification if account status changed
+  if (statusChanged && updatedUser.email) {
+    try {
+      const status = data.isActive ? 'activated' : 'deactivated';
+      const emailHtml = getAccountStatusEmailTemplate(
+        updatedUser.name || 'User',
+        status
+      );
+      
+      await sendEmail({
+        to: updatedUser.email,
+        subject: `Account ${status === 'activated' ? 'Activated' : 'Deactivated'} - Property Valuation System`,
+        html: emailHtml
+      });
+      console.log(`Account ${status} email sent to ${updatedUser.email}`);
+    } catch (emailError) {
+      console.error('Failed to send account status email:', emailError);
+    }
+  }
+  
   return updatedUser;
 };
 
-export const deleteUserByAdmin = async (userId: string) => {
-  // Check if user exists
+export const deleteUserByAdmin = async (userId: string, adminId: string) => {
+  // First, check if user exists
   const user = await prisma.user.findUnique({
-    where: { id: userId },
-    include: {
-      properties: true,
-      assignments: true
-    }
+    where: { id: userId }
   });
   
   if (!user) {
-    throw new Error('User not found');
+    throw new AppError('User not found', 404);
   }
   
-  // Check if user has any properties or assignments
-  if (user.properties.length > 0 || user.assignments.length > 0) {
+  // Prevent deleting own account
+  if (user.id === adminId) {
+    throw new AppError('You cannot delete your own account', 400);
+  }
+  
+  // Prevent deleting last admin
+  if (user.role === 'ADMIN') {
+    const adminCount = await prisma.user.count({ where: { role: 'ADMIN' } });
+    if (adminCount <= 1) {
+      throw new AppError('Cannot delete the last admin user', 400);
+    }
+  }
+  
+  // Store user info for email before deletion
+  const userEmail = user.email;
+  const userName = user.name || 'User';
+  
+  // Check if user has associated data by counting directly from database
+  const [propertiesCount, assignmentsCount, invitationsCount] = await Promise.all([
+    prisma.property.count({ where: { clientId: userId } }),
+    prisma.assignment.count({ where: { collectorId: userId } }), // ✅ Fixed: Use collectorId instead of userId
+    prisma.invitation.count({ where: { createdById: userId } })
+  ]);
+  
+  const hasAssociatedData = propertiesCount > 0 || assignmentsCount > 0 || invitationsCount > 0;
+  
+  if (hasAssociatedData) {
     // Soft delete - just deactivate instead of hard delete
     await prisma.user.update({
       where: { id: userId },
       data: { isActive: false }
     });
-    return { softDeleted: true, message: 'User has associated data. Account deactivated instead.' };
+    
+    // Send deactivation email
+    try {
+      const emailHtml = getAccountStatusEmailTemplate(userName, 'deactivated');
+      await sendEmail({
+        to: userEmail,
+        subject: 'Account Deactivated - Property Valuation System',
+        html: emailHtml
+      });
+      console.log(`Account deactivation email sent to ${userEmail}`);
+    } catch (emailError) {
+      console.error('Failed to send deactivation email:', emailError);
+    }
+    
+    return { 
+      success: true, 
+      softDeleted: true, 
+      message: 'User has associated data. Account deactivated instead of deleted.' 
+    };
+  }
+  
+  // Send deletion notification email before hard delete
+  try {
+    const emailHtml = getAccountDeletedEmailTemplate(userName);
+    await sendEmail({
+      to: userEmail,
+      subject: 'Account Deleted - Property Valuation System',
+      html: emailHtml
+    });
+    console.log(`Account deletion email sent to ${userEmail}`);
+  } catch (emailError) {
+    console.error('Failed to send deletion email:', emailError);
   }
   
   // Hard delete if no associated data
@@ -333,5 +469,129 @@ export const deleteUserByAdmin = async (userId: string) => {
     where: { id: userId }
   });
   
-  return { hardDeleted: true };
+  return { 
+    success: true, 
+    hardDeleted: true, 
+    message: 'User deleted successfully' 
+  };
+};
+// Cancel invitation - allow cancelling COMPLETED invitations if user doesn't exist
+export const cancelInvitation = async (invitationId: string, adminId: string) => {
+  // Check if invitation exists
+  const invitation = await prisma.invitation.findFirst({
+    where: {
+      id: invitationId,
+      NOT: {
+        status: 'PENDING'
+      }
+    }
+  });
+  
+  if (!invitation) {
+    throw new AppError('Invitation not found', 404);
+  }
+  
+  // If status is COMPLETED, check if user actually exists
+  if (invitation.status === 'COMPLETED') {
+    const existingUser = await prisma.user.findUnique({
+      where: { email: invitation.email }
+    });
+    
+    // If user doesn't exist, treat as PENDING and allow cancellation
+    if (!existingUser) {
+      // Update status to CANCELLED
+      const cancelledInvitation = await prisma.invitation.update({
+        where: { id: invitationId },
+        data: { status: 'CANCELLED' }
+      });
+      
+      return {
+        success: true,
+        message: 'Invitation cancelled successfully (user never registered)',
+        invitation: cancelledInvitation
+      };
+    }
+  }
+  
+  // Check if current admin created this invitation
+  if (invitation.createdById !== adminId) {
+    throw new AppError('You can only cancel invitations you created', 403);
+  }
+  
+  // Update status to CANCELLED
+  const cancelledInvitation = await prisma.invitation.update({
+    where: { id: invitationId },
+    data: { status: 'CANCELLED' }
+  });
+  
+  return {
+    success: true,
+    message: 'Invitation cancelled successfully',
+    invitation: cancelledInvitation
+  };
+};
+
+// Delete invitation - also handle COMPLETED without user
+export const deleteInvitation = async (invitationId: string, adminId: string) => {
+  // Check if invitation exists
+  const invitation = await prisma.invitation.findUnique({
+    where: { id: invitationId }
+  });
+  
+  if (!invitation) {
+    throw new AppError('Invitation not found', 404);
+  }
+  
+  // If status is COMPLETED, check if user actually exists
+  if (invitation.status === 'COMPLETED') {
+    const existingUser = await prisma.user.findUnique({
+      where: { email: invitation.email }
+    });
+    
+    // If user doesn't exist, allow deletion
+    if (!existingUser) {
+      await prisma.invitation.delete({
+        where: { id: invitationId }
+      });
+      
+      return {
+        success: true,
+        message: 'Invitation deleted successfully (user never registered)',
+        deletedInvitation: {
+          id: invitation.id,
+          email: invitation.email,
+          name: invitation.name,
+          role: invitation.role
+        }
+      };
+    } else {
+      throw new AppError('Cannot delete invitation for user that already exists', 400);
+    }
+  }
+  
+  // Only PENDING invitations can be deleted
+  if (invitation.status !== 'PENDING') {
+    throw new AppError(`Cannot delete invitation that is ${invitation.status.toLowerCase()}`, 400);
+  }
+  
+  // Check if current admin created this invitation
+  if (invitation.createdById !== adminId) {
+    throw new AppError('You can only delete invitations you created', 403);
+  }
+  
+  // Delete the invitation
+  await prisma.invitation.delete({
+    where: { id: invitationId }
+  });
+  
+  return {
+    success: true,
+    message: 'Invitation deleted successfully',
+    deletedInvitation: {
+      id: invitation.id,
+      email: invitation.email,
+      name: invitation.name,
+      role: invitation.role
+    }
+  };
 };

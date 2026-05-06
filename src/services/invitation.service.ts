@@ -84,3 +84,4 @@ export const acceptInvitation = async (token: string, password: string, phone?: 
     token: authToken
   };
 };
+

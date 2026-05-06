@@ -1,48 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import * as adminService from '../services/admin.service';
 import { AuthRequest } from '../middleware/auth.middleware';
+import prisma from '../config/prisma'; 
 import { AppError } from '../utils/AppError';
 
-export const getDashboardStats = async (req: AuthRequest, res: Response) => {
-  try {
-    const adminId = req.authenticatedUser?.id;
-    
-    if (!adminId) {
-      return res.status(401).json({
-        success: false,
-        error: 'Unauthorized'
-      });
-    }
-    
-    const [
-      totalUsers,
-      totalProperties,
-      totalEmployees,
-    ] = await Promise.all([
-      adminService.countUsers(),
-      adminService.countEmployees(),
-      adminService.getRecentActivities()
-    ]);
-    
-    return res.status(200).json({
-      success: true,
-      data: {
-        counts: {
-          totalUsers,
-          totalProperties,
-          totalEmployees
-        },
-        
-      }
-    });
-  } catch (error) {
-    console.error('Dashboard stats error:', error);
-    return res.status(500).json({
-      success: false,
-      error: 'Failed to fetch dashboard statistics'
-    });
-  }
-};
 
 export const createInvitation = async (req: AuthRequest, res: Response) => {
   try {
@@ -207,7 +168,7 @@ export const deleteUserByAdmin = async (req: Request, res: Response) => {
       });
     }
     
-    await adminService.deleteUserByAdmin(userId);
+    await adminService.deleteUserByAdmin(userId, adminId);
     
     res.json({
       success: true,
@@ -222,3 +183,175 @@ export const deleteUserByAdmin = async (req: Request, res: Response) => {
   }
 };
 
+// ============================================
+// GET RECENT ACTIVITIES (Using Properties)
+// ============================================
+
+export const getDashboardStats = async (req: AuthRequest, res: Response) => {
+  try {
+    const adminId = req.authenticatedUser?.id;
+    
+    if (!adminId) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    
+    const [
+      totalUsers,
+      totalProperties,
+      pendingApplications,
+      activeAssignments,
+      underReview,
+      publishedProperties,
+      totalEmployees
+    ] = await Promise.all([
+      prisma.user.count(),
+      prisma.property.count(),
+      prisma.property.count({ where: { status: 'PENDING' } }),
+      prisma.property.count({ where: { status: { in: ['ASSIGNED', 'IN_FIELDWORK'] } } }),
+      prisma.property.count({ where: { status: 'UNDER_REVIEW' } }),
+      prisma.property.count({ where: { status: 'PUBLISHED' } }),
+      prisma.user.count({ where: { role: { in: ['DATA_COLLECTOR', 'SUPERVISOR'] } } })
+    ]);
+    
+    res.json({
+      success: true,
+      data: {
+        counts: {
+          totalUsers,
+          totalProperties,
+          pendingApplications,
+          activeAssignments,
+          underReview,
+          publishedProperties,
+          totalEmployees
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Dashboard stats error:', error);
+    res.status(500).json({ error: 'Failed to fetch dashboard stats' });
+  }
+};
+
+// ============================================
+// GET RECENT ACTIVITIES
+// ============================================
+
+export const getRecentActivities = async (req: Request, res: Response) => {
+  try {
+    // Get recent properties as activities
+    const recentProperties = await prisma.property.findMany({
+      take: 10,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        client: {
+          select: { name: true, email: true }
+        }
+      }
+    });
+    
+    const activities = recentProperties.map((property: any) => ({
+      id: property.id,
+      type: 'PROPERTY_SUBMITTED',
+      description: `${property.client?.name || 'A client'} submitted property ${property.upiNumber}`,
+      upiNumber: property.upiNumber,
+      status: property.status,
+      createdAt: property.createdAt
+    }));
+    
+    res.json({
+      success: true,
+      data: activities
+    });
+  } catch (error) {
+    console.error('Get recent activities error:', error);
+    res.status(500).json({ error: 'Failed to fetch activities' });
+  }
+};
+
+const getParamAsString = (param: string | string[] | undefined): string => {
+  if (!param) return '';
+  return Array.isArray(param) ? param[0] : param;
+};
+
+export const cancelInvitation = async (req: AuthRequest, res: Response) => {
+  try {
+    const adminId = req.authenticatedUser?.id;
+    const invitationId = getParamAsString(req.params.invitationId);
+    
+    if (!adminId) {
+      return res.status(401).json({ 
+        success: false, 
+        error: 'Unauthorized: Admin access required' 
+      });
+    }
+    
+    if (!invitationId) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Invitation ID is required' 
+      });
+    }
+    
+    const result = await adminService.cancelInvitation(invitationId, adminId);
+    
+    res.json({
+      success: true,
+      message: result.message,
+      data: result.invitation
+    });
+    
+  } catch (error: any) {
+    if (error.message === 'Invitation not found or already processed') {
+      return res.status(404).json({ success: false, error: error.message });
+    }
+    if (error.message === 'You can only cancel invitations you created') {
+      return res.status(403).json({ success: false, error: error.message });
+    }
+    
+    console.error('Cancel invitation error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to cancel invitation' 
+    });
+  }
+};
+
+export const deleteInvitation = async (req: AuthRequest, res: Response) => {
+  try {
+    const adminId = req.authenticatedUser?.id;
+    const invitationId = getParamAsString(req.params.invitationId);
+    
+    if (!adminId) {
+      return res.status(401).json({ 
+        success: false, 
+        error: 'Unauthorized: Admin access required' 
+      });
+    }
+    
+    const result = await adminService.deleteInvitation(invitationId, adminId);
+    
+    res.json({
+      success: true,
+      message: result.message,
+      data: result.deletedInvitation
+    });
+    
+  } catch (error: any) {
+    if (error.message === 'Invitation not found') {
+      return res.status(404).json({ success: false, error: error.message });
+    }
+    if (error.message.includes('Cannot delete')) {
+      return res.status(400).json({ success: false, error: error.message });
+    }
+    if (error.message === 'You can only delete invitations you created') {
+      return res.status(403).json({ success: false, error: error.message });
+    }
+    
+    console.error('Delete invitation error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to delete invitation' 
+    });
+  }
+};
