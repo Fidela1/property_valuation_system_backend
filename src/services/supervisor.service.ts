@@ -434,3 +434,181 @@ export const getSupervisorStats = async (supervisorId: string) => {
     recentReviews
   };
 };
+
+export const getInFieldworkProperties = async (options: {
+  page?: number;
+  limit?: number;
+  search?: string;
+}) => {
+  const page = options?.page || 1;
+  const limit = options?.limit || 10;
+  const skip = (page - 1) * limit;
+  
+  const where: any = { status: 'IN_FIELDWORK' };
+  
+  if (options?.search) {
+    where.OR = [
+      { upiNumber: { contains: options.search, mode: 'insensitive' } },
+      { ownerName: { contains: options.search, mode: 'insensitive' } },
+      { phoneNumber: { contains: options.search, mode: 'insensitive' } }
+    ];
+  }
+  
+  const [properties, total] = await Promise.all([
+    prisma.property.findMany({
+      where,
+      skip,
+      take: limit,
+      include: {
+        client: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true
+          }
+        },
+        assignment: {
+          include: {
+            collector: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                phone: true
+              }
+            },
+            assignedBy: {
+              select: {
+                name: true,
+                email: true
+              }
+            }
+          }
+        },
+        fieldData: {
+          select: {
+            propertyType: true,
+            landSize: true,
+            buildingSize: true,
+            bedrooms: true,
+            bathrooms: true,
+            condition: true,
+            yearBuilt: true,
+            valuationAmount: true,
+            notes: true
+          }
+        },
+        images: {
+          orderBy: { order: 'asc' },
+          take: 1
+        }
+      },
+      orderBy: { updatedAt: 'desc' }
+    }),
+    prisma.property.count({ where })
+  ]);
+  
+  return {
+    properties,
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit)
+    }
+  };
+};
+
+export const getAllProperties = async (options: {
+  page?: number;
+  limit?: number;
+  search?: string;
+  status?: string;
+}) => {
+  const page = options?.page || 1;
+  const limit = options?.limit || 10;
+  const skip = (page - 1) * limit;
+  
+  const where: any = {};
+  
+  // Filter by status if provided
+  if (options?.status && options.status !== 'ALL') {
+    where.status = options.status;
+  }
+  
+  // Search functionality
+  if (options?.search) {
+    where.OR = [
+      { upiNumber: { contains: options.search, mode: 'insensitive' } },
+      { ownerName: { contains: options.search, mode: 'insensitive' } },
+      { phoneNumber: { contains: options.search, mode: 'insensitive' } },
+      { district: { contains: options.search, mode: 'insensitive' } }
+    ];
+  }
+  
+  const [properties, total] = await Promise.all([
+    prisma.property.findMany({
+      where,
+      skip,
+      take: limit,
+      include: {
+        client: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true
+          }
+        },
+        assignment: {
+          include: {
+            collector: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                phone: true
+              }
+            },
+            assignedBy: {
+              select: {
+                name: true,
+                email: true
+              }
+            }
+          }
+        },
+        fieldData: {
+          select: {
+            propertyType: true,
+            landSize: true,
+            buildingSize: true,
+            bedrooms: true,
+            bathrooms: true,
+            condition: true,
+            yearBuilt: true,
+            valuationAmount: true,
+            notes: true
+          }
+        },
+        images: {
+          orderBy: { order: 'asc' },
+          take: 1 // Get first image for thumbnail
+        }
+      },
+      orderBy: { createdAt: 'desc' }
+    }),
+    prisma.property.count({ where })
+  ]);
+  
+  return {
+    properties,
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit)
+    }
+  };
+};

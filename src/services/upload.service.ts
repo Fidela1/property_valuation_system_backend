@@ -19,7 +19,7 @@ export const uploadPropertyImages = async (
       assignment: {
         collectorId: userId
       },
-      status: 'IN_FIELDWORK'
+      status: { in: ['IN_FIELDWORK', 'UNDER_REVIEW', 'NEEDS_REVISION'] }
     }
   });
 

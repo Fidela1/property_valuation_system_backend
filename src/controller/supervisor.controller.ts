@@ -108,7 +108,32 @@ export const getUnderReviewProperties = async (req: AuthRequest, res: Response) 
     });
   }
 };
-
+export const getAllProperties = async (req: Request, res: Response) => {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const search = req.query.search as string;
+    const status = req.query.status as string;
+    
+    const result = await supervisorService.getAllProperties({
+      page,
+      limit,
+      search,
+      status
+    });
+    
+    res.json({
+      success: true,
+      data: result
+    });
+  } catch (error) {
+    console.error('Error fetching all properties:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch properties'
+    });
+  }
+};
 export const getAvailableDataCollectors = async (req: AuthRequest, res: Response) => {
   try {
     const supervisorId = req.authenticatedUser?.id;
@@ -361,6 +386,31 @@ export const publishProperty = async (req: AuthRequest, res: Response) => {
     res.status(500).json({
       success: false,
       error: 'Failed to publish property'
+    });
+  }
+};
+
+export const getInFieldworkProperties = async (req: Request, res: Response) => {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const search = req.query.search as string;
+    
+    const result = await supervisorService.getInFieldworkProperties({
+      page,
+      limit,
+      search
+    });
+    
+    res.json({
+      success: true,
+      data: result
+    });
+  } catch (error) {
+    console.error('Error fetching in-fieldwork properties:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch in-fieldwork properties'
     });
   }
 };

@@ -8,8 +8,10 @@ router.use(authenticate);
 router.use(authorize('SUPERVISOR'));
 
 router.get('/dashboard', supervisorController.getSupervisorStats);
+router.get('/dashboard/properties/all', supervisorController.getAllProperties);
 router.get('/dashboard/properties/pending', supervisorController.getPendingProperties);
 router.get('/dashboard/properties/under-review', supervisorController.getUnderReviewProperties);
+router.get('/dashboard/properties/in-fieldwork', supervisorController.getInFieldworkProperties);
 router.get('/dashboard/properties/:id', supervisorController.getPropertyForReview);
 router.get('/dashboard/data-collectors', supervisorController.getAvailableDataCollectors);
 router.post('/dashboard/properties/:id/assign', supervisorController.assignDataCollector);

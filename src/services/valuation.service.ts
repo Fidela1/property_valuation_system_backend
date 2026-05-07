@@ -247,155 +247,173 @@ const proximityBonus = (
   return 0;
 };
 
+
 export const calculateLiveValuation = (input: ValuationInput): ValuationOutput => {
   const currentYear = input.currentYear ?? new Date().getFullYear();
 
+  // ========== LAND VALUE CALCULATION ==========
   const landRate = RATES.land[input.district as keyof typeof RATES.land] ?? RATES.land.default;
-  let landValue = input.landSize * landRate;
+  let landValue = (input.landSize || 0) * (landRate || 0);
 
   const slopeAdjustment = RATES.landSlope[input.landSlope] ?? 0;
-  landValue = landValue * (1 + slopeAdjustment);
+  landValue = landValue * (1 + (slopeAdjustment || 0));
 
   if (input.floodRisk) {
-    landValue = landValue * (1 + RATES.floodRisk);
+    landValue = landValue * (1 + (RATES.floodRisk || 0));
   }
 
-
+  // ========== BUILDING VALUE CALCULATION ==========
   let buildingValue = 0;
   let floorValue = 0;
   let depreciationAmount = 0;
   
-  if (input.propertyCategory !== 'LAND' && input.buildingSize > 0) {
+  if (input.propertyCategory !== 'LAND' && (input.buildingSize || 0) > 0) {
     const buildingRate = RATES.building[input.propertyType] ?? RATES.building.default;
-    const rawBuildingValue = input.buildingSize * buildingRate;
+    const rawBuildingValue = (input.buildingSize || 0) * (buildingRate || 0);
     
-    const age = Math.max(0, currentYear - input.yearBuilt);
-    const depreciation = Math.min(age * RATES.depreciationRate, RATES.maxDepreciation);
-    depreciationAmount = rawBuildingValue * depreciation;
+    const age = Math.max(0, currentYear - (input.yearBuilt || currentYear));
+    const depreciation = Math.min(age * (RATES.depreciationRate || 0.01), RATES.maxDepreciation || 0.3);
+    depreciationAmount = rawBuildingValue * (depreciation || 0);
     buildingValue = rawBuildingValue - depreciationAmount;
  
     const floorRate = RATES.floorMaterial[input.floorMaterial] ?? RATES.floorMaterial.Default;
-    floorValue = input.buildingSize * floorRate;
+    floorValue = (input.buildingSize || 0) * (floorRate || 0);
 
     const roofAdjustment = RATES.roofType[input.roofType] ?? 0;
-    buildingValue = buildingValue * (1 + roofAdjustment);
+    buildingValue = buildingValue * (1 + (roofAdjustment || 0));
   }
 
+  // ========== ROOM PREMIUM ==========
   let roomPremium = 0;
-  if (input.propertyCategory !== 'LAND' && input.buildingSize > 0) {
-    const extraBedrooms  = Math.max(0, input.bedrooms - 2);
-    const extraBathrooms = Math.max(0, input.bathrooms - 1);
-    roomPremium = (extraBedrooms * RATES.extraBedroom) + (extraBathrooms * RATES.extraBathroom);
-    }
+  if (input.propertyCategory !== 'LAND' && (input.buildingSize || 0) > 0) {
+    const extraBedrooms = Math.max(0, (input.bedrooms || 0) - 2);
+    const extraBathrooms = Math.max(0, (input.bathrooms || 0) - 1);
+    roomPremium = (extraBedrooms * (RATES.extraBedroom || 2000000)) + (extraBathrooms * (RATES.extraBathroom || 1000000));
+  }
 
-  const gardenCap = landValue * RATES.caps.garden;
-  const rawGardenValue = input.gardenSize * RATES.garden;
+  // ========== GARDEN VALUE ==========
+  const gardenCap = landValue * (RATES.caps.garden || 0.15);
+  const rawGardenValue = (input.gardenSize || 0) * (RATES.garden || 5000);
   const gardenCapped = rawGardenValue > gardenCap;
-  const gardenValue = gardenCapped ? gardenCap : rawGardenValue;
+  const gardenValue = gardenCapped ? gardenCap : (rawGardenValue || 0);
   
-  const fenceCap = landValue * RATES.caps.fence;
-  const rawFenceValue = input.fenceHeight * RATES.fence;
+  // ========== FENCE VALUE ==========
+  const fenceCap = landValue * (RATES.caps.fence || 0.10);
+  const rawFenceValue = (input.fenceHeight || 0) * (RATES.fence || 15000);
   const fenceCapped = rawFenceValue > fenceCap;
-  const fenceValue = fenceCapped ? fenceCap : rawFenceValue;
+  const fenceValue = fenceCapped ? fenceCap : (rawFenceValue || 0);
   
-  const gateCap = landValue * RATES.caps.gate;
-  const rawGateValue = input.gateType ? RATES.gate[input.gateType] : 0;
+  // ========== GATE VALUE ==========
+  const gateCap = landValue * (RATES.caps.gate || 0.05);
+  const rawGateValue = input.gateType ? (RATES.gate[input.gateType] || 0) : 0;
   const gateCapped = rawGateValue > gateCap;
-  const gateValue = gateCapped ? gateCap : rawGateValue;
+  const gateValue = gateCapped ? gateCap : (rawGateValue || 0);
   
-  const parkingCap = landValue * RATES.caps.parking;
-  const rawParkingValue = input.parkingSpaces * RATES.parking;
+  // ========== PARKING VALUE ==========
+  const parkingCap = landValue * (RATES.caps.parking || 0.08);
+  const rawParkingValue = (input.parkingSpaces || 0) * (RATES.parking || 500000);
   const parkingCapped = rawParkingValue > parkingCap;
-  const parkingValue = parkingCapped ? parkingCap : rawParkingValue;
+  const parkingValue = parkingCapped ? parkingCap : (rawParkingValue || 0);
 
+  // ========== UTILITIES BONUS ==========
   let utilitiesBonusPercent = 0;
-  if (input.hasElectricity) utilitiesBonusPercent += RATES.utilities.electricity;
-  if (input.hasWaterSupply) utilitiesBonusPercent += RATES.utilities.waterSupply;
-  if (input.hasWaterTank) utilitiesBonusPercent += RATES.utilities.waterTank;
+  if (input.hasElectricity) utilitiesBonusPercent += (RATES.utilities?.electricity || 0.02);
+  if (input.hasWaterSupply) utilitiesBonusPercent += (RATES.utilities?.waterSupply || 0.02);
+  if (input.hasWaterTank) utilitiesBonusPercent += (RATES.utilities?.waterTank || 0.01);
 
-  let baseSubtotal = landValue + buildingValue + floorValue + roomPremium + 
-                     gardenValue + fenceValue + gateValue + parkingValue;
+  // ========== BASE SUBTOTAL ==========
+  let baseSubtotal = (landValue || 0) + (buildingValue || 0) + (floorValue || 0) + (roomPremium || 0) + 
+                     (gardenValue || 0) + (fenceValue || 0) + (gateValue || 0) + (parkingValue || 0);
 
-  const utilitiesBonus = baseSubtotal * utilitiesBonusPercent;
-  let subtotal = baseSubtotal + utilitiesBonus;
+  // ========== UTILITIES BONUS ==========
+  const utilitiesBonus = (baseSubtotal || 0) * (utilitiesBonusPercent || 0);
+  let subtotal = (baseSubtotal || 0) + (utilitiesBonus || 0);
 
+  // ========== CATEGORY MULTIPLIER ==========
   const categoryMultiplier = RATES.propertyCategory[input.propertyCategory] ?? 1.0;
-  subtotal = subtotal * categoryMultiplier;
+  subtotal = (subtotal || 0) * (categoryMultiplier || 1);
 
-  const schoolBonus    = proximityBonus(input.nearestSchoolKm,    RATES.neighborhood.school);
-  const hospitalBonus  = proximityBonus(input.nearestHospitalKm,  RATES.neighborhood.hospital);
-  const transportBonus = proximityBonus(input.nearestTransportKm, RATES.neighborhood.transport);
-  const marketBonus    = proximityBonus(input.nearestMarketKm,    RATES.neighborhood.market);
+  // ========== NEIGHBOURHOOD BONUS ==========
+  const schoolBonus = proximityBonus(input.nearestSchoolKm || 2, RATES.neighborhood.school);
+  const hospitalBonus = proximityBonus(input.nearestHospitalKm || 3, RATES.neighborhood.hospital);
+  const transportBonus = proximityBonus(input.nearestTransportKm || 1, RATES.neighborhood.transport);
+  const marketBonus = proximityBonus(input.nearestMarketKm || 1.5, RATES.neighborhood.market);
 
-  let totalNeighbourhoodRate = schoolBonus + hospitalBonus + transportBonus + marketBonus;
-  const neighbourhoodCapped = totalNeighbourhoodRate > RATES.caps.neighborhood;
-  if (neighbourhoodCapped) totalNeighbourhoodRate = RATES.caps.neighborhood;
+  let totalNeighbourhoodRate = (schoolBonus || 0) + (hospitalBonus || 0) + (transportBonus || 0) + (marketBonus || 0);
+  const neighbourhoodCapped = totalNeighbourhoodRate > (RATES.caps.neighborhood || 0.15);
+  if (neighbourhoodCapped) totalNeighbourhoodRate = (RATES.caps.neighborhood || 0.15);
 
-  const neighbourhoodBonus = subtotal * totalNeighbourhoodRate;
+  const neighbourhoodBonus = (subtotal || 0) * (totalNeighbourhoodRate || 0);
 
+  // ========== ROAD BONUS ==========
   const roadRate = RATES.road[input.roadAccessType] ?? 0;
-  const roadBonus = subtotal * roadRate;
+  const roadBonus = (subtotal || 0) * (roadRate || 0);
 
-  subtotal = subtotal + neighbourhoodBonus + roadBonus;
+  // ========== FINAL SUBTOTAL ==========
+  subtotal = (subtotal || 0) + (neighbourhoodBonus || 0) + (roadBonus || 0);
 
-  const estimatedValue = Math.round(subtotal / 100000) * 100000;
+  // ========== ESTIMATED VALUE ==========
+  const estimatedValue = subtotal > 0 ? Math.round((subtotal || 0) / 100000) * 100000 : 0;
 
+  // ========== CONFIDENCE SCORE ==========
   let confidenceScore = 40;
-  if (input.landSize > 0) confidenceScore += 10;
-  if (input.buildingSize > 0) confidenceScore += 10;
-  if (input.yearBuilt > 0) confidenceScore += 5;
-  if (input.bedrooms > 0) confidenceScore += 5;
-  if (input.bathrooms > 0) confidenceScore += 5;
-  if (input.district !== 'default') confidenceScore += 5;
+  if ((input.landSize || 0) > 0) confidenceScore += 10;
+  if ((input.buildingSize || 0) > 0) confidenceScore += 10;
+  if ((input.yearBuilt || 0) > 0) confidenceScore += 5;
+  if ((input.bedrooms || 0) > 0) confidenceScore += 5;
+  if ((input.bathrooms || 0) > 0) confidenceScore += 5;
+  if (input.district && input.district !== 'default') confidenceScore += 5;
   if (input.propertyCategory !== 'LAND') confidenceScore += 5;
   if (input.hasElectricity) confidenceScore += 3;
   if (input.hasWaterSupply) confidenceScore += 3;
-  if (input.nearestSchoolKm > 0 && input.nearestSchoolKm < 5) confidenceScore += 2;
-  if (input.nearestHospitalKm > 0 && input.nearestHospitalKm < 5) confidenceScore += 2;
-  if (input.floorMaterial !== 'Cement') confidenceScore += 3;
+  if ((input.nearestSchoolKm || 0) > 0 && (input.nearestSchoolKm || 0) < 5) confidenceScore += 2;
+  if ((input.nearestHospitalKm || 0) > 0 && (input.nearestHospitalKm || 0) < 5) confidenceScore += 2;
+  if (input.floorMaterial && input.floorMaterial !== 'Cement') confidenceScore += 3;
   confidenceScore = Math.min(confidenceScore, 95);
 
+  // ========== PRICE RANGE VARIANCE ==========
   const variance = confidenceScore >= 85 ? 0.06 :
                    confidenceScore >= 70 ? 0.10 :
                    confidenceScore >= 55 ? 0.15 : 0.20;
 
+  // ========== RETURN STATEMENT ==========
   return {
-    estimatedValue,
-    confidenceScore,
+    estimatedValue: estimatedValue || 0,
+    confidenceScore: confidenceScore || 0,
     breakdown: {
-      landValue:            Math.round(landValue),
-      buildingValue:        Math.round(buildingValue),
-      floorValue:           Math.round(floorValue),
-      buildingDepreciation: Math.round(depreciationAmount),
-      roomPremium:          Math.round(roomPremium),
-      gardenValue:          Math.round(gardenValue),
-      fenceValue:           Math.round(fenceValue),
-      gateValue:            Math.round(gateValue),
-      parkingValue:         Math.round(parkingValue),
-      utilitiesBonus:       Math.round(utilitiesBonus),
-      neighbourhoodBonus:   Math.round(neighbourhoodBonus),
-      roadBonus:            Math.round(roadBonus),
-      categoryMultiplier:   categoryMultiplier,
-      subtotal:             Math.round(subtotal),
+      landValue: Math.round(landValue || 0),
+      buildingValue: Math.round(buildingValue || 0),
+      floorValue: Math.round(floorValue || 0),
+      buildingDepreciation: Math.round(depreciationAmount || 0),
+      roomPremium: Math.round(roomPremium || 0),
+      gardenValue: Math.round(gardenValue || 0),
+      fenceValue: Math.round(fenceValue || 0),
+      gateValue: Math.round(gateValue || 0),
+      parkingValue: Math.round(parkingValue || 0),
+      utilitiesBonus: Math.round(utilitiesBonus || 0),
+      neighbourhoodBonus: Math.round(neighbourhoodBonus || 0),
+      roadBonus: Math.round(roadBonus || 0),
+      categoryMultiplier: categoryMultiplier || 1,
+      subtotal: Math.round(subtotal || 0),
     },
     priceRange: {
-      min: Math.round(subtotal * (1 - variance) / 100000) * 100000,
-      max: Math.round(subtotal * (1 + variance) / 100000) * 100000,
+      min: subtotal > 0 ? Math.round((subtotal * (1 - variance) / 100000)) * 100000 : 0,
+      max: subtotal > 0 ? Math.round((subtotal * (1 + variance) / 100000)) * 100000 : 0,
     },
     neighbourhoodScores: {
-      school:    Number((schoolBonus    * 100).toFixed(2)),
-      hospital:  Number((hospitalBonus  * 100).toFixed(2)),
-      transport: Number((transportBonus * 100).toFixed(2)),
-      market:    Number((marketBonus    * 100).toFixed(2)),
-      road:      Number((roadRate       * 100).toFixed(2)),
-      total:     Number((totalNeighbourhoodRate * 100).toFixed(2)),
-      capped:    neighbourhoodCapped,
+      school: Number(((schoolBonus || 0) * 100).toFixed(2)),
+      hospital: Number(((hospitalBonus || 0) * 100).toFixed(2)),
+      transport: Number(((transportBonus || 0) * 100).toFixed(2)),
+      market: Number(((marketBonus || 0) * 100).toFixed(2)),
+      road: Number(((roadRate || 0) * 100).toFixed(2)),
+      total: Number(((totalNeighbourhoodRate || 0) * 100).toFixed(2)),
+      capped: neighbourhoodCapped || false,
     },
     caps: {
-      garden:  gardenCapped,
-      fence:   fenceCapped,
-      gate:    gateCapped,
-      parking: parkingCapped,
+      garden: gardenCapped || false,
+      fence: fenceCapped || false,
+      gate: gateCapped || false,
+      parking: parkingCapped || false,
     }
   };
 };

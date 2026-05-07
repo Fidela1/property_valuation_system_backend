@@ -1,5 +1,6 @@
 import prisma from '../config/prisma';
 import { AppError } from '../utils/AppError';
+import { calculateLiveValuation, saveValuationToProperty } from './valuation.service';
 
 // ============================================
 // GET COLLECTOR STATISTICS (Dashboard)
@@ -251,6 +252,8 @@ export const acceptAssignment = async (collectorId: string, propertyId: string) 
 // SUBMIT FIELD DATA
 // ============================================
 
+
+
 export const submitFieldData = async (
   collectorId: string,
   data: {
@@ -258,7 +261,6 @@ export const submitFieldData = async (
     latitude: number;
     longitude: number;
     gpsAccuracy?: number;
-    // Property features
     propertyType?: string;
     condition?: string;
     bedrooms?: number;
@@ -267,112 +269,135 @@ export const submitFieldData = async (
     buildingSize?: number;
     yearBuilt?: number;
     parkingSpaces?: number;
-    // Garden
     hasGarden?: boolean;
     gardenSize?: number;
     gardenType?: string;
-    // Annex
     hasAnnex?: boolean;
     annexType?: string;
     annexSize?: number;
     annexBedrooms?: number;
     annexBathrooms?: number;
-    // Gate
     hasGate?: boolean;
     gateType?: string;
     gateMaterial?: string;
-    // Fence
     hasFence?: boolean;
     fenceType?: string;
     fenceHeight?: number;
-    // Neighborhood
     nearestSchoolKm?: number;
     nearestHospitalKm?: number;
     nearestTransportKm?: number;
     nearestMarketKm?: number;
     roadAccessType?: string;
-    // Valuation
     valuationAmount?: number;
     notes?: string;
     images?: { url: string; publicId?: string }[];
   }
 ) => {
-  // Check if property exists and is IN_FIELDWORK
+  console.log('=== SUBMIT FIELD DATA START ===');
+  console.log('Property ID:', data.propertyId);
+  console.log('Collector ID:', collectorId);
+
+  // Check if property exists and is accessible
   const property = await prisma.property.findFirst({
     where: {
       id: data.propertyId,
-      assignment: {
-        collectorId
-      },
-      status: 'IN_FIELDWORK'
+      assignment: { collectorId },
+      status: { in: ['IN_FIELDWORK', 'UNDER_REVIEW', 'NEEDS_REVISION'] }
     }
   });
 
+  console.log('Property found:', property ? 'YES' : 'NO');
+  console.log('Property status:', property?.status);
+  console.log('Property district:', property?.district);
+
   if (!property) {
-    throw new AppError('Property not found or not in fieldwork status', 404);
+    throw new AppError('Property not found or not accessible', 404);
   }
 
-  // Helper function to validate enum values
+  // Check if field data exists
+  const existingFieldData = await prisma.fieldData.findUnique({
+    where: { propertyId: data.propertyId }
+  });
+
+  console.log('Existing field data:', existingFieldData ? 'YES' : 'NO');
+
+  let fieldData;
+  let isFirstSubmission = false;
+
+  // Prepare field data object
   const validPropertyTypes = ['HOUSE', 'APARTMENT', 'VILLA', 'LAND', 'COMMERCIAL'];
   const validConditions = ['EXCELLENT', 'GOOD', 'FAIR', 'NEEDS_RENOVATION'];
   const validRoadAccessTypes = ['PAVED', 'UNPAVED', 'DIRT', 'UNDER_CONSTRUCTION'];
 
-  // Create field data with proper enum casting
-  const fieldData = await prisma.fieldData.create({
-    data: {
-      propertyId: data.propertyId,
-      // GPS
-      latitude: data.latitude,
-      longitude: data.longitude,
-      gpsAccuracy: data.gpsAccuracy,
-      // Property features - cast to enum or null
-      propertyType: data.propertyType && validPropertyTypes.includes(data.propertyType.toUpperCase()) 
-        ? data.propertyType.toUpperCase() as any 
-        : null,
-      condition: data.condition && validConditions.includes(data.condition.toUpperCase())
-        ? data.condition.toUpperCase() as any
-        : null,
-      bedrooms: data.bedrooms,
-      bathrooms: data.bathrooms,
-      landSize: data.landSize,
-      buildingSize: data.buildingSize,
-      yearBuilt: data.yearBuilt,
-      parkingSpaces: data.parkingSpaces || 0,
-      // Garden
-      hasGarden: data.hasGarden || false,
-      gardenSize: data.gardenSize,
-      gardenType: data.gardenType,
-      // Annex
-      hasAnnex: data.hasAnnex || false,
-      annexType: data.annexType,
-      annexSize: data.annexSize,
-      annexBedrooms: data.annexBedrooms,
-      annexBathrooms: data.annexBathrooms,
-      // Gate
-      hasGate: data.hasGate || false,
-      gateType: data.gateType,
-      gateMaterial: data.gateMaterial,
-      // Fence
-      hasFence: data.hasFence || false,
-      fenceType: data.fenceType,
-      fenceHeight: data.fenceHeight,
-      // Neighborhood - cast to enum or null
-      roadAccessType: data.roadAccessType && validRoadAccessTypes.includes(data.roadAccessType.toUpperCase())
-        ? data.roadAccessType.toUpperCase() as any
-        : null,
-      nearestSchoolKm: data.nearestSchoolKm,
-      nearestHospitalKm: data.nearestHospitalKm,
-      nearestTransportKm: data.nearestTransportKm,
-      nearestMarketKm: data.nearestMarketKm,
-      // Valuation
-      valuationAmount: data.valuationAmount,
-      notes: data.notes,
-      submittedAt: new Date()
-    }
+  const fieldDataInput = {
+    propertyId: data.propertyId,
+    latitude: data.latitude,
+    longitude: data.longitude,
+    gpsAccuracy: data.gpsAccuracy,
+    propertyType: data.propertyType && validPropertyTypes.includes(data.propertyType.toUpperCase()) 
+      ? data.propertyType.toUpperCase() as any 
+      : null,
+    condition: data.condition && validConditions.includes(data.condition.toUpperCase())
+      ? data.condition.toUpperCase() as any
+      : null,
+    bedrooms: data.bedrooms,
+    bathrooms: data.bathrooms,
+    landSize: data.landSize,
+    buildingSize: data.buildingSize,
+    yearBuilt: data.yearBuilt,
+    parkingSpaces: data.parkingSpaces || 0,
+    hasGarden: data.hasGarden || false,
+    gardenSize: data.gardenSize,
+    gardenType: data.gardenType,
+    hasAnnex: data.hasAnnex || false,
+    annexType: data.annexType,
+    annexSize: data.annexSize,
+    annexBedrooms: data.annexBedrooms,
+    annexBathrooms: data.annexBathrooms,
+    hasGate: data.hasGate || false,
+    gateType: data.gateType,
+    gateMaterial: data.gateMaterial,
+    hasFence: data.hasFence || false,
+    fenceType: data.fenceType,
+    fenceHeight: data.fenceHeight,
+    roadAccessType: data.roadAccessType && validRoadAccessTypes.includes(data.roadAccessType.toUpperCase())
+      ? data.roadAccessType.toUpperCase() as any
+      : null,
+    nearestSchoolKm: data.nearestSchoolKm,
+    nearestHospitalKm: data.nearestHospitalKm,
+    nearestTransportKm: data.nearestTransportKm,
+    nearestMarketKm: data.nearestMarketKm,
+    valuationAmount: data.valuationAmount,
+    notes: data.notes,
+  };
+
+  console.log('Field data input prepared:', {
+    landSize: fieldDataInput.landSize,
+    buildingSize: fieldDataInput.buildingSize,
+    propertyType: fieldDataInput.propertyType,
+    district: property.district
   });
 
-  // Add images if provided
+  if (existingFieldData) {
+    console.log('UPDATING existing field data');
+    fieldData = await prisma.fieldData.update({
+      where: { propertyId: data.propertyId },
+      data: { ...fieldDataInput, updatedAt: new Date() }
+    });
+  } else {
+    console.log('CREATING new field data');
+    isFirstSubmission = true;
+    fieldData = await prisma.fieldData.create({
+      data: { ...fieldDataInput, submittedAt: new Date() }
+    });
+  }
+
+  console.log('Field data saved. ID:', fieldData.id);
+
+  // Handle images
   if (data.images && data.images.length > 0) {
+    console.log(`Processing ${data.images.length} images`);
+    await prisma.image.deleteMany({ where: { propertyId: data.propertyId } });
     await prisma.image.createMany({
       data: data.images.map((img, index) => ({
         propertyId: data.propertyId,
@@ -383,38 +408,131 @@ export const submitFieldData = async (
         uploadedBy: collectorId
       }))
     });
+    console.log('Images saved');
   }
 
-  // Update property status to UNDER_REVIEW
+  // ========== AI VALUATION CALCULATION ==========
+  console.log('=== STARTING AI VALUATION CALCULATION ===');
+  
+  // Helper functions
+  const determinePropertyQuality = (propertyType: string, condition: string, buildingSize: number): 'BASIC' | 'STANDARD' | 'LUXURY' => {
+    if (propertyType === 'VILLA' || (buildingSize > 500 && condition === 'EXCELLENT')) return 'LUXURY';
+    if (propertyType === 'HOUSE' || buildingSize > 200 || condition === 'GOOD') return 'STANDARD';
+    return 'BASIC';
+  };
+
+  const determinePropertyCategory = (propertyType: string): 'RESIDENTIAL' | 'COMMERCIAL' | 'LAND' | 'AGRICULTURAL' => {
+    if (propertyType === 'COMMERCIAL') return 'COMMERCIAL';
+    if (propertyType === 'LAND') return 'LAND';
+    if (propertyType === 'AGRICULTURAL') return 'AGRICULTURAL';
+    return 'RESIDENTIAL';
+  };
+
+  const propertyTypeStr = fieldData.propertyType as string || 'RESIDENTIAL';
+  const conditionStr = fieldData.condition as string || 'GOOD';
+  const buildingSizeNum = fieldData.buildingSize || 0;
+
+  console.log('Property characteristics:', {
+    propertyTypeStr,
+    conditionStr,
+    buildingSizeNum,
+    landSize: fieldData.landSize,
+    district: property.district,
+    bedrooms: fieldData.bedrooms,
+    bathrooms: fieldData.bathrooms
+  });
+
+  const valuationInput = {
+    landSize: fieldData.landSize || 0,
+    buildingSize: buildingSizeNum,
+    yearBuilt: fieldData.yearBuilt || new Date().getFullYear(),
+    propertyType: determinePropertyQuality(propertyTypeStr, conditionStr, buildingSizeNum),
+    propertyCategory: determinePropertyCategory(propertyTypeStr),
+    bedrooms: fieldData.bedrooms || 0,
+    bathrooms: fieldData.bathrooms || 0,
+    gardenSize: fieldData.gardenSize || 0,
+    fenceHeight: fieldData.fenceHeight || 0,
+    gateType: fieldData.gateType as 'AUTOMATIC' | 'SLIDING' | 'SWING' | 'MANUAL' || null,
+    parkingSpaces: fieldData.parkingSpaces || 0,
+    hasElectricity: true,
+    hasWaterSupply: true,
+    hasWaterTank: false,
+    floodRisk: false,
+    landSlope: 'Flat' as const,
+    floorMaterial: 'Cement' as const,
+    roofType: 'Iron sheets' as const,
+    district: property.district,
+    nearestSchoolKm: fieldData.nearestSchoolKm || 2,
+    nearestHospitalKm: fieldData.nearestHospitalKm || 3,
+    nearestTransportKm: fieldData.nearestTransportKm || 1,
+    nearestMarketKm: fieldData.nearestMarketKm || 1.5,
+    roadAccessType: (fieldData.roadAccessType as 'PAVED' | 'UNPAVED' | 'DIRT' | 'UNDER_CONSTRUCTION') || 'UNPAVED',
+  };
+
+  console.log('Valuation input prepared:', JSON.stringify(valuationInput, null, 2));
+
+  // Calculate AI valuation
+  const valuation = calculateLiveValuation(valuationInput);
+  
+  console.log('Valuation result:', JSON.stringify(valuation, null, 2));
+  console.log('estimatedValue:', valuation.estimatedValue);
+  console.log('confidenceScore:', valuation.confidenceScore);
+  console.log('typeof estimatedValue:', typeof valuation.estimatedValue);
+
+  // Update property with AI valuation
+  const estimatedValue = valuation?.estimatedValue || 0;
+  const confidenceScore = valuation?.confidenceScore || 0;
+
+  console.log('Values to save to property:', { estimatedValue, confidenceScore });
+
   const updatedProperty = await prisma.property.update({
     where: { id: data.propertyId },
-    data: { status: 'UNDER_REVIEW' }
+    data: { 
+      status: isFirstSubmission ? 'UNDER_REVIEW' : property.status,
+      aiValuation: estimatedValue,
+      aiConfidence: confidenceScore,
+      aiFactors: valuation?.breakdown as any 
+    }
+  });
+
+  console.log('Property after update:', {
+    id: updatedProperty.id,
+    status: updatedProperty.status,
+    aiValuation: updatedProperty.aiValuation,
+    aiConfidence: updatedProperty.aiConfidence
   });
 
   // Log audit
   await prisma.auditLog.create({
     data: {
       userId: collectorId,
-      action: 'FIELD_DATA_SUBMITTED',
+      action: existingFieldData ? 'FIELD_DATA_UPDATED' : 'FIELD_DATA_SUBMITTED',
       entityType: 'Property',
       entityId: data.propertyId,
       details: {
         hasImages: data.images?.length || 0,
-        hasGarden: data.hasGarden,
-        hasAnnex: data.hasAnnex,
-        hasGate: data.hasGate,
-        parkingSpaces: data.parkingSpaces,
-        valuationAmount: data.valuationAmount
+        isUpdate: !!existingFieldData,
+        valuationAmount: data.valuationAmount,
+        aiValuation: estimatedValue,
+        aiConfidence: confidenceScore
       }
     }
   });
 
+  console.log('=== SUBMIT FIELD DATA COMPLETE ===');
+
   return {
     fieldData,
-    property: updatedProperty
+    property: updatedProperty,
+    aiValuation: {
+      estimatedValue: estimatedValue,
+      confidenceScore: confidenceScore,
+      priceRange: valuation?.priceRange,
+      breakdown: valuation?.breakdown
+    },
+    isUpdate: !!existingFieldData
   };
 };
-
 // ============================================
 // UPDATE FIELD DATA (for revision requests)
 // ============================================
