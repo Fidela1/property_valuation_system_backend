@@ -12,53 +12,39 @@ interface AuthRequest extends Request {
   };
 }
 
-// Helper: safely extract a single string from req.params
 const paramStr = (val: string | string[]): string =>
   Array.isArray(val) ? val[0] : val;
-
-// ============================================
-// LIVE VALUATION — real-time, no save
-// ============================================
 
 export const liveValuation = async (req: Request, res: Response) => {
   try {
     const {
-      // Core dimensions
+
       landSize,
       buildingSize,
       yearBuilt,
       propertyType,
       propertyCategory,
-      // Rooms
       bedrooms,
       bathrooms,
-      // Amenities
       gardenSize,
       fenceHeight,
       gateType,
       parkingSpaces,
-      // Utilities
       hasElectricity,
       hasWaterSupply,
       hasWaterTank,
-      // Land characteristics
       floodRisk,
       landSlope,
-      // Building finishes
       floorMaterial,
       roofType,
-      // Location
       district,
-      // Neighbourhood distances
       nearestSchoolKm,
       nearestHospitalKm,
       nearestTransportKm,
       nearestMarketKm,
-      // Road
       roadAccessType
     } = req.body;
 
-    // ── Required field validation ─────────────────────────────────────────────
     const missingFields = [];
     if (!landSize) missingFields.push('landSize');
     if (!buildingSize && propertyCategory !== 'LAND') missingFields.push('buildingSize');
@@ -80,7 +66,6 @@ export const liveValuation = async (req: Request, res: Response) => {
       });
     }
 
-    // ── Enum validation ───────────────────────────────────────────────────────
     const validPropertyTypes = ['BASIC', 'STANDARD', 'LUXURY'];
     const normalizedPropertyType = String(propertyType || 'BASIC').toUpperCase();
     if (!validPropertyTypes.includes(normalizedPropertyType)) {
@@ -147,7 +132,6 @@ export const liveValuation = async (req: Request, res: Response) => {
       });
     }
 
-    // ── Calculate valuation ────────────────────────────────────────────────────
     const valuation = valuationService.calculateLiveValuation({
       landSize:           Number(landSize),
       buildingSize:       Number(buildingSize) || 0,
@@ -182,10 +166,6 @@ export const liveValuation = async (req: Request, res: Response) => {
     return res.status(500).json({ success: false, error: 'Failed to calculate valuation' });
   }
 };
-
-// ============================================
-// SAVE VALUATION — triggered after field data submission
-// ============================================
 
 export const saveValuation = async (req: AuthRequest, res: Response) => {
   try {
@@ -280,10 +260,6 @@ export const saveValuation = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// ============================================
-// GET VALUATION — fetch and recompute for a property
-// ============================================
-
 export const getValuation = async (req: Request, res: Response) => {
   try {
     const propertyId = paramStr(req.params.propertyId);
@@ -357,10 +333,6 @@ export const getValuation = async (req: Request, res: Response) => {
     return res.status(500).json({ success: false, error: 'Failed to get valuation' });
   }
 };
-
-// ============================================
-// PREVIEW VALUATION — quick estimate, no field data needed
-// ============================================
 
 export const previewValuation = async (req: Request, res: Response) => {
   try {

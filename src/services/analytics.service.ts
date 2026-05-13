@@ -1,9 +1,5 @@
 import prisma from '../config/prisma';
 
-// ============================================
-// USER STATISTICS SUMMARY
-// ============================================
-
 export const getUserStatistics = async () => {
   const [
     totalUsers,
@@ -28,10 +24,6 @@ export const getUserStatistics = async () => {
     verificationRate: totalUsers > 0 ? ((verifiedUsers / totalUsers) * 100).toFixed(1) : 0
   };
 };
-
-// ============================================
-// USERS BY ROLE
-// ============================================
 
 export const getUsersByRole = async () => {
   const roleCounts = await prisma.user.groupBy({
@@ -79,10 +71,6 @@ export const getUsersByRole = async () => {
   };
 };
 
-// ============================================
-// MONTHLY USER REGISTRATIONS
-// ============================================
-
 export const getMonthlyUserRegistrations = async (year?: number) => {
   const targetYear = year || new Date().getFullYear();
   
@@ -101,8 +89,7 @@ export const getMonthlyUserRegistrations = async (year?: number) => {
       role: true
     }
   });
-  
-  // Initialize monthly data
+
   const monthlyData = Array(12).fill(0).map((_, i) => ({
     month: new Date(targetYear, i, 1).toLocaleString('default', { month: 'short' }),
     monthNumber: i + 1,
@@ -133,10 +120,6 @@ export const getMonthlyUserRegistrations = async (year?: number) => {
     year: targetYear
   };
 };
-
-// ============================================
-// USER REGISTRATIONS BY ROLE (Stacked Bar)
-// ============================================
 
 export const getUserRegistrationsByRole = async () => {
   const currentYear = new Date().getFullYear();
@@ -197,10 +180,6 @@ export const getUserRegistrationsByRole = async () => {
   return results;
 };
 
-// ============================================
-// USER GROWTH TREND (Last 12 Months)
-// ============================================
-
 export const getUserGrowthTrend = async () => {
   const today = new Date();
   const last12Months = Array.from({ length: 12 }, (_, i) => {
@@ -236,8 +215,7 @@ export const getUserGrowthTrend = async () => {
       monthKey: `${date.getFullYear()}-${date.getMonth()}`
     });
   }
-  
-  // Calculate growth rate
+
   const firstMonthTotal = results[0]?.cumulativeTotal || 1;
   const lastMonthTotal = results[results.length - 1]?.cumulativeTotal || 1;
   const growthRate = ((lastMonthTotal - firstMonthTotal) / firstMonthTotal) * 100;
@@ -249,12 +227,8 @@ export const getUserGrowthTrend = async () => {
   };
 };
 
-// ============================================
-// TOP USERS BY ACTIVITY
-// ============================================
-
 export const getTopUsersByActivity = async (limit: number = 10) => {
-  // Users with most properties
+
   const topClients = await prisma.user.findMany({
     where: { role: 'CLIENT' },
     select: {
@@ -272,8 +246,7 @@ export const getTopUsersByActivity = async (limit: number = 10) => {
     },
     take: limit
   });
-  
-  // Data collectors with most assignments
+
   const topDataCollectors = await prisma.user.findMany({
     where: { role: 'DATA_COLLECTOR' },
     select: {
@@ -291,8 +264,7 @@ export const getTopUsersByActivity = async (limit: number = 10) => {
     },
     take: limit
   });
-  
-  // Supervisors with most reviews
+
   const topSupervisors = await prisma.user.findMany({
     where: { role: 'SUPERVISOR' },
     select: {
@@ -336,10 +308,6 @@ export const getTopUsersByActivity = async (limit: number = 10) => {
   };
 };
 
-// ============================================
-// USER STATUS DISTRIBUTION
-// ============================================
-
 export const getUserStatusDistribution = async () => {
   const [active, inactive, verified, unverified] = await Promise.all([
     prisma.user.count({ where: { isActive: true } }),
@@ -363,10 +331,6 @@ export const getUserStatusDistribution = async () => {
     }
   };
 };
-
-// ============================================
-// RECENTLY JOINED USERS
-// ============================================
 
 export const getRecentlyJoinedUsers = async (limit: number = 10) => {
   const users = await prisma.user.findMany({
@@ -395,14 +359,9 @@ export const getRecentlyJoinedUsers = async (limit: number = 10) => {
   }));
 };
 
-// ============================================
-// USER ENGAGEMENT SUMMARY
-// ============================================
-
 export const getUserEngagementSummary = async () => {
   const totalUsers = await prisma.user.count();
-  
-  // Users who have created at least one property
+
   const usersWithProperties = await prisma.user.count({
     where: {
       properties: {
@@ -410,8 +369,7 @@ export const getUserEngagementSummary = async () => {
       }
     }
   });
-  
-  // Data collectors who have completed assignments
+
   const activeDataCollectors = await prisma.user.count({
     where: {
       role: 'DATA_COLLECTOR',
@@ -422,8 +380,7 @@ export const getUserEngagementSummary = async () => {
       }
     }
   });
-  
-  // Supervisors who have reviewed properties
+
   const activeSupervisors = await prisma.user.count({
     where: {
       role: 'SUPERVISOR',
@@ -432,8 +389,7 @@ export const getUserEngagementSummary = async () => {
       }
     }
   });
-  
-  // Users joined in last 30 days
+
   const last30Days = new Date();
   last30Days.setDate(last30Days.getDate() - 30);
   

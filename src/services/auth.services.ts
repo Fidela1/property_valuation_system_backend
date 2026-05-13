@@ -73,7 +73,6 @@ export const handleGoogleAuthService = async (user: any) => {
   };
 };
 
-// Regular email/password login (using your comparePassword)
 export const loginWithEmail = async (email: string, password: string) => {
   const user = await prisma.user.findUnique({
     where: { email }
@@ -83,7 +82,6 @@ export const loginWithEmail = async (email: string, password: string) => {
     throw new Error('Invalid email or password');
   }
 
-  // ✅ Use your comparePassword function
   const isValidPassword = await comparePassword(password, user.password);
   
   if (!isValidPassword) {

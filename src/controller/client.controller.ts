@@ -3,9 +3,6 @@ import * as propertyService from '../services/client.service';
 import { AuthRequest } from '../middleware/auth.middleware';
 import { AppError } from '../utils/AppError';
 
-// ============================================
-// CREATE PROPERTY
-// ============================================
 
 export const createProperty = async (req: AuthRequest, res: Response) => {
   try {
@@ -41,10 +38,6 @@ export const createProperty = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-
-// ============================================
-// GET MY PROPERTIES (Dashboard)
-// ============================================
 
 export const getMyProperties = async (req: AuthRequest, res: Response) => {
   try {
@@ -82,10 +75,6 @@ export const getMyProperties = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-
-// ============================================
-// GET PROPERTY BY ID
-// ============================================
 
 export const getPropertyById = async (req: AuthRequest, res: Response) => {
   try {
@@ -125,10 +114,6 @@ export const getPropertyById = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-
-// ============================================
-// UPDATE PROPERTY
-// ============================================
 
 export const updateProperty = async (req: AuthRequest, res: Response) => {
   try {
@@ -170,9 +155,6 @@ export const updateProperty = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// ============================================
-// DELETE PROPERTY
-// ============================================
 
 export const deleteProperty = async (req: AuthRequest, res: Response) => {
   try {
@@ -213,10 +195,6 @@ export const deleteProperty = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-
-// ============================================
-// GET PROPERTY TIMELINE
-// ============================================
 
 export const getPropertyTimeline = async (req: AuthRequest, res: Response) => {
   try {

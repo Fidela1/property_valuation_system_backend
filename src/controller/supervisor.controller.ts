@@ -208,10 +208,6 @@ export const assignDataCollector = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// ============================================
-// GET PROPERTY FOR REVIEW
-// ============================================
-
 export const getPropertyForReview = async (req: AuthRequest, res: Response) => {
   try {
     const supervisorId = req.authenticatedUser?.id;
@@ -249,10 +245,6 @@ export const getPropertyForReview = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-
-// ============================================
-// APPROVE PROPERTY
-// ============================================
 
 export const approveProperty = async (req: AuthRequest, res: Response) => {
   try {
@@ -293,10 +285,6 @@ export const approveProperty = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-
-// ============================================
-// REJECT PROPERTY (NEEDS REVISION)
-// ============================================
 
 export const rejectProperty = async (req: AuthRequest, res: Response) => {
   try {
@@ -345,10 +333,6 @@ export const rejectProperty = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-
-// ============================================
-// PUBLISH PROPERTY
-// ============================================
 
 export const publishProperty = async (req: AuthRequest, res: Response) => {
   try {

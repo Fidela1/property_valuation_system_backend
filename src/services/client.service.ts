@@ -1,10 +1,6 @@
 import prisma from '../config/prisma';
 import { AppError } from '../utils/AppError';
 
-// ============================================
-// CREATE PROPERTY
-// ============================================
-
 export const createProperty = async (
   userId: string,
   data: {
@@ -21,7 +17,7 @@ export const createProperty = async (
    
   }
 ) => {
-  // Check if UPI already exists
+
   const existingProperty = await prisma.property.findFirst({
     where: { upiNumber: data.upiNumber }
   });
@@ -29,8 +25,7 @@ export const createProperty = async (
   if (existingProperty) {
     throw new AppError('Property with this UPI number already exists', 400);
   }
-  
-  // Create property
+
   const property = await prisma.property.create({
     data: {
       upiNumber: data.upiNumber,
@@ -47,8 +42,7 @@ export const createProperty = async (
       clientId: userId
     }
   });
-  
-  // Log audit
+
   await prisma.auditLog.create({
     data: {
       userId,
@@ -66,10 +60,6 @@ export const createProperty = async (
   return property;
 };
 
-// ============================================
-// GET ALL CLIENT PROPERTIES
-// ============================================
-
 export const getClientProperties = async (
   userId: string,
   options?: {
@@ -84,7 +74,7 @@ export const getClientProperties = async (
   
   const where: any = { 
     clientId: userId,
-    status: { not: 'ARCHIVED' }  // ✅ Exclude archived properties
+    status: { not: 'ARCHIVED' } 
   };
 
   if (options?.status && options.status !== 'ALL') {
@@ -120,8 +110,7 @@ export const getClientProperties = async (
     }),
     prisma.property.count({ where })
   ]);
-  
-  // Status counts for dashboard
+
   const statusCounts = await prisma.property.groupBy({
     by: ['status'],
     where: { clientId: userId,
@@ -155,10 +144,6 @@ export const getClientProperties = async (
     counts
   };
 };
-
-// ============================================
-// GET SINGLE PROPERTY (with ownership check)
-// ============================================
 
 export const getClientPropertyById = async (userId: string, propertyId: string) => {
   const property = await prisma.property.findFirst({
@@ -210,8 +195,7 @@ export const getClientPropertyById = async (userId: string, propertyId: string) 
   if (!property) {
     throw new AppError('Property not found', 404);
   }
-  
-  // Get view count
+
   const viewCount = await prisma.auditLog.count({
     where: {
       entityType: 'Property',
@@ -229,10 +213,6 @@ export const getClientPropertyById = async (userId: string, propertyId: string) 
   };
 };
 
-// ============================================
-// UPDATE PROPERTY
-// ============================================
-
 export const updateProperty = async (
   userId: string,
   propertyId: string,
@@ -246,7 +226,7 @@ export const updateProperty = async (
     village?: string;
   }
 ) => {
-  // Check if property exists and belongs to user
+
   const existingProperty = await prisma.property.findFirst({
     where: {
       id: propertyId,
@@ -257,14 +237,12 @@ export const updateProperty = async (
   if (!existingProperty) {
     throw new AppError('Property not found', 404);
   }
-  
-  // Cannot edit if status is beyond certain point
+
   const nonEditableStatuses = ['IN_FIELDWORK', 'UNDER_REVIEW', 'APPROVED', 'PUBLISHED', 'SOLD'];
   if (nonEditableStatuses.includes(existingProperty.status)) {
     throw new AppError(`Cannot edit property while status is ${existingProperty.status}`, 400);
   }
-  
-  // Update property
+
   const updatedProperty = await prisma.property.update({
     where: { id: propertyId },
     data: {
@@ -278,8 +256,7 @@ export const updateProperty = async (
     
     }
   });
-  
-  // Log audit
+
   await prisma.auditLog.create({
     data: {
       userId,
@@ -293,12 +270,7 @@ export const updateProperty = async (
   return updatedProperty;
 };
 
-// ============================================
-// DELETE PROPERTY (Soft Delete)
-// ============================================
-
 export const deleteProperty = async (userId: string, propertyId: string) => {
-  // Check if property exists and belongs to user
   const existingProperty = await prisma.property.findFirst({
     where: {
       id: propertyId,
@@ -309,8 +281,7 @@ export const deleteProperty = async (userId: string, propertyId: string) => {
   if (!existingProperty) {
     throw new AppError('Property not found', 404);
   }
-  
-  // Cannot delete if status is beyond certain point
+
   const protectedStatuses = ['IN_FIELDWORK', 'UNDER_REVIEW', 'APPROVED', 'PUBLISHED', 'SOLD'];
   if (protectedStatuses.includes(existingProperty.status)) {
     throw new AppError(`Cannot delete property while status is ${existingProperty.status}`, 400);
@@ -319,8 +290,7 @@ export const deleteProperty = async (userId: string, propertyId: string) => {
    const deletedProperty = await prisma.property.delete({
     where: { id: propertyId }
   });
-  
-  // Log audit
+
   await prisma.auditLog.create({
     data: {
       userId,
@@ -333,10 +303,6 @@ export const deleteProperty = async (userId: string, propertyId: string) => {
   
   return deletedProperty;
 };
-
-// ============================================
-// GET PROPERTY STATUS WITH TIMELINE
-// ============================================
 
 export const getPropertyTimeline = async (userId: string, propertyId: string) => {
   const property = await prisma.property.findFirst({
@@ -377,8 +343,7 @@ export const getPropertyTimeline = async (userId: string, propertyId: string) =>
   if (!property) {
     throw new AppError('Property not found', 404);
   }
-  
-  // Build timeline
+
   const timeline = [];
   
   timeline.push({

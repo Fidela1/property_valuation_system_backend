@@ -10,15 +10,10 @@ interface AuthRequest extends Request {
   };
 }
 
-// Helper function to safely get string from params
 const getStringParam = (param: string | string[] | undefined): string => {
   if (!param) return '';
   return Array.isArray(param) ? param[0] : param;
 };
-
-// ============================================
-// UPLOAD IMAGES FOR PROPERTY (Multiple)
-// ============================================
 
 export const uploadPropertyImages = async (req: AuthRequest, res: Response) => {
   try {
@@ -79,10 +74,6 @@ export const uploadPropertyImages = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// ============================================
-// GET PROPERTY IMAGES
-// ============================================
-
 export const getPropertyImages = async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.authenticatedUser?.id;
@@ -125,10 +116,6 @@ export const getPropertyImages = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// ============================================
-// DELETE IMAGE
-// ============================================
-
 export const deleteImage = async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.authenticatedUser?.id;
@@ -170,10 +157,6 @@ export const deleteImage = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-
-// ============================================
-// SET FEATURED IMAGE
-// ============================================
 
 export const setFeaturedImage = async (req: AuthRequest, res: Response) => {
   try {
@@ -218,10 +201,6 @@ export const setFeaturedImage = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-
-// ============================================
-// UPLOAD SINGLE IMAGE (profile, avatar, etc.)
-// ============================================
 
 export const uploadSingle = async (req: AuthRequest, res: Response) => {
   try {

@@ -10,13 +10,8 @@ interface AuthRequest extends Request {
   };
 }
 
-// Helper: safely extract a single string from req.params
 const paramStr = (val: string | string[]): string =>
   Array.isArray(val) ? val[0] : val;
-
-// ============================================
-// CREATE REPORT
-// ============================================
 
 export const createReport = async (req: AuthRequest, res: Response) => {
   try {
@@ -55,10 +50,6 @@ export const createReport = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// ============================================
-// GET REPORTS BY PROPERTY
-// ============================================
-
 export const getReportsByProperty = async (req: Request, res: Response) => {
   try {
     const propertyId = paramStr(req.params.propertyId);
@@ -78,10 +69,6 @@ export const getReportsByProperty = async (req: Request, res: Response) => {
   }
 };
 
-// ============================================
-// GET SINGLE REPORT
-// ============================================
-
 export const getReportById = async (req: Request, res: Response) => {
   try {
     const reportId = paramStr(req.params.reportId);
@@ -100,10 +87,6 @@ export const getReportById = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, error: 'Failed to fetch report' });
   }
 };
-
-// ============================================
-// UPDATE REPORT
-// ============================================
 
 export const updateReport = async (req: AuthRequest, res: Response) => {
   try {
@@ -135,10 +118,6 @@ export const updateReport = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// ============================================
-// DELETE REPORT
-// ============================================
-
 export const deleteReport = async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.authenticatedUser?.id;
@@ -162,10 +141,6 @@ export const deleteReport = async (req: AuthRequest, res: Response) => {
     res.status(500).json({ success: false, error: 'Failed to delete report' });
   }
 };
-
-// ============================================
-// DOWNLOAD REPORT AS PDF
-// ============================================
 
 export const downloadReportPDF = async (req: Request, res: Response) => {
   try {

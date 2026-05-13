@@ -290,11 +290,10 @@ export const approveProperty = async (
     data: { 
       status: 'APPROVED',
       aiValuation: property.fieldData?.valuationAmount,
-      aiConfidence: 85  // Default confidence for now
+      aiConfidence: 85 
     }
   });
   
-  // Log audit
   await prisma.auditLog.create({
     data: {
       userId: supervisorId,
@@ -394,20 +393,28 @@ export const publishProperty = async (propertyId: string, supervisorId: string) 
 
 export const getSupervisorStats = async (supervisorId: string) => {
   const [
+    totalProperties,
     pendingCount,
     underReviewCount,
     approvedCount,
     publishedCount,
-    rejectedCount
+    rejectedCount,
+    inFieldworkCount,
+    assignedCount
   ] = await Promise.all([
+    prisma.property.count(),
     prisma.property.count({ where: { status: 'PENDING' } }),
     prisma.property.count({ where: { status: 'UNDER_REVIEW' } }),
     prisma.property.count({ where: { status: 'APPROVED' } }),
     prisma.property.count({ where: { status: 'PUBLISHED' } }),
-    prisma.property.count({ where: { status: 'NEEDS_REVISION' } })
+    prisma.property.count({ where: { status: 'NEEDS_REVISION' } }),
+    prisma.property.count({ where: { status: 'IN_FIELDWORK' } }),
+    prisma.property.count({ where: { status: 'ASSIGNED' } })
   ]);
-  
-  // Get recent activity
+
+  const inProgress = pendingCount + assignedCount + inFieldworkCount;
+  const completed = approvedCount + publishedCount;
+
   const recentReviews = await prisma.review.findMany({
     where: { supervisorId },
     take: 10,
@@ -422,16 +429,35 @@ export const getSupervisorStats = async (supervisorId: string) => {
       }
     }
   });
+
+  const recentProperties = await prisma.property.findMany({
+    take: 5,
+    orderBy: { createdAt: 'desc' },
+    select: {
+      id: true,
+      upiNumber: true,
+      ownerName: true,
+      status: true,
+      district: true,
+      createdAt: true
+    }
+  });
   
   return {
     counts: {
+      total: totalProperties,
       pending: pendingCount,
       underReview: underReviewCount,
       approved: approvedCount,
       published: publishedCount,
-      rejected: rejectedCount
+      rejected: rejectedCount,
+      inFieldwork: inFieldworkCount,
+      assigned: assignedCount,
+      inProgress: inProgress,
+      completed: completed
     },
-    recentReviews
+    recentReviews,
+    recentProperties
   };
 };
 
@@ -531,13 +557,11 @@ export const getAllProperties = async (options: {
   const skip = (page - 1) * limit;
   
   const where: any = {};
-  
-  // Filter by status if provided
+
   if (options?.status && options.status !== 'ALL') {
     where.status = options.status;
   }
-  
-  // Search functionality
+
   if (options?.search) {
     where.OR = [
       { upiNumber: { contains: options.search, mode: 'insensitive' } },
@@ -594,7 +618,7 @@ export const getAllProperties = async (options: {
         },
         images: {
           orderBy: { order: 'asc' },
-          take: 1 // Get first image for thumbnail
+          take: 1 
         }
       },
       orderBy: { createdAt: 'desc' }

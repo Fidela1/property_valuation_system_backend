@@ -2,38 +2,24 @@ import prisma from '../src/config/prisma';
 import bcrypt from 'bcrypt';
 
 async function seedAdmin() {
-  console.log('🌱 Seeding database...');
-  console.log('📊 Checking connection...');
 
   try {
-    // Test database connection
+    
     const userCount = await prisma.user.count();
-    console.log(`📊 Current users in database: ${userCount}`);
 
     const adminEmail = "admin@example.com";
     const adminPassword = "Admin@123";
 
-    console.log(`🔍 Looking for admin with email: ${adminEmail}`);
-
-    // Check if admin already exists
     const existingAdmin = await prisma.user.findUnique({
       where: { email: adminEmail }
     });
 
     if (existingAdmin) {
-      console.log('✅ Admin already exists:', existingAdmin.email);
-      console.log('✅ Admin ID:', existingAdmin.id);
-      console.log('✅ Admin Role:', existingAdmin.role);
       return;
     }
 
-    console.log('📝 Admin not found. Creating new admin...');
-
-    // Hash password
     const hashedPassword = await bcrypt.hash(adminPassword, 10);
-    console.log('✅ Password hashed');
 
-    // Create admin user
     const admin = await prisma.user.create({
       data: {
         name: "System Admin",
@@ -52,10 +38,6 @@ async function seedAdmin() {
       }
     });
 
-    console.log('✅ Admin user created successfully!');
-    console.log('   Email:', admin.email);
-    console.log('   Role:', admin.role);
-    console.log('   ID:', admin.id);
 
   } catch (error) {
     console.error('❌ Error seeding admin:', error);
@@ -63,7 +45,6 @@ async function seedAdmin() {
   }
 }
 
-// Make sure the function is called
 seedAdmin()
   .then(() => {
     console.log('🎉 Seeding completed!');

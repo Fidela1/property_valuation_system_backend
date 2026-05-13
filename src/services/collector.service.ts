@@ -1,10 +1,7 @@
 import prisma from '../config/prisma';
 import { AppError } from '../utils/AppError';
 import { calculateLiveValuation, saveValuationToProperty } from './valuation.service';
-
-// ============================================
-// GET COLLECTOR STATISTICS (Dashboard)
-// ============================================
+import path from 'path';
 
 export const getCollectorStats = async (collectorId: string) => {
   const [
@@ -48,7 +45,6 @@ export const getCollectorStats = async (collectorId: string) => {
 
   const total = assignedCount + inFieldworkCount + underReviewCount + needsRevisionCount + completedCount;
 
-  // Get recent submissions
   const recentSubmissions = await prisma.fieldData.findMany({
     where: {
       property: {
@@ -81,10 +77,6 @@ export const getCollectorStats = async (collectorId: string) => {
     recentSubmissions
   };
 };
-
-// ============================================
-// GET ASSIGNED PROPERTIES
-// ============================================
 
 export const getAssignedProperties = async (
   collectorId: string,
@@ -158,10 +150,6 @@ export const getAssignedProperties = async (
   };
 };
 
-// ============================================
-// GET ASSIGNMENT BY ID
-// ============================================
-
 export const getAssignmentById = async (collectorId: string, assignmentId: string) => {
   const assignment = await prisma.assignment.findFirst({
     where: {
@@ -202,12 +190,8 @@ export const getAssignmentById = async (collectorId: string, assignmentId: strin
   return assignment;
 };
 
-// ============================================
-// ACCEPT ASSIGNMENT
-// ============================================
-
 export const acceptAssignment = async (collectorId: string, propertyId: string) => {
-  // Check if property exists and is ASSIGNED
+
   const property = await prisma.property.findFirst({
     where: {
       id: propertyId,
@@ -222,19 +206,16 @@ export const acceptAssignment = async (collectorId: string, propertyId: string) 
     throw new AppError('Assignment not found or already accepted', 404);
   }
 
-  // Update assignment with verification
   await prisma.assignment.update({
     where: { propertyId },
     data: { verifiedAt: new Date() }
   });
 
-  // Update property status
   const updatedProperty = await prisma.property.update({
     where: { id: propertyId },
     data: { status: 'IN_FIELDWORK' }
   });
 
-  // Log audit
   await prisma.auditLog.create({
     data: {
       userId: collectorId,
@@ -247,12 +228,6 @@ export const acceptAssignment = async (collectorId: string, propertyId: string) 
 
   return updatedProperty;
 };
-
-// ============================================
-// SUBMIT FIELD DATA
-// ============================================
-
-
 
 export const submitFieldData = async (
   collectorId: string,
@@ -297,7 +272,6 @@ export const submitFieldData = async (
   console.log('Property ID:', data.propertyId);
   console.log('Collector ID:', collectorId);
 
-  // Check if property exists and is accessible
   const property = await prisma.property.findFirst({
     where: {
       id: data.propertyId,
@@ -306,15 +280,10 @@ export const submitFieldData = async (
     }
   });
 
-  console.log('Property found:', property ? 'YES' : 'NO');
-  console.log('Property status:', property?.status);
-  console.log('Property district:', property?.district);
-
   if (!property) {
     throw new AppError('Property not found or not accessible', 404);
   }
 
-  // Check if field data exists
   const existingFieldData = await prisma.fieldData.findUnique({
     where: { propertyId: data.propertyId }
   });
@@ -324,7 +293,6 @@ export const submitFieldData = async (
   let fieldData;
   let isFirstSubmission = false;
 
-  // Prepare field data object
   const validPropertyTypes = ['HOUSE', 'APARTMENT', 'VILLA', 'LAND', 'COMMERCIAL'];
   const validConditions = ['EXCELLENT', 'GOOD', 'FAIR', 'NEEDS_RENOVATION'];
   const validRoadAccessTypes = ['PAVED', 'UNPAVED', 'DIRT', 'UNDER_CONSTRUCTION'];
@@ -394,27 +362,52 @@ export const submitFieldData = async (
 
   console.log('Field data saved. ID:', fieldData.id);
 
-  // Handle images
   if (data.images && data.images.length > 0) {
-    console.log(`Processing ${data.images.length} images`);
-    await prisma.image.deleteMany({ where: { propertyId: data.propertyId } });
-    await prisma.image.createMany({
-      data: data.images.map((img, index) => ({
-        propertyId: data.propertyId,
-        url: img.url,
-        publicId: img.publicId,
-        order: index,
-        isFeatured: index === 0,
-        uploadedBy: collectorId
-      }))
-    });
-    console.log('Images saved');
-  }
+  console.log(`Processing ${data.images.length} images`);
+  console.log('Raw images data:', JSON.stringify(data.images, null, 2));
 
-  // ========== AI VALUATION CALCULATION ==========
-  console.log('=== STARTING AI VALUATION CALCULATION ===');
+  await prisma.image.deleteMany({ where: { propertyId: data.propertyId } });
+
+  const processedImages = data.images.map((img, index) => {
+    let normalizedUrl = img.url;
+
+    if (normalizedUrl.startsWith('http://') || normalizedUrl.startsWith('https://')) {
+      try {
+        const urlObj = new URL(normalizedUrl);
+        normalizedUrl = urlObj.pathname; 
+      } catch (e) {
+        console.error('Failed to parse URL:', normalizedUrl);
+      }
+    }
+
+    if (!normalizedUrl.startsWith('/uploads/')) {
+      if (normalizedUrl.startsWith('uploads/')) {
+        normalizedUrl = '/' + normalizedUrl;
+      } else {
+        normalizedUrl = `/uploads/properties/${normalizedUrl.replace(/^\/+/, '')}`;
+      }
+    }
+    
+    console.log(`Image ${index}: Original URL: ${img.url} -> Normalized URL: ${normalizedUrl}`);
+    
+    return {
+      propertyId: data.propertyId,
+      url: normalizedUrl,
+      publicId: img.publicId || path.basename(normalizedUrl),
+      order: index,
+      isFeatured: index === 0,
+      uploadedBy: collectorId
+    };
+  });
   
-  // Helper functions
+  await prisma.image.createMany({
+    data: processedImages
+  });
+  console.log('Images saved with normalized URLs');
+}
+
+  console.log('=== STARTING AI VALUATION CALCULATION ===');
+
   const determinePropertyQuality = (propertyType: string, condition: string, buildingSize: number): 'BASIC' | 'STANDARD' | 'LUXURY' => {
     if (propertyType === 'VILLA' || (buildingSize > 500 && condition === 'EXCELLENT')) return 'LUXURY';
     if (propertyType === 'HOUSE' || buildingSize > 200 || condition === 'GOOD') return 'STANDARD';
@@ -469,21 +462,10 @@ export const submitFieldData = async (
     roadAccessType: (fieldData.roadAccessType as 'PAVED' | 'UNPAVED' | 'DIRT' | 'UNDER_CONSTRUCTION') || 'UNPAVED',
   };
 
-  console.log('Valuation input prepared:', JSON.stringify(valuationInput, null, 2));
-
-  // Calculate AI valuation
   const valuation = calculateLiveValuation(valuationInput);
   
-  console.log('Valuation result:', JSON.stringify(valuation, null, 2));
-  console.log('estimatedValue:', valuation.estimatedValue);
-  console.log('confidenceScore:', valuation.confidenceScore);
-  console.log('typeof estimatedValue:', typeof valuation.estimatedValue);
-
-  // Update property with AI valuation
   const estimatedValue = valuation?.estimatedValue || 0;
   const confidenceScore = valuation?.confidenceScore || 0;
-
-  console.log('Values to save to property:', { estimatedValue, confidenceScore });
 
   const updatedProperty = await prisma.property.update({
     where: { id: data.propertyId },
@@ -495,14 +477,6 @@ export const submitFieldData = async (
     }
   });
 
-  console.log('Property after update:', {
-    id: updatedProperty.id,
-    status: updatedProperty.status,
-    aiValuation: updatedProperty.aiValuation,
-    aiConfidence: updatedProperty.aiConfidence
-  });
-
-  // Log audit
   await prisma.auditLog.create({
     data: {
       userId: collectorId,
@@ -518,9 +492,6 @@ export const submitFieldData = async (
       }
     }
   });
-
-  console.log('=== SUBMIT FIELD DATA COMPLETE ===');
-
   return {
     fieldData,
     property: updatedProperty,
@@ -533,23 +504,14 @@ export const submitFieldData = async (
     isUpdate: !!existingFieldData
   };
 };
-// ============================================
-// UPDATE FIELD DATA (for revision requests)
-// ============================================
-
-// ============================================
-// UPDATE FIELD DATA (for revision requests) - FIXED ENUMS
-// ============================================
 
 export const updateFieldData = async (
   collectorId: string,
   fieldDataId: string,
   data: {
-    // GPS
     latitude?: number;
     longitude?: number;
     gpsAccuracy?: number;
-    // Property features
     propertyType?: string;
     condition?: string;
     bedrooms?: number;
@@ -558,36 +520,30 @@ export const updateFieldData = async (
     buildingSize?: number;
     yearBuilt?: number;
     parkingSpaces?: number;
-    // Garden
     hasGarden?: boolean;
     gardenSize?: number;
     gardenType?: string;
-    // Annex
     hasAnnex?: boolean;
     annexType?: string;
     annexSize?: number;
     annexBedrooms?: number;
     annexBathrooms?: number;
-    // Gate
     hasGate?: boolean;
     gateType?: string;
     gateMaterial?: string;
-    // Fence
     hasFence?: boolean;
     fenceType?: string;
     fenceHeight?: number;
-    // Neighborhood
     nearestSchoolKm?: number;
     nearestHospitalKm?: number;
     nearestTransportKm?: number;
     nearestMarketKm?: number;
     roadAccessType?: string;
-    // Valuation
     valuationAmount?: number;
     notes?: string;
   }
 ) => {
-  // Check if field data exists and belongs to collector's property
+
   const fieldData = await prisma.fieldData.findFirst({
     where: {
       id: fieldDataId,
@@ -606,25 +562,19 @@ export const updateFieldData = async (
     throw new AppError('Field data not found', 404);
   }
 
-  // Check if property is in NEEDS_REVISION status
-  if (fieldData.property.status !== 'NEEDS_REVISION') {
-    throw new AppError(`Cannot update: Property status is ${fieldData.property.status}`, 400);
-  }
+ if (fieldData.property.status !== 'NEEDS_REVISION' && fieldData.property.status !== 'UNDER_REVIEW') {
+  throw new AppError(`Cannot update: Property status is ${fieldData.property.status}`, 400);
+}
 
-  // Valid enum values
   const validPropertyTypes = ['HOUSE', 'APARTMENT', 'VILLA', 'LAND', 'COMMERCIAL'];
   const validConditions = ['EXCELLENT', 'GOOD', 'FAIR', 'NEEDS_RENOVATION'];
   const validRoadAccessTypes = ['PAVED', 'UNPAVED', 'DIRT', 'UNDER_CONSTRUCTION'];
-
-  // Build update data
   const updateData: any = {};
 
-  // GPS
   if (data.latitude !== undefined) updateData.latitude = data.latitude;
   if (data.longitude !== undefined) updateData.longitude = data.longitude;
   if (data.gpsAccuracy !== undefined) updateData.gpsAccuracy = data.gpsAccuracy;
 
-  // Property features with enum casting
   if (data.propertyType !== undefined) {
     updateData.propertyType = validPropertyTypes.includes(data.propertyType.toUpperCase())
       ? data.propertyType.toUpperCase() as any
@@ -641,30 +591,20 @@ export const updateFieldData = async (
   if (data.buildingSize !== undefined) updateData.buildingSize = data.buildingSize;
   if (data.yearBuilt !== undefined) updateData.yearBuilt = data.yearBuilt;
   if (data.parkingSpaces !== undefined) updateData.parkingSpaces = data.parkingSpaces;
-
-  // Garden
   if (data.hasGarden !== undefined) updateData.hasGarden = data.hasGarden;
   if (data.gardenSize !== undefined) updateData.gardenSize = data.gardenSize;
   if (data.gardenType !== undefined) updateData.gardenType = data.gardenType;
-
-  // Annex
   if (data.hasAnnex !== undefined) updateData.hasAnnex = data.hasAnnex;
   if (data.annexType !== undefined) updateData.annexType = data.annexType;
   if (data.annexSize !== undefined) updateData.annexSize = data.annexSize;
   if (data.annexBedrooms !== undefined) updateData.annexBedrooms = data.annexBedrooms;
   if (data.annexBathrooms !== undefined) updateData.annexBathrooms = data.annexBathrooms;
-
-  // Gate
   if (data.hasGate !== undefined) updateData.hasGate = data.hasGate;
   if (data.gateType !== undefined) updateData.gateType = data.gateType;
   if (data.gateMaterial !== undefined) updateData.gateMaterial = data.gateMaterial;
-
-  // Fence
   if (data.hasFence !== undefined) updateData.hasFence = data.hasFence;
   if (data.fenceType !== undefined) updateData.fenceType = data.fenceType;
   if (data.fenceHeight !== undefined) updateData.fenceHeight = data.fenceHeight;
-
-  // Neighborhood with enum casting
   if (data.roadAccessType !== undefined) {
     updateData.roadAccessType = validRoadAccessTypes.includes(data.roadAccessType.toUpperCase())
       ? data.roadAccessType.toUpperCase() as any
@@ -674,24 +614,17 @@ export const updateFieldData = async (
   if (data.nearestHospitalKm !== undefined) updateData.nearestHospitalKm = data.nearestHospitalKm;
   if (data.nearestTransportKm !== undefined) updateData.nearestTransportKm = data.nearestTransportKm;
   if (data.nearestMarketKm !== undefined) updateData.nearestMarketKm = data.nearestMarketKm;
-
-  // Valuation
   if (data.valuationAmount !== undefined) updateData.valuationAmount = data.valuationAmount;
   if (data.notes !== undefined) updateData.notes = data.notes;
-
-  // Update field data
   const updatedFieldData = await prisma.fieldData.update({
     where: { id: fieldDataId },
     data: { ...updateData, updatedAt: new Date() }
   });
-
-  // Update property status back to UNDER_REVIEW
   await prisma.property.update({
     where: { id: fieldData.propertyId },
     data: { status: 'UNDER_REVIEW' }
   });
 
-  // Log audit
   await prisma.auditLog.create({
     data: {
       userId: collectorId,
@@ -704,9 +637,6 @@ export const updateFieldData = async (
 
   return updatedFieldData;
 };
-// ============================================
-// GET SUBMISSION HISTORY
-// ============================================
 
 export const getSubmissionHistory = async (collectorId: string) => {
   const submissions = await prisma.fieldData.findMany({
@@ -734,10 +664,6 @@ export const getSubmissionHistory = async (collectorId: string) => {
 
   return submissions;
 };
-
-// ============================================
-// GET REVISION REQUESTS (Properties needing correction)
-// ============================================
 
 export const getRevisionRequests = async (collectorId: string, options?: {
   page?: number;
