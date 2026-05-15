@@ -404,3 +404,100 @@ export const getAccountDeletedEmailTemplate = (name: string) => {
 </html>
 `;
 };
+export const sendPasswordResetEmail = async (email: string, resetToken: string, name: string) => {
+  const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
+  
+  const mailOptions = {
+    from: `"PropertyVal" <${process.env.SMTP_FROM || 'noreply@propertyval.com'}>`,
+    to: email,
+    subject: 'Password Reset Request - PropertyVal',
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <title>Password Reset</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+          }
+          .header {
+            background: linear-gradient(135deg, #1B3A5C 0%, #2C5F8A 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+          }
+          .content {
+            background: #f9fafb;
+            padding: 30px;
+            border-radius: 0 0 8px 8px;
+            border: 1px solid #e5e7eb;
+            border-top: none;
+          }
+          .button {
+            display: inline-block;
+            background: #1B3A5C;
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            margin: 20px 0;
+            font-weight: bold;
+          }
+          .warning {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 12px;
+            margin: 20px 0;
+            font-size: 14px;
+          }
+          .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #6b7280;
+            text-align: center;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h2>PropertyVal</h2>
+          <p>Property Valuation System</p>
+        </div>
+        <div class="content">
+          <h3>Hello ${name},</h3>
+          <p>We received a request to reset your password for your PropertyVal account.</p>
+          
+          <div style="text-align: center;">
+            <a href="${resetUrl}" class="button">Reset Password</a>
+          </div>
+          
+          <div class="warning">
+            <strong>⚠️ This link will expire in 1 hour.</strong>
+            <p style="margin: 8px 0 0 0; font-size: 12px;">If you didn't request this, please ignore this email and your password will remain unchanged.</p>
+          </div>
+          
+          <p>If the button doesn't work, copy and paste this link into your browser:</p>
+          <p style="background: #e5e7eb; padding: 10px; border-radius: 4px; font-size: 12px; word-break: break-all;">
+            ${resetUrl}
+          </p>
+          
+          <p>Best regards,<br>PropertyVal Team</p>
+        </div>
+        <div class="footer">
+          <p>This is an automated message, please do not reply to this email.</p>
+          <p>&copy; ${new Date().getFullYear()} PropertyVal. All rights reserved.</p>
+        </div>
+      </body>
+      </html>
+    `
+  };
+  
+  await transporter.sendMail(mailOptions);
+};

@@ -213,7 +213,7 @@ export const acceptAssignment = async (collectorId: string, propertyId: string) 
 
   const updatedProperty = await prisma.property.update({
     where: { id: propertyId },
-    data: { status: 'IN_FIELDWORK' }
+    data: { status: 'UNDER_REVIEW' }
   });
 
   await prisma.auditLog.create({
@@ -504,7 +504,45 @@ export const submitFieldData = async (
     isUpdate: !!existingFieldData
   };
 };
-
+export const getFieldDataById = async (fieldDataId: string, collectorId: string) => {
+  const fieldData = await prisma.fieldData.findFirst({
+    where: {
+      id: fieldDataId,
+      property: {
+        assignment: {
+          collectorId: collectorId
+        }
+      }
+    },
+    include: {
+      property: {
+        select: {
+          id: true,
+          upiNumber: true,
+          ownerName: true,
+          district: true,
+          province: true,
+          images: {
+            orderBy: { order: 'asc' },
+            select: {
+              id: true,
+              url: true,
+              publicId: true,
+              isFeatured: true,
+              order: true
+            }
+          }
+        }
+      }
+    }
+  });
+  
+  if (!fieldData) {
+    throw new AppError('Field data not found', 404);
+  }
+  
+  return fieldData;
+};
 export const updateFieldData = async (
   collectorId: string,
   fieldDataId: string,
@@ -541,6 +579,7 @@ export const updateFieldData = async (
     roadAccessType?: string;
     valuationAmount?: number;
     notes?: string;
+    images?: Array<{ url: string; publicId: string }>;  // ✅ Add this line
   }
 ) => {
 
@@ -562,19 +601,20 @@ export const updateFieldData = async (
     throw new AppError('Field data not found', 404);
   }
 
- if (fieldData.property.status !== 'NEEDS_REVISION' && fieldData.property.status !== 'UNDER_REVIEW') {
-  throw new AppError(`Cannot update: Property status is ${fieldData.property.status}`, 400);
-}
+  if (fieldData.property.status !== 'NEEDS_REVISION' && fieldData.property.status !== 'UNDER_REVIEW') {
+    throw new AppError(`Cannot update: Property status is ${fieldData.property.status}`, 400);
+  }
 
   const validPropertyTypes = ['HOUSE', 'APARTMENT', 'VILLA', 'LAND', 'COMMERCIAL'];
   const validConditions = ['EXCELLENT', 'GOOD', 'FAIR', 'NEEDS_RENOVATION'];
   const validRoadAccessTypes = ['PAVED', 'UNPAVED', 'DIRT', 'UNDER_CONSTRUCTION'];
+  
+  // Build update data
   const updateData: any = {};
 
   if (data.latitude !== undefined) updateData.latitude = data.latitude;
   if (data.longitude !== undefined) updateData.longitude = data.longitude;
   if (data.gpsAccuracy !== undefined) updateData.gpsAccuracy = data.gpsAccuracy;
-
   if (data.propertyType !== undefined) {
     updateData.propertyType = validPropertyTypes.includes(data.propertyType.toUpperCase())
       ? data.propertyType.toUpperCase() as any
@@ -616,15 +656,42 @@ export const updateFieldData = async (
   if (data.nearestMarketKm !== undefined) updateData.nearestMarketKm = data.nearestMarketKm;
   if (data.valuationAmount !== undefined) updateData.valuationAmount = data.valuationAmount;
   if (data.notes !== undefined) updateData.notes = data.notes;
+  
+  // Update field data
   const updatedFieldData = await prisma.fieldData.update({
     where: { id: fieldDataId },
     data: { ...updateData, updatedAt: new Date() }
   });
-  await prisma.property.update({
-    where: { id: fieldData.propertyId },
-    data: { status: 'UNDER_REVIEW' }
-  });
-
+  
+  // ✅ Handle images if provided
+  if (data.images && Array.isArray(data.images) && data.images.length > 0) {
+    // Delete existing images
+    await prisma.image.deleteMany({
+      where: { propertyId: updatedFieldData.propertyId }
+    });
+    
+    // Create new images
+    await prisma.image.createMany({
+      data: data.images.map((img: any, index: number) => ({
+        propertyId: updatedFieldData.propertyId,
+        url: img.url,
+        publicId: img.publicId,
+        order: index,
+        isFeatured: index === 0,
+        uploadedBy: collectorId
+      }))
+    });
+  }
+  
+  // Update property status back to UNDER_REVIEW if it was NEEDS_REVISION
+  if (fieldData.property.status === 'NEEDS_REVISION') {
+    await prisma.property.update({
+      where: { id: fieldData.propertyId },
+      data: { status: 'UNDER_REVIEW' }
+    });
+  }
+  
+  // Log audit
   await prisma.auditLog.create({
     data: {
       userId: collectorId,
@@ -634,7 +701,7 @@ export const updateFieldData = async (
       details: { updatedFields: Object.keys(data) }
     }
   });
-
+  
   return updatedFieldData;
 };
 

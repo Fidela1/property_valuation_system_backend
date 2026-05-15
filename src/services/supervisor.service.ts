@@ -118,17 +118,19 @@ export const getUnderReviewProperties = async (options: {
   };
 };
 
+// In your backend collector.service.ts
 export const getAvailableDataCollectors = async () => {
   const collectors = await prisma.user.findMany({
     where: {
       role: 'DATA_COLLECTOR',
-      isActive: true
+      // Don't filter by isActive here if you want to see inactive ones too
     },
     select: {
       id: true,
       name: true,
       email: true,
       phone: true,
+      isActive: true,  // ✅ Make sure this is selected
       assignments: {
         where: {
           property: {
@@ -142,15 +144,19 @@ export const getAvailableDataCollectors = async () => {
   });
   
   return collectors.map(collector => ({
-    ...collector,
-    activeWorkload: collector.assignments.length,
-    isAvailable: collector.assignments.length < 5  // Max 5 active assignments
+    id: collector.id,
+    name: collector.name,
+    email: collector.email,
+    phone: collector.phone,
+    isActive: collector.isActive,  // ✅ Return the actual value
+    currentAssignments: collector.assignments.length,
+    isAvailable: collector.isActive && collector.assignments.length < 5
   }));
 };
 
 export const assignDataCollector = async (
   propertyId: string,
-  collectorId: string,
+  collectorEmail: string,
   supervisorId: string,
   notes?: string
 ) => {
@@ -167,12 +173,17 @@ export const assignDataCollector = async (
     throw new AppError(`Cannot assign: Property status is ${property.status}`, 400);
   }
   
+  // Find collector by email instead of ID
   const collector = await prisma.user.findUnique({
-    where: { id: collectorId }
+    where: { email: collectorEmail.toLowerCase().trim() }
   });
   
-  if (!collector || collector.role !== 'DATA_COLLECTOR') {
-    throw new AppError('Invalid data collector', 400);
+  if (!collector) {
+    throw new AppError('Data collector not found with this email', 404);
+  }
+  
+  if (collector.role !== 'DATA_COLLECTOR') {
+    throw new AppError(`User with email ${collectorEmail} is not a data collector`, 400);
   }
   
   if (!collector.isActive) {
@@ -182,7 +193,7 @@ export const assignDataCollector = async (
   const assignment = await prisma.assignment.create({
     data: {
       propertyId,
-      collectorId,
+      collectorId: collector.id,  // Use the found collector's ID
       assignedById: supervisorId,
       notes,
       assignedAt: new Date()
@@ -201,8 +212,9 @@ export const assignDataCollector = async (
       entityType: 'Property',
       entityId: propertyId,
       details: {
-        collectorId,
+        collectorEmail: collector.email,
         collectorName: collector.name,
+        collectorId: collector.id,
         notes
       }
     }

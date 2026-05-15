@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import passport from 'passport';
-import { createUser, login
+import { createUser, login,forgotPassword, resetPassword, verifyResetToken
 , googleAuth, googleAuthCallback
  } from '../controller/auth.controller'
 
@@ -8,6 +8,9 @@ const  router = Router();
 
 router.post('/signup', createUser);
 router.post('/login', login);
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password', resetPassword);
+router.get('/verify-reset-token', verifyResetToken);
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 router.get('/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),

@@ -267,7 +267,34 @@ export const submitFieldData = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-
+export const getFieldDataById = async (req: AuthRequest, res: Response) => {
+  try {
+    const collectorId = req.authenticatedUser?.id;
+    let { id } = req.params;
+    
+    if (!collectorId) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+    if (Array.isArray(id)) {
+      id = id[0];
+    }
+    const fieldData = await collectorService.getFieldDataById(id, collectorId);
+    
+    res.json({
+      success: true,
+      data: fieldData
+    });
+  } catch (error: any) {
+    console.error('Error fetching field data:', error);
+    if (error.message === 'Field data not found') {
+      return res.status(404).json({ success: false, error: error.message });
+    }
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to fetch field data' 
+    });
+  }
+};
 export const updateFieldData = async (req: AuthRequest, res: Response) => {
   try {
     const collectorId = req.authenticatedUser?.id;
