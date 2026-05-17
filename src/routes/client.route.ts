@@ -11,15 +11,13 @@ import {
 
 const router = Router();
 
-// All property routes require authentication
 router.use(authenticate);
 
-// Client property routes (Full CRUD)
-router.post('/createProperty', createProperty);                    // Create
-router.get('/myProperties', getMyProperties);                    // Read all (dashboard)
-router.get('/myProperties/:id', getPropertyById);                 // Read one
-router.get('/myProperties/:id/timeline', getPropertyTimeline);    // Timeline
-router.put('/myProperties/:id', updateProperty);                  // Update
-router.delete('/myProperties/:id', deleteProperty);               // Delete
+router.post('/createProperty', createProperty);                    
+router.get('/myProperties', getMyProperties);                    
+router.get('/myProperties/:id', getPropertyById);                 
+router.get('/myProperties/:id/timeline', getPropertyTimeline);    
+router.put('/myProperties/:id', updateProperty);                  
+router.delete('/myProperties/:id', deleteProperty);               
 
 export default router;

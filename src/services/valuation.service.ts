@@ -250,8 +250,6 @@ const proximityBonus = (
 
 export const calculateLiveValuation = (input: ValuationInput): ValuationOutput => {
   const currentYear = input.currentYear ?? new Date().getFullYear();
-
-  // ========== LAND VALUE CALCULATION ==========
   const landRate = RATES.land[input.district as keyof typeof RATES.land] ?? RATES.land.default;
   let landValue = (input.landSize || 0) * (landRate || 0);
 
@@ -261,8 +259,6 @@ export const calculateLiveValuation = (input: ValuationInput): ValuationOutput =
   if (input.floodRisk) {
     landValue = landValue * (1 + (RATES.floodRisk || 0));
   }
-
-  // ========== BUILDING VALUE CALCULATION ==========
   let buildingValue = 0;
   let floorValue = 0;
   let depreciationAmount = 0;
@@ -282,8 +278,6 @@ export const calculateLiveValuation = (input: ValuationInput): ValuationOutput =
     const roofAdjustment = RATES.roofType[input.roofType] ?? 0;
     buildingValue = buildingValue * (1 + (roofAdjustment || 0));
   }
-
-  // ========== ROOM PREMIUM ==========
   let roomPremium = 0;
   if (input.propertyCategory !== 'LAND' && (input.buildingSize || 0) > 0) {
     const extraBedrooms = Math.max(0, (input.bedrooms || 0) - 2);
@@ -291,49 +285,35 @@ export const calculateLiveValuation = (input: ValuationInput): ValuationOutput =
     roomPremium = (extraBedrooms * (RATES.extraBedroom || 2000000)) + (extraBathrooms * (RATES.extraBathroom || 1000000));
   }
 
-  // ========== GARDEN VALUE ==========
   const gardenCap = landValue * (RATES.caps.garden || 0.15);
   const rawGardenValue = (input.gardenSize || 0) * (RATES.garden || 5000);
   const gardenCapped = rawGardenValue > gardenCap;
   const gardenValue = gardenCapped ? gardenCap : (rawGardenValue || 0);
-  
-  // ========== FENCE VALUE ==========
   const fenceCap = landValue * (RATES.caps.fence || 0.10);
   const rawFenceValue = (input.fenceHeight || 0) * (RATES.fence || 15000);
   const fenceCapped = rawFenceValue > fenceCap;
   const fenceValue = fenceCapped ? fenceCap : (rawFenceValue || 0);
-  
-  // ========== GATE VALUE ==========
   const gateCap = landValue * (RATES.caps.gate || 0.05);
   const rawGateValue = input.gateType ? (RATES.gate[input.gateType] || 0) : 0;
   const gateCapped = rawGateValue > gateCap;
   const gateValue = gateCapped ? gateCap : (rawGateValue || 0);
-  
-  // ========== PARKING VALUE ==========
   const parkingCap = landValue * (RATES.caps.parking || 0.08);
   const rawParkingValue = (input.parkingSpaces || 0) * (RATES.parking || 500000);
   const parkingCapped = rawParkingValue > parkingCap;
   const parkingValue = parkingCapped ? parkingCap : (rawParkingValue || 0);
-
-  // ========== UTILITIES BONUS ==========
   let utilitiesBonusPercent = 0;
   if (input.hasElectricity) utilitiesBonusPercent += (RATES.utilities?.electricity || 0.02);
   if (input.hasWaterSupply) utilitiesBonusPercent += (RATES.utilities?.waterSupply || 0.02);
   if (input.hasWaterTank) utilitiesBonusPercent += (RATES.utilities?.waterTank || 0.01);
 
-  // ========== BASE SUBTOTAL ==========
   let baseSubtotal = (landValue || 0) + (buildingValue || 0) + (floorValue || 0) + (roomPremium || 0) + 
                      (gardenValue || 0) + (fenceValue || 0) + (gateValue || 0) + (parkingValue || 0);
 
-  // ========== UTILITIES BONUS ==========
   const utilitiesBonus = (baseSubtotal || 0) * (utilitiesBonusPercent || 0);
   let subtotal = (baseSubtotal || 0) + (utilitiesBonus || 0);
 
-  // ========== CATEGORY MULTIPLIER ==========
   const categoryMultiplier = RATES.propertyCategory[input.propertyCategory] ?? 1.0;
   subtotal = (subtotal || 0) * (categoryMultiplier || 1);
-
-  // ========== NEIGHBOURHOOD BONUS ==========
   const schoolBonus = proximityBonus(input.nearestSchoolKm || 2, RATES.neighborhood.school);
   const hospitalBonus = proximityBonus(input.nearestHospitalKm || 3, RATES.neighborhood.hospital);
   const transportBonus = proximityBonus(input.nearestTransportKm || 1, RATES.neighborhood.transport);
@@ -344,18 +324,13 @@ export const calculateLiveValuation = (input: ValuationInput): ValuationOutput =
   if (neighbourhoodCapped) totalNeighbourhoodRate = (RATES.caps.neighborhood || 0.15);
 
   const neighbourhoodBonus = (subtotal || 0) * (totalNeighbourhoodRate || 0);
-
-  // ========== ROAD BONUS ==========
   const roadRate = RATES.road[input.roadAccessType] ?? 0;
   const roadBonus = (subtotal || 0) * (roadRate || 0);
 
-  // ========== FINAL SUBTOTAL ==========
   subtotal = (subtotal || 0) + (neighbourhoodBonus || 0) + (roadBonus || 0);
 
-  // ========== ESTIMATED VALUE ==========
   const estimatedValue = subtotal > 0 ? Math.round((subtotal || 0) / 100000) * 100000 : 0;
 
-  // ========== CONFIDENCE SCORE ==========
   let confidenceScore = 40;
   if ((input.landSize || 0) > 0) confidenceScore += 10;
   if ((input.buildingSize || 0) > 0) confidenceScore += 10;
@@ -371,12 +346,10 @@ export const calculateLiveValuation = (input: ValuationInput): ValuationOutput =
   if (input.floorMaterial && input.floorMaterial !== 'Cement') confidenceScore += 3;
   confidenceScore = Math.min(confidenceScore, 95);
 
-  // ========== PRICE RANGE VARIANCE ==========
   const variance = confidenceScore >= 85 ? 0.06 :
                    confidenceScore >= 70 ? 0.10 :
                    confidenceScore >= 55 ? 0.15 : 0.20;
 
-  // ========== RETURN STATEMENT ==========
   return {
     estimatedValue: estimatedValue || 0,
     confidenceScore: confidenceScore || 0,
@@ -417,8 +390,6 @@ export const calculateLiveValuation = (input: ValuationInput): ValuationOutput =
     }
   };
 };
-
-// SAVE VALUATION TO DATABASE
 
 export const saveValuationToProperty = async (
   propertyId: string,

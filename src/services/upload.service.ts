@@ -8,10 +8,6 @@ export const uploadPropertyImages = async (
   propertyId: string,
   files: Express.Multer.File[]
 ) => {
-  console.log('🔵 uploadPropertyImages called');
-  console.log('userId:', userId);
-  console.log('propertyId:', propertyId);
-  console.log('files count:', files?.length);
 
   const property = await prisma.property.findFirst({
     where: {
@@ -63,7 +59,7 @@ export const uploadPropertyImages = async (
 };
 
 export const getPropertyImages = async (userId: string, propertyId: string) => {
-  // Verify property belongs to collector
+
   const property = await prisma.property.findFirst({
     where: {
       id: propertyId,
@@ -175,7 +171,7 @@ export const setFeaturedImage = async (userId: string, propertyId: string, image
 };
 
 export const uploadSingleImage = async (userId: string, file: Express.Multer.File, folder: string = 'general') => {
-  // Create folder if doesn't exist
+
   const uploadDir = `uploads/${folder}`;
   if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });

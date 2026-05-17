@@ -64,7 +64,6 @@ export const createInvitation = async (req: AuthRequest, res: Response) => {
     });
     
   } catch (error) {
-  // Handle Prisma unique constraint error
   if (error instanceof Error && error.message.includes('Unique constraint')) {
     return res.status(400).json({
       success: false,
@@ -183,10 +182,6 @@ export const deleteUserByAdmin = async (req: Request, res: Response) => {
   }
 };
 
-// ============================================
-// GET RECENT ACTIVITIES (Using Properties)
-// ============================================
-
 export const getDashboardStats = async (req: AuthRequest, res: Response) => {
   try {
     const adminId = req.authenticatedUser?.id;
@@ -233,13 +228,8 @@ export const getDashboardStats = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// ============================================
-// GET RECENT ACTIVITIES
-// ============================================
-
 export const getRecentActivities = async (req: Request, res: Response) => {
   try {
-    // Get recent properties as activities
     const recentProperties = await prisma.property.findMany({
       take: 10,
       orderBy: { createdAt: 'desc' },

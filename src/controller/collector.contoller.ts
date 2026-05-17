@@ -10,10 +10,6 @@ interface AuthRequest extends Request {
   };
 }
 
-// ============================================
-// GET COLLECTOR DASHBOARD STATS
-// ============================================
-
 export const getCollectorStats = async (req: AuthRequest, res: Response) => {
   try {
     const collectorId = req.authenticatedUser?.id;
@@ -39,10 +35,6 @@ export const getCollectorStats = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-
-// ============================================
-// GET ASSIGNED PROPERTIES
-// ============================================
 
 export const getAssignedProperties = async (req: AuthRequest, res: Response) => {
   try {
@@ -78,10 +70,6 @@ export const getAssignedProperties = async (req: AuthRequest, res: Response) => 
     });
   }
 };
-
-// ============================================
-// GET ASSIGNMENT BY ID
-// ============================================
 
 export const getAssignmentById = async (req: AuthRequest, res: Response) => {
   try {
@@ -120,10 +108,6 @@ export const getAssignmentById = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-
-// ============================================
-// ACCEPT ASSIGNMENT
-// ============================================
 
 export const acceptAssignment = async (req: AuthRequest, res: Response) => {
   try {
@@ -164,10 +148,6 @@ export const acceptAssignment = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// ============================================
-// SUBMIT FIELD DATA (with surroundings)
-// ============================================
-
 export const submitFieldData = async (req: AuthRequest, res: Response) => {
   try {
     const collectorId = req.authenticatedUser?.id;
@@ -184,7 +164,6 @@ export const submitFieldData = async (req: AuthRequest, res: Response) => {
       latitude,
       longitude,
       gpsAccuracy,
-      // Property features
       propertyType,
       condition,
       bedrooms,
@@ -193,37 +172,30 @@ export const submitFieldData = async (req: AuthRequest, res: Response) => {
       buildingSize,
       yearBuilt,
       parkingSpaces,
-      // Garden
       hasGarden,
       gardenSize,
       gardenType,
-      // Annex
       hasAnnex,
       annexType,
       annexSize,
       annexBedrooms,
       annexBathrooms,
-      // Gate
       hasGate,
       gateType,
       gateMaterial,
-      // Fence
       hasFence,
       fenceType,
       fenceHeight,
-      // Neighborhood
       nearestSchoolKm,
       nearestHospitalKm,
       nearestTransportKm,
       nearestMarketKm,
       roadAccessType,
-      // Valuation
       valuationAmount,
       notes,
       images
     } = req.body;
 
-    // Validate required fields
     if (!propertyId) {
       return res.status(400).json({
         success: false,
@@ -243,7 +215,6 @@ export const submitFieldData = async (req: AuthRequest, res: Response) => {
       latitude,
       longitude,
       gpsAccuracy: gpsAccuracy ? Number(gpsAccuracy) : undefined,
-      // Property features
       propertyType,
       condition,
       bedrooms: bedrooms ? Number(bedrooms) : undefined,
@@ -252,31 +223,25 @@ export const submitFieldData = async (req: AuthRequest, res: Response) => {
       buildingSize: buildingSize ? Number(buildingSize) : undefined,
       yearBuilt: yearBuilt ? Number(yearBuilt) : undefined,
       parkingSpaces: parkingSpaces ? Number(parkingSpaces) : undefined,
-      // Garden
       hasGarden: hasGarden === true || hasGarden === 'true',
       gardenSize: gardenSize ? Number(gardenSize) : undefined,
       gardenType,
-      // Annex
       hasAnnex: hasAnnex === true || hasAnnex === 'true',
       annexType,
       annexSize: annexSize ? Number(annexSize) : undefined,
       annexBedrooms: annexBedrooms ? Number(annexBedrooms) : undefined,
       annexBathrooms: annexBathrooms ? Number(annexBathrooms) : undefined,
-      // Gate
       hasGate: hasGate === true || hasGate === 'true',
       gateType,
       gateMaterial,
-      // Fence
       hasFence: hasFence === true || hasFence === 'true',
       fenceType,
       fenceHeight: fenceHeight ? Number(fenceHeight) : undefined,
-      // Neighborhood
       nearestSchoolKm: nearestSchoolKm ? Number(nearestSchoolKm) : undefined,
       nearestHospitalKm: nearestHospitalKm ? Number(nearestHospitalKm) : undefined,
       nearestTransportKm: nearestTransportKm ? Number(nearestTransportKm) : undefined,
       nearestMarketKm: nearestMarketKm ? Number(nearestMarketKm) : undefined,
       roadAccessType,
-      // Valuation
       valuationAmount: valuationAmount ? Number(valuationAmount) : undefined,
       notes,
       images: images || []
@@ -302,22 +267,44 @@ export const submitFieldData = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-
-// ============================================
-// UPDATE FIELD DATA (for revision)
-// ============================================
-
+export const getFieldDataById = async (req: AuthRequest, res: Response) => {
+  try {
+    const collectorId = req.authenticatedUser?.id;
+    let { id } = req.params;
+    
+    if (!collectorId) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+    if (Array.isArray(id)) {
+      id = id[0];
+    }
+    const fieldData = await collectorService.getFieldDataById(id, collectorId);
+    
+    res.json({
+      success: true,
+      data: fieldData
+    });
+  } catch (error: any) {
+    console.error('Error fetching field data:', error);
+    if (error.message === 'Field data not found') {
+      return res.status(404).json({ success: false, error: error.message });
+    }
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to fetch field data' 
+    });
+  }
+};
 export const updateFieldData = async (req: AuthRequest, res: Response) => {
   try {
     const collectorId = req.authenticatedUser?.id;
       let { id } = req.params;
     
     const {
-      // GPS
+ 
       latitude,
       longitude,
       gpsAccuracy,
-      // Property features
       propertyType,
       condition,
       bedrooms,
@@ -326,31 +313,25 @@ export const updateFieldData = async (req: AuthRequest, res: Response) => {
       buildingSize,
       yearBuilt,
       parkingSpaces,
-      // Garden
       hasGarden,
       gardenSize,
       gardenType,
-      // Annex
       hasAnnex,
       annexType,
       annexSize,
       annexBedrooms,
       annexBathrooms,
-      // Gate
       hasGate,
       gateType,
       gateMaterial,
-      // Fence
       hasFence,
       fenceType,
       fenceHeight,
-      // Neighborhood
       nearestSchoolKm,
       nearestHospitalKm,
       nearestTransportKm,
       nearestMarketKm,
       roadAccessType,
-      // Valuation
       valuationAmount,
       notes
     } = req.body;
@@ -367,11 +348,9 @@ export const updateFieldData = async (req: AuthRequest, res: Response) => {
     }
     
     const fieldData = await collectorService.updateFieldData(collectorId, id, {
-      // GPS
       latitude,
       longitude,
       gpsAccuracy: gpsAccuracy ? Number(gpsAccuracy) : undefined,
-      // Property features
       propertyType,
       condition,
       bedrooms: bedrooms ? Number(bedrooms) : undefined,
@@ -380,31 +359,25 @@ export const updateFieldData = async (req: AuthRequest, res: Response) => {
       buildingSize: buildingSize ? Number(buildingSize) : undefined,
       yearBuilt: yearBuilt ? Number(yearBuilt) : undefined,
       parkingSpaces: parkingSpaces ? Number(parkingSpaces) : undefined,
-      // Garden
       hasGarden: hasGarden === true || hasGarden === 'true',
       gardenSize: gardenSize ? Number(gardenSize) : undefined,
       gardenType,
-      // Annex
       hasAnnex: hasAnnex === true || hasAnnex === 'true',
       annexType,
       annexSize: annexSize ? Number(annexSize) : undefined,
       annexBedrooms: annexBedrooms ? Number(annexBedrooms) : undefined,
       annexBathrooms: annexBathrooms ? Number(annexBathrooms) : undefined,
-      // Gate
       hasGate: hasGate === true || hasGate === 'true',
       gateType,
       gateMaterial,
-      // Fence
       hasFence: hasFence === true || hasFence === 'true',
       fenceType,
       fenceHeight: fenceHeight ? Number(fenceHeight) : undefined,
-      // Neighborhood
       nearestSchoolKm: nearestSchoolKm ? Number(nearestSchoolKm) : undefined,
       nearestHospitalKm: nearestHospitalKm ? Number(nearestHospitalKm) : undefined,
       nearestTransportKm: nearestTransportKm ? Number(nearestTransportKm) : undefined,
       nearestMarketKm: nearestMarketKm ? Number(nearestMarketKm) : undefined,
       roadAccessType,
-      // Valuation
       valuationAmount: valuationAmount ? Number(valuationAmount) : undefined,
       notes
     });
@@ -429,10 +402,6 @@ export const updateFieldData = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-
-// ============================================
-// GET SUBMISSION HISTORY
-// ============================================
 
 export const getSubmissionHistory = async (req: AuthRequest, res: Response) => {
   try {
@@ -459,10 +428,6 @@ export const getSubmissionHistory = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-
-// ============================================
-// GET REVISION REQUESTS
-// ============================================
 
 export const getRevisionRequests = async (req: AuthRequest, res: Response) => {
   try {

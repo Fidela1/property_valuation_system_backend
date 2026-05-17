@@ -163,55 +163,41 @@ export const getAvailableDataCollectors = async (req: AuthRequest, res: Response
 
 export const assignDataCollector = async (req: AuthRequest, res: Response) => {
   try {
+    // Extract ID properly - handle both string and array cases
+    const idParam = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const propertyId = idParam as string;
+    
     const supervisorId = req.authenticatedUser?.id;
-    let { id } = req.params;
-    const { collectorId, notes } = req.body;
+    const { collectorEmail, notes } = req.body;
     
     if (!supervisorId) {
-      return res.status(401).json({
-        success: false,
-        error: 'Unauthorized'
-      });
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
     }
     
-    if (!collectorId) {
-      return res.status(400).json({
-        success: false,
-        error: 'Collector ID is required'
-      });
+    if (!collectorEmail) {
+      return res.status(400).json({ success: false, error: 'Collector email is required' });
     }
     
-     if (Array.isArray(id)) {
-      id = id[0];
-    }
-    const result = await supervisorService.assignDataCollector(id, collectorId, supervisorId, notes);
+    const result = await supervisorService.assignDataCollector(
+      propertyId,  // Use the extracted propertyId
+      collectorEmail,
+      supervisorId,
+      notes
+    );
     
     res.json({
       success: true,
       message: 'Data collector assigned successfully',
       data: result
     });
-    
-  } catch (error) {
-    if (error instanceof AppError) {
-      return res.status(error.statusCode).json({
-        success: false,
-        error: error.message
-      });
-    }
-    
+  } catch (error: any) {
     console.error('Assign data collector error:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to assign data collector'
+    res.status(400).json({ 
+      success: false, 
+      error: error.message || 'Failed to assign data collector' 
     });
   }
 };
-
-// ============================================
-// GET PROPERTY FOR REVIEW
-// ============================================
-
 export const getPropertyForReview = async (req: AuthRequest, res: Response) => {
   try {
     const supervisorId = req.authenticatedUser?.id;
@@ -249,10 +235,6 @@ export const getPropertyForReview = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-
-// ============================================
-// APPROVE PROPERTY
-// ============================================
 
 export const approveProperty = async (req: AuthRequest, res: Response) => {
   try {
@@ -293,10 +275,6 @@ export const approveProperty = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-
-// ============================================
-// REJECT PROPERTY (NEEDS REVISION)
-// ============================================
 
 export const rejectProperty = async (req: AuthRequest, res: Response) => {
   try {
@@ -345,10 +323,6 @@ export const rejectProperty = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-
-// ============================================
-// PUBLISH PROPERTY
-// ============================================
 
 export const publishProperty = async (req: AuthRequest, res: Response) => {
   try {

@@ -1,6 +1,8 @@
 import prisma from '../config/prisma';
 import { hashedPassword, comparePassword } from '../utils/hash';
 import { AppError } from '../utils/AppError';
+import { sendPasswordResetEmail } from '../config/email';
+import crypto from 'crypto';
 
 export const createUser = async (name: string, email: string, phone: string, password: string) => {
   const existingUser = await prisma.user.findUnique({ where: { email: email.toLowerCase().trim()} });
@@ -73,7 +75,6 @@ export const handleGoogleAuthService = async (user: any) => {
   };
 };
 
-// Regular email/password login (using your comparePassword)
 export const loginWithEmail = async (email: string, password: string) => {
   const user = await prisma.user.findUnique({
     where: { email }
@@ -83,7 +84,6 @@ export const loginWithEmail = async (email: string, password: string) => {
     throw new Error('Invalid email or password');
   }
 
-  // ✅ Use your comparePassword function
   const isValidPassword = await comparePassword(password, user.password);
   
   if (!isValidPassword) {
@@ -103,4 +103,89 @@ export const loginWithEmail = async (email: string, password: string) => {
       }
     }
   };
+};
+
+export const forgotPassword = async (email: string) => {
+  const user = await prisma.user.findUnique({
+    where: { email: email.toLowerCase().trim() }
+  });
+  
+  if (!user) {
+    // For security, don't reveal that the user doesn't exist
+    return { success: true, message: 'If an account exists, you will receive a reset email' };
+  }
+  
+  // Generate reset token
+  const resetToken = crypto.randomBytes(32).toString('hex');
+  const resetExpires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+  
+  // Save token to database
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      passwordResetToken: resetToken,
+      passwordResetExpires: resetExpires
+    }
+  });
+  
+  // Send email
+  await sendPasswordResetEmail(user.email, resetToken, user.name);
+  
+  return { success: true, message: 'Password reset email sent' };
+};
+
+export const resetPassword = async (token: string, newPassword: string,) => {
+  // Find user with valid token
+  const user = await prisma.user.findFirst({
+    where: {
+      passwordResetToken: token,
+      passwordResetExpires: {
+        gt: new Date()
+      }
+    }
+  });
+  
+  if (!user) {
+    throw new AppError('Invalid or expired reset token', 400);
+  }
+  
+  if (!newPassword || newPassword.length < 6) {
+    throw new AppError('Password must be at least 6 characters', 400);
+  }
+  
+  const hashed = await hashedPassword(newPassword);
+  
+  // Update user and clear reset token
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      password: hashed,
+      passwordResetToken: null,
+      passwordResetExpires: null
+    }
+  });
+  
+  return { success: true, message: 'Password reset successfully' };
+};
+
+export const verifyResetToken = async (token: string) => {
+  const user = await prisma.user.findFirst({
+    where: {
+      passwordResetToken: token,
+      passwordResetExpires: {
+        gt: new Date()
+      }
+    },
+    select: {
+      id: true,
+      email: true,
+      name: true
+    }
+  });
+  
+  if (!user) {
+    throw new AppError('Invalid or expired reset token', 400);
+  }
+  
+  return { valid: true, email: user.email, name: user.name };
 };

@@ -91,7 +91,8 @@ model User {
 
   addedById           String?
   addedBy             User?         @relation("AdminAddsEmployee", fields: [addedById], references: [id])
-  
+  passwordResetToken   String?   @unique
+  passwordResetExpires DateTime?
 
   properties          Property[]    @relation("ClientProperties")
 

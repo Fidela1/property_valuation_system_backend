@@ -12,6 +12,7 @@ router.get('/dashboard/assignments', collectorController.getAssignedProperties);
 router.get('/dashboard/assignments/:id', collectorController.getAssignmentById);
 router.post('/dashboard/assignments/:id/accept', collectorController.acceptAssignment);
 router.post('/dashboard/field-data', collectorController.submitFieldData);
+router.get('/dashboard/field-data/:id', collectorController.getFieldDataById);
 router.put('/dashboard/field-data/:id', collectorController.updateFieldData);
 router.get('/dashboard/submissions', collectorController.getSubmissionHistory);
 router.get('/dashboard/revisions', collectorController.getRevisionRequests);

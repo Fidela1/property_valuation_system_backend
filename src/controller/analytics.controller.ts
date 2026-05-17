@@ -2,9 +2,6 @@ import { Request, Response } from 'express';
 import * as userAnalyticsService from '../services/analytics.service';
 import { AppError } from '../utils/AppError';
 
-// ============================================
-// USER STATISTICS SUMMARY
-// ============================================
 
 export const getUserStatistics = async (req: Request, res: Response) => {
   try {
@@ -16,10 +13,6 @@ export const getUserStatistics = async (req: Request, res: Response) => {
   }
 };
 
-// ============================================
-// USERS BY ROLE (Pie Chart)
-// ============================================
-
 export const getUsersByRole = async (req: Request, res: Response) => {
   try {
     const data = await userAnalyticsService.getUsersByRole();
@@ -29,10 +22,6 @@ export const getUsersByRole = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, error: 'Failed to fetch users by role' });
   }
 };
-
-// ============================================
-// MONTHLY USER REGISTRATIONS (Bar/Line Chart)
-// ============================================
 
 export const getMonthlyUserRegistrations = async (req: Request, res: Response) => {
   try {
@@ -45,10 +34,6 @@ export const getMonthlyUserRegistrations = async (req: Request, res: Response) =
   }
 };
 
-// ============================================
-// USER GROWTH TREND (Line Chart)
-// ============================================
-
 export const getUserGrowthTrend = async (req: Request, res: Response) => {
   try {
     const data = await userAnalyticsService.getUserGrowthTrend();
@@ -58,10 +43,6 @@ export const getUserGrowthTrend = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, error: 'Failed to fetch user growth trend' });
   }
 };
-
-// ============================================
-// USER REGISTRATIONS BY ROLE (Stacked Bar)
-// ============================================
 
 export const getUserRegistrationsByRole = async (req: Request, res: Response) => {
   try {
@@ -73,10 +54,6 @@ export const getUserRegistrationsByRole = async (req: Request, res: Response) =>
   }
 };
 
-// ============================================
-// USER STATUS DISTRIBUTION (Donut Chart)
-// ============================================
-
 export const getUserStatusDistribution = async (req: Request, res: Response) => {
   try {
     const data = await userAnalyticsService.getUserStatusDistribution();
@@ -86,10 +63,6 @@ export const getUserStatusDistribution = async (req: Request, res: Response) => 
     res.status(500).json({ success: false, error: 'Failed to fetch user status distribution' });
   }
 };
-
-// ============================================
-// TOP USERS BY ACTIVITY
-// ============================================
 
 export const getTopUsersByActivity = async (req: Request, res: Response) => {
   try {
@@ -102,10 +75,6 @@ export const getTopUsersByActivity = async (req: Request, res: Response) => {
   }
 };
 
-// ============================================
-// RECENTLY JOINED USERS
-// ============================================
-
 export const getRecentlyJoinedUsers = async (req: Request, res: Response) => {
   try {
     const { limit } = req.query;
@@ -116,10 +85,6 @@ export const getRecentlyJoinedUsers = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, error: 'Failed to fetch recent users' });
   }
 };
-
-// ============================================
-// USER ENGAGEMENT SUMMARY
-// ============================================
 
 export const getUserEngagementSummary = async (req: Request, res: Response) => {
   try {

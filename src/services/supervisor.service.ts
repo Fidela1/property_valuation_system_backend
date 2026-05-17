@@ -118,17 +118,19 @@ export const getUnderReviewProperties = async (options: {
   };
 };
 
+// In your backend collector.service.ts
 export const getAvailableDataCollectors = async () => {
   const collectors = await prisma.user.findMany({
     where: {
       role: 'DATA_COLLECTOR',
-      isActive: true
+      // Don't filter by isActive here if you want to see inactive ones too
     },
     select: {
       id: true,
       name: true,
       email: true,
       phone: true,
+      isActive: true,  // ✅ Make sure this is selected
       assignments: {
         where: {
           property: {
@@ -142,15 +144,19 @@ export const getAvailableDataCollectors = async () => {
   });
   
   return collectors.map(collector => ({
-    ...collector,
-    activeWorkload: collector.assignments.length,
-    isAvailable: collector.assignments.length < 5  // Max 5 active assignments
+    id: collector.id,
+    name: collector.name,
+    email: collector.email,
+    phone: collector.phone,
+    isActive: collector.isActive,  // ✅ Return the actual value
+    currentAssignments: collector.assignments.length,
+    isAvailable: collector.isActive && collector.assignments.length < 5
   }));
 };
 
 export const assignDataCollector = async (
   propertyId: string,
-  collectorId: string,
+  collectorEmail: string,
   supervisorId: string,
   notes?: string
 ) => {
@@ -167,12 +173,17 @@ export const assignDataCollector = async (
     throw new AppError(`Cannot assign: Property status is ${property.status}`, 400);
   }
   
+  // Find collector by email instead of ID
   const collector = await prisma.user.findUnique({
-    where: { id: collectorId }
+    where: { email: collectorEmail.toLowerCase().trim() }
   });
   
-  if (!collector || collector.role !== 'DATA_COLLECTOR') {
-    throw new AppError('Invalid data collector', 400);
+  if (!collector) {
+    throw new AppError('Data collector not found with this email', 404);
+  }
+  
+  if (collector.role !== 'DATA_COLLECTOR') {
+    throw new AppError(`User with email ${collectorEmail} is not a data collector`, 400);
   }
   
   if (!collector.isActive) {
@@ -182,7 +193,7 @@ export const assignDataCollector = async (
   const assignment = await prisma.assignment.create({
     data: {
       propertyId,
-      collectorId,
+      collectorId: collector.id,  // Use the found collector's ID
       assignedById: supervisorId,
       notes,
       assignedAt: new Date()
@@ -201,8 +212,9 @@ export const assignDataCollector = async (
       entityType: 'Property',
       entityId: propertyId,
       details: {
-        collectorId,
+        collectorEmail: collector.email,
         collectorName: collector.name,
+        collectorId: collector.id,
         notes
       }
     }
@@ -290,11 +302,10 @@ export const approveProperty = async (
     data: { 
       status: 'APPROVED',
       aiValuation: property.fieldData?.valuationAmount,
-      aiConfidence: 85  // Default confidence for now
+      aiConfidence: 85 
     }
   });
   
-  // Log audit
   await prisma.auditLog.create({
     data: {
       userId: supervisorId,
@@ -394,20 +405,28 @@ export const publishProperty = async (propertyId: string, supervisorId: string) 
 
 export const getSupervisorStats = async (supervisorId: string) => {
   const [
+    totalProperties,
     pendingCount,
     underReviewCount,
     approvedCount,
     publishedCount,
-    rejectedCount
+    rejectedCount,
+    inFieldworkCount,
+    assignedCount
   ] = await Promise.all([
+    prisma.property.count(),
     prisma.property.count({ where: { status: 'PENDING' } }),
     prisma.property.count({ where: { status: 'UNDER_REVIEW' } }),
     prisma.property.count({ where: { status: 'APPROVED' } }),
     prisma.property.count({ where: { status: 'PUBLISHED' } }),
-    prisma.property.count({ where: { status: 'NEEDS_REVISION' } })
+    prisma.property.count({ where: { status: 'NEEDS_REVISION' } }),
+    prisma.property.count({ where: { status: 'IN_FIELDWORK' } }),
+    prisma.property.count({ where: { status: 'ASSIGNED' } })
   ]);
-  
-  // Get recent activity
+
+  const inProgress = pendingCount + assignedCount + inFieldworkCount;
+  const completed = approvedCount + publishedCount;
+
   const recentReviews = await prisma.review.findMany({
     where: { supervisorId },
     take: 10,
@@ -422,16 +441,35 @@ export const getSupervisorStats = async (supervisorId: string) => {
       }
     }
   });
+
+  const recentProperties = await prisma.property.findMany({
+    take: 5,
+    orderBy: { createdAt: 'desc' },
+    select: {
+      id: true,
+      upiNumber: true,
+      ownerName: true,
+      status: true,
+      district: true,
+      createdAt: true
+    }
+  });
   
   return {
     counts: {
+      total: totalProperties,
       pending: pendingCount,
       underReview: underReviewCount,
       approved: approvedCount,
       published: publishedCount,
-      rejected: rejectedCount
+      rejected: rejectedCount,
+      inFieldwork: inFieldworkCount,
+      assigned: assignedCount,
+      inProgress: inProgress,
+      completed: completed
     },
-    recentReviews
+    recentReviews,
+    recentProperties
   };
 };
 
@@ -531,13 +569,11 @@ export const getAllProperties = async (options: {
   const skip = (page - 1) * limit;
   
   const where: any = {};
-  
-  // Filter by status if provided
+
   if (options?.status && options.status !== 'ALL') {
     where.status = options.status;
   }
-  
-  // Search functionality
+
   if (options?.search) {
     where.OR = [
       { upiNumber: { contains: options.search, mode: 'insensitive' } },
@@ -594,7 +630,7 @@ export const getAllProperties = async (options: {
         },
         images: {
           orderBy: { order: 'asc' },
-          take: 1 // Get first image for thumbnail
+          take: 1 
         }
       },
       orderBy: { createdAt: 'desc' }

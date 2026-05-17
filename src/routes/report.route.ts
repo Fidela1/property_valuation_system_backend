@@ -4,7 +4,6 @@ import * as reportController from '../controller/report.controller';
 
 const router = Router();
 
-// All report routes require authentication
 router.use(authenticate);
 
 router.post('/', authorize('SUPERVISOR', 'ADMIN'), reportController.createReport);

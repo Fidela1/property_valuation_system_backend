@@ -71,8 +71,7 @@ export const createInvitation = async (
 ) => {
 
   const normalizedEmail = data.email.toLowerCase().trim();
-  
-  // Check if email already has an active invitation
+
   const existingInvitation = await prisma.invitation.findFirst({
     where: {
       email: normalizedEmail,
@@ -83,8 +82,7 @@ export const createInvitation = async (
   if (existingInvitation) {
     throw new AppError(`An active invitation already exists for ${normalizedEmail}. Please wait for the user to accept or cancel the existing invitation.`, 400);
   }
-  
-  // Check if user already exists with this email
+
   const existingUser = await prisma.user.findUnique({
     where: { email: normalizedEmail }
   });
@@ -92,8 +90,7 @@ export const createInvitation = async (
   if (existingUser) {
     throw new AppError('User with this email already exists', 400);
   }
-  
-  // Check for expired invitation - delete it and allow new
+
   const existingExpiredInvitation = await prisma.invitation.findFirst({
     where: {
       email: normalizedEmail,
@@ -102,13 +99,11 @@ export const createInvitation = async (
   });
   
   if (existingExpiredInvitation) {
-    // Delete expired invitation instead of blocking
     await prisma.invitation.delete({
       where: { id: existingExpiredInvitation.id }
     });
   }
-  
-  // Handle cancelled invitations - delete the cancelled one and create new
+
   const existingCancelledInvitation = await prisma.invitation.findFirst({
     where: {
       email: normalizedEmail,
@@ -117,18 +112,15 @@ export const createInvitation = async (
   });
   
   if (existingCancelledInvitation) {
-    // Delete the cancelled invitation to allow new one
     await prisma.invitation.delete({
       where: { id: existingCancelledInvitation.id }
     });
   }
-  
-  // Generate invitation token
+
   const token = generateInvitationToken();
   const expiresAt = new Date();
   expiresAt.setDate(expiresAt.getDate() + 7); 
-  
-  // Create invitation
+
   const invitation = await prisma.invitation.create({
     data: {
       email: data.email.toLowerCase().trim(),
@@ -141,29 +133,22 @@ export const createInvitation = async (
       createdById: adminId
     }
   });
-  
-  // Generate invitation link
+
   const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
   const invitationLink = `${frontendUrl}/accept-invitation?token=${token}`;
-  
-  // ✅ SEND EMAIL WITH THE INVITATION LINK
+
   try {
-    // Get role display name for email
     const roleDisplayName = getRoleDisplayName(data.role);
-    
-    // Send the email
+
     await sendEmail({
       to: data.email,
       subject: `Invitation to join Property Valuation System as ${roleDisplayName}`,
       html: getInvitationEmailTemplate(data.name, roleDisplayName, invitationLink),
     });
-    
-    console.log(`✅ Invitation email sent to ${data.email}`);
+
     
   } catch (emailError) {
-    console.error(`❌ Failed to send invitation email to ${data.email}:`, emailError);
-    // Don't throw error - invitation is created, just log the failure
-    // You might want to notify admin that email failed
+    console.error(`Failed to send invitation email to ${data.email}:`, emailError);
   }
   
   return {
@@ -173,7 +158,6 @@ export const createInvitation = async (
   };
 };
 
-// Helper function for role display names (add if not already in your service)
 const getRoleDisplayName = (role: string): string => {
   const roleMap: Record<string, string> = {
     'CLIENT': 'Property Owner',
@@ -193,8 +177,7 @@ export const getManageUsers = async (
   }) => {
   const { page, limit, role, search } = options;
   const skip = (page - 1) * limit;
-  
-  // Build where clause - DON'T exclude current admin
+
   const where: any = {
     isActive: true
   };
@@ -210,8 +193,7 @@ export const getManageUsers = async (
       { phone: { contains: search, mode: 'insensitive' } }
     ];
   }
-  
-  // Get users with pagination (include all users)
+
   const [users, total] = await Promise.all([
     prisma.user.findMany({
       where,
@@ -255,7 +237,7 @@ export const getManageUsers = async (
     prisma.user.count({ where: { role: 'ADMIN' } }),
     prisma.user.count({ where: { isActive: true } }),
     prisma.user.count({ where: { isActive: false } }),
-    prisma.user.count() // Total users including admins
+    prisma.user.count() 
   ]);
   
   return {
@@ -266,7 +248,7 @@ export const getManageUsers = async (
       total,
       totalPages: Math.ceil(total / limit)
     },
-    totalUsers, // This will now match dashboard count
+    totalUsers, 
     totalClients,
     totalDataCollectors,
     totalSupervisors,
@@ -294,8 +276,7 @@ export const updateUserByAdmin = async (
   if (!user) {
     throw new AppError('User not found', 404);
   }
-  
-  // If email is being changed, check if new email already exists
+
   let oldEmail = user.email;
   let roleChanged = false;
   let oldRole = user.role;
@@ -310,26 +291,22 @@ export const updateUserByAdmin = async (
       throw new AppError('Email already exists', 400);
     }
   }
-  
-  // Check if role is being changed
+
   if (data.role && data.role !== user.role) {
     roleChanged = true;
   }
-  
-  // Check if status is being changed
+
   if (data.isActive !== undefined && data.isActive !== user.isActive) {
     statusChanged = true;
   }
-  
-  // Build update data
+
   const updateData: any = {};
   if (data.name !== undefined) updateData.name = data.name;
   if (data.email !== undefined) updateData.email = data.email.toLowerCase().trim();
   if (data.phone !== undefined) updateData.phone = data.phone;
   if (data.role !== undefined) updateData.role = data.role;
   if (data.isActive !== undefined) updateData.isActive = data.isActive;
-  
-  // Update user
+
   const updatedUser = await prisma.user.update({
     where: { id: userId },
     data: updateData,
@@ -344,8 +321,7 @@ export const updateUserByAdmin = async (
       updatedAt: true
     }
   });
-  
-  // Send email notification if role changed
+
   if (roleChanged && updatedUser.email) {
     try {
       const emailHtml = getRoleUpdateEmailTemplate(
@@ -364,8 +340,7 @@ export const updateUserByAdmin = async (
       console.error('Failed to send role update email:', emailError);
     }
   }
-  
-  // Send email notification if account status changed
+
   if (statusChanged && updatedUser.email) {
     try {
       const status = data.isActive ? 'activated' : 'deactivated';
@@ -389,7 +364,7 @@ export const updateUserByAdmin = async (
 };
 
 export const deleteUserByAdmin = async (userId: string, adminId: string) => {
-  // First, check if user exists
+
   const user = await prisma.user.findUnique({
     where: { id: userId }
   });
@@ -397,41 +372,35 @@ export const deleteUserByAdmin = async (userId: string, adminId: string) => {
   if (!user) {
     throw new AppError('User not found', 404);
   }
-  
-  // Prevent deleting own account
+
   if (user.id === adminId) {
     throw new AppError('You cannot delete your own account', 400);
   }
-  
-  // Prevent deleting last admin
+
   if (user.role === 'ADMIN') {
     const adminCount = await prisma.user.count({ where: { role: 'ADMIN' } });
     if (adminCount <= 1) {
       throw new AppError('Cannot delete the last admin user', 400);
     }
   }
-  
-  // Store user info for email before deletion
+
   const userEmail = user.email;
   const userName = user.name || 'User';
-  
-  // Check if user has associated data by counting directly from database
+
   const [propertiesCount, assignmentsCount, invitationsCount] = await Promise.all([
     prisma.property.count({ where: { clientId: userId } }),
-    prisma.assignment.count({ where: { collectorId: userId } }), // ✅ Fixed: Use collectorId instead of userId
+    prisma.assignment.count({ where: { collectorId: userId } }), 
     prisma.invitation.count({ where: { createdById: userId } })
   ]);
   
   const hasAssociatedData = propertiesCount > 0 || assignmentsCount > 0 || invitationsCount > 0;
   
   if (hasAssociatedData) {
-    // Soft delete - just deactivate instead of hard delete
     await prisma.user.update({
       where: { id: userId },
       data: { isActive: false }
     });
-    
-    // Send deactivation email
+
     try {
       const emailHtml = getAccountStatusEmailTemplate(userName, 'deactivated');
       await sendEmail({
@@ -450,8 +419,7 @@ export const deleteUserByAdmin = async (userId: string, adminId: string) => {
       message: 'User has associated data. Account deactivated instead of deleted.' 
     };
   }
-  
-  // Send deletion notification email before hard delete
+
   try {
     const emailHtml = getAccountDeletedEmailTemplate(userName);
     await sendEmail({
@@ -463,8 +431,7 @@ export const deleteUserByAdmin = async (userId: string, adminId: string) => {
   } catch (emailError) {
     console.error('Failed to send deletion email:', emailError);
   }
-  
-  // Hard delete if no associated data
+
   await prisma.user.delete({
     where: { id: userId }
   });
@@ -475,9 +442,9 @@ export const deleteUserByAdmin = async (userId: string, adminId: string) => {
     message: 'User deleted successfully' 
   };
 };
-// Cancel invitation - allow cancelling COMPLETED invitations if user doesn't exist
+
 export const cancelInvitation = async (invitationId: string, adminId: string) => {
-  // Check if invitation exists
+
   const invitation = await prisma.invitation.findFirst({
     where: {
       id: invitationId,
@@ -490,16 +457,13 @@ export const cancelInvitation = async (invitationId: string, adminId: string) =>
   if (!invitation) {
     throw new AppError('Invitation not found', 404);
   }
-  
-  // If status is COMPLETED, check if user actually exists
+
   if (invitation.status === 'COMPLETED') {
     const existingUser = await prisma.user.findUnique({
       where: { email: invitation.email }
     });
-    
-    // If user doesn't exist, treat as PENDING and allow cancellation
+
     if (!existingUser) {
-      // Update status to CANCELLED
       const cancelledInvitation = await prisma.invitation.update({
         where: { id: invitationId },
         data: { status: 'CANCELLED' }
@@ -512,13 +476,11 @@ export const cancelInvitation = async (invitationId: string, adminId: string) =>
       };
     }
   }
-  
-  // Check if current admin created this invitation
+
   if (invitation.createdById !== adminId) {
     throw new AppError('You can only cancel invitations you created', 403);
   }
-  
-  // Update status to CANCELLED
+
   const cancelledInvitation = await prisma.invitation.update({
     where: { id: invitationId },
     data: { status: 'CANCELLED' }
@@ -531,9 +493,8 @@ export const cancelInvitation = async (invitationId: string, adminId: string) =>
   };
 };
 
-// Delete invitation - also handle COMPLETED without user
 export const deleteInvitation = async (invitationId: string, adminId: string) => {
-  // Check if invitation exists
+
   const invitation = await prisma.invitation.findUnique({
     where: { id: invitationId }
   });
@@ -541,14 +502,12 @@ export const deleteInvitation = async (invitationId: string, adminId: string) =>
   if (!invitation) {
     throw new AppError('Invitation not found', 404);
   }
-  
-  // If status is COMPLETED, check if user actually exists
+
   if (invitation.status === 'COMPLETED') {
     const existingUser = await prisma.user.findUnique({
       where: { email: invitation.email }
     });
-    
-    // If user doesn't exist, allow deletion
+
     if (!existingUser) {
       await prisma.invitation.delete({
         where: { id: invitationId }
@@ -568,18 +527,15 @@ export const deleteInvitation = async (invitationId: string, adminId: string) =>
       throw new AppError('Cannot delete invitation for user that already exists', 400);
     }
   }
-  
-  // Only PENDING invitations can be deleted
+
   if (invitation.status !== 'PENDING') {
     throw new AppError(`Cannot delete invitation that is ${invitation.status.toLowerCase()}`, 400);
   }
-  
-  // Check if current admin created this invitation
+
   if (invitation.createdById !== adminId) {
     throw new AppError('You can only delete invitations you created', 403);
   }
-  
-  // Delete the invitation
+
   await prisma.invitation.delete({
     where: { id: invitationId }
   });

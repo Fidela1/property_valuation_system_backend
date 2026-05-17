@@ -93,3 +93,68 @@ export const googleAuthCallback = (req: Request, res: Response, next: any) => {
     }
   })(req, res, next);
 };
+export const forgotPassword = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+    
+    if (!email) {
+      return res.status(400).json({ success: false, error: 'Email is required' });
+    }
+    
+    const result = await authService.forgotPassword(email);
+    
+    res.json({
+      success: true,
+      message: result.message
+    });
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.status(500).json({ success: false, error: 'Failed to process request' });
+  }
+};
+
+export const resetPassword = async (req: Request, res: Response) => {
+  try {
+    const { token, password } = req.body;
+    
+    if (!token || !password) {
+      return res.status(400).json({ success: false, error: 'Token and password are required' });
+    }
+    
+    const result = await authService.resetPassword(token, password);
+    
+    res.json({
+      success: true,
+      message: result.message
+    });
+  } catch (error: any) {
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json({ success: false, error: error.message });
+    }
+    console.error('Reset password error:', error);
+    res.status(500).json({ success: false, error: 'Failed to reset password' });
+  }
+};
+
+export const verifyResetToken = async (req: Request, res: Response) => {
+  try {
+    const { token } = req.query;
+    
+    if (!token || typeof token !== 'string') {
+      return res.status(400).json({ success: false, error: 'Token is required' });
+    }
+    
+    const result = await authService.verifyResetToken(token);
+    
+    res.json({
+      success: true,
+      data: result
+    });
+  } catch (error: any) {
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json({ success: false, error: error.message });
+    }
+    console.error('Verify token error:', error);
+    res.status(500).json({ success: false, error: 'Failed to verify token' });
+  }
+};

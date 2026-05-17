@@ -2,10 +2,6 @@ import prisma from '../config/prisma';
 import { AppError } from '../utils/AppError';
 import puppeteer from 'puppeteer';
 
-// ============================================
-// TYPES
-// ============================================
-
 export interface CreateReportInput {
   propertyId: string;
   title: string;
@@ -19,12 +15,8 @@ export interface UpdateReportInput {
   isPublished?: boolean;
 }
 
-// ============================================
-// CREATE REPORT
-// ============================================
-
 export const createReport = async (data: CreateReportInput) => {
-  // Check if property exists
+
   const property = await prisma.property.findUnique({
     where: { id: data.propertyId },
     include: {
@@ -37,7 +29,6 @@ export const createReport = async (data: CreateReportInput) => {
     throw new AppError('Property not found', 404);
   }
 
-  // Generate HTML content if not provided
   let content = data.content;
   if (!content) {
     content = generateFullReportHTML(null, property);
@@ -134,7 +125,6 @@ export const updateReport = async (
     throw new AppError('Report not found', 404);
   }
 
-  // Check if user is the generator or admin
   if (report.generatedBy !== userId) {
     const user = await prisma.user.findUnique({
       where: { id: userId }
