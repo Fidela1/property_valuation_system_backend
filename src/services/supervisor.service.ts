@@ -648,3 +648,25 @@ export const getAllProperties = async (options: {
     }
   };
 };
+// In your backend supervisor.service.ts
+export const getPropertiesForReportDropdown = async () => {
+  const properties = await prisma.property.findMany({
+    where: {
+      status: {
+        in: ['APPROVED', 'PUBLISHED']
+      }
+    },
+    select: {
+      id: true,
+      upiNumber: true,
+      ownerName: true,
+      district: true,
+      province: true,
+      aiValuation: true,
+      status: true
+    },
+    orderBy: { createdAt: 'desc' }
+  });
+  
+  return properties;
+};

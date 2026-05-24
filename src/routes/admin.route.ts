@@ -15,6 +15,7 @@ router.get('/dashboard/manage-users', adminController.getManageUsers);
 
 router.get('/activities', adminController.getRecentActivities);
 router.put('/dashboard/manage-users/:userId', adminController.updateUserByAdmin);
+router.put('/dashboard/manage-users/:userId/toggle-status', authorize('ADMIN'), adminController.toggleUserStatus);
 router.delete('/dashboard/manage-users/:userId', adminController.deleteUserByAdmin);
 
 export default router;

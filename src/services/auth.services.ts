@@ -44,6 +44,10 @@ export const userLogin = async (email: string, password: string) => {
     throw new Error("User doesn't exist");
   }
 
+   if (!user.isActive) {
+    throw new Error('Your account has been deactivated. Please contact administrator.');
+  }
+  
   const isPasswordValid = await comparePassword(password, user.password);
   if (!isPasswordValid) {
     throw new Error("Invalid email or password");

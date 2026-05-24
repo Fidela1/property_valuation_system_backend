@@ -388,3 +388,24 @@ export const getInFieldworkProperties = async (req: Request, res: Response) => {
     });
   }
 };
+
+// In your backend supervisor.controller.ts
+export const getPropertiesForReportDropdown = async (req: AuthRequest, res: Response) => {
+  try {
+    const supervisorId = req.authenticatedUser?.id;
+    
+    if (!supervisorId) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+    
+    const properties = await supervisorService.getPropertiesForReportDropdown();
+    
+    res.json({
+      success: true,
+      data: properties
+    });
+  } catch (error) {
+    console.error('Error fetching properties for report:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch properties' });
+  }
+};

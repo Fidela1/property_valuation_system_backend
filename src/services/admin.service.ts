@@ -2,7 +2,9 @@ import prisma from '../config/prisma';
 import bcrypt from 'bcrypt';
 import { AppError } from '../utils/AppError';
 import { randomBytes } from 'crypto';
-import { sendEmail, getInvitationEmailTemplate,getRoleUpdateEmailTemplate, getAccountStatusEmailTemplate, getAccountDeletedEmailTemplate } from '../config/email';
+import { sendEmail, getInvitationEmailTemplate,getRoleUpdateEmailTemplate, 
+  getAccountStatusEmailTemplate, getAccountDeletedEmailTemplate, 
+  sendStatusChangeEmail } from '../config/email';
 type Role = 'ADMIN' | 'DATA_COLLECTOR' | 'SUPERVISOR';
 
 export const countUsers = async () => {
@@ -174,13 +176,21 @@ export const getManageUsers = async (
     limit: number;
     role?: string;
     search?: string;
+    status?: string; // Add status filter
   }) => {
-  const { page, limit, role, search } = options;
+  const { page, limit, role, search, status } = options;
   const skip = (page - 1) * limit;
 
-  const where: any = {
-    isActive: true
-  };
+  const where: any = {};
+  
+  // Remove the hardcoded isActive: true
+  // Only filter by status if specified
+  if (status === 'ACTIVE') {
+    where.isActive = true;
+  } else if (status === 'INACTIVE') {
+    where.isActive = false;
+  }
+  // If status is 'ALL' or undefined, don't filter by isActive at all
   
   if (role && role !== 'ALL') {
     where.role = role;
@@ -221,7 +231,7 @@ export const getManageUsers = async (
     prisma.user.count({ where })
   ]);
   
-  // Get summary statistics (all users)
+  // Get summary statistics (all users) - These should ALWAYS count ALL users regardless of filters
   const [
     totalClients,
     totalDataCollectors,
@@ -248,6 +258,7 @@ export const getManageUsers = async (
       total,
       totalPages: Math.ceil(total / limit)
     },
+    // These summary stats are for the dashboard cards
     totalUsers, 
     totalClients,
     totalDataCollectors,
@@ -549,5 +560,91 @@ export const deleteInvitation = async (invitationId: string, adminId: string) =>
       name: invitation.name,
       role: invitation.role
     }
+  };
+};
+
+
+export const toggleUserStatus = async (userId: string, adminId: string) => {
+  // Check if admin is trying to deactivate themselves
+  if (userId === adminId) {
+    throw new AppError('You cannot deactivate your own account', 400);
+  }
+  
+  // Get current user and admin info
+  const [user, admin] = await Promise.all([
+    prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        isActive: true
+      }
+    }),
+    prisma.user.findUnique({
+      where: { id: adminId },
+      select: {
+        name: true,
+        email: true
+      }
+    })
+  ]);
+  
+  if (!user) {
+    throw new AppError('User not found', 404);
+  }
+  
+  if (!admin) {
+    throw new AppError('Admin not found', 404);
+  }
+  
+  // Toggle status
+  const updatedUser = await prisma.user.update({
+    where: { id: userId },
+    data: { isActive: !user.isActive },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      isActive: true
+    }
+  });
+  
+  // Send email notification
+  try {
+    await sendStatusChangeEmail(
+      user.email,
+      user.name,
+      updatedUser.isActive, // new status
+      admin.name
+    );
+    console.log(`Status change email sent to ${user.email}`);
+  } catch (emailError) {
+    console.error('Failed to send status change email:', emailError);
+    // Don't throw error - the status change was successful, just email failed
+  }
+  
+  // Log audit
+  await prisma.auditLog.create({
+    data: {
+      userId: adminId,
+      action: user.isActive ? 'USER_DEACTIVATED' : 'USER_ACTIVATED',
+      entityType: 'User',
+      entityId: userId,
+      details: {
+        userName: user.name,
+        userEmail: user.email,
+        previousStatus: user.isActive,
+        newStatus: !user.isActive,
+        emailSent: true
+      }
+    }
+  });
+  
+  return {
+    message: user.isActive ? 'User deactivated successfully. Email notification sent.' : 'User activated successfully. Email notification sent.',
+    user: updatedUser
   };
 };
