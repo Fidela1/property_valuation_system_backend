@@ -9,6 +9,7 @@ import uploadRoute from "./upload.route";
 import valuationRoute from "./valuation.route"
 import reportRoute from "./report.route"
 import userAnalyticsRoute from "./analytics.route";
+import propertyRoutes from "./property.route";
 
 const router = Router();
 
@@ -22,5 +23,5 @@ router.use('/upload', uploadRoute);
 router.use('/valuation', valuationRoute);
 router.use('/report', reportRoute);
 router.use('/user-analytics', userAnalyticsRoute);
-
+router.use('/properties', propertyRoutes);
 export default router;

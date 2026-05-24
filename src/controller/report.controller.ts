@@ -1,163 +1,212 @@
 import { Request, Response } from 'express';
+import { AuthRequest } from '../middleware/auth.middleware';
 import * as reportService from '../services/report.service';
 import { AppError } from '../utils/AppError';
 
-interface AuthRequest extends Request {
-  authenticatedUser?: {
-    id: string;
-    email: string;
-    role: string;
-  };
-}
-
-const paramStr = (val: string | string[]): string =>
-  Array.isArray(val) ? val[0] : val;
-
-export const createReport = async (req: AuthRequest, res: Response) => {
+export const getPropertiesForReport = async (req: AuthRequest, res: Response) => {
   try {
-    const userId = req.authenticatedUser?.id;
-    const { propertyId, title, content } = req.body;
-
-    if (!userId) {
+    const supervisorId = req.authenticatedUser?.id;
+    
+    if (!supervisorId) {
       return res.status(401).json({ success: false, error: 'Unauthorized' });
     }
-
-    if (!propertyId || !title) {
-      return res.status(400).json({
-        success: false,
-        error: 'Missing required fields: propertyId, title'
-      });
-    }
-
-    const report = await reportService.createReport({
-      propertyId,
-      title,
-      content,
-      generatedBy: userId
-    });
-
-    res.status(201).json({
+    
+    const properties = await reportService.getPropertiesForReport(supervisorId);
+    
+    res.json({
       success: true,
-      message: 'Report created successfully',
-      data: report
+      data: properties
     });
   } catch (error) {
-    if (error instanceof AppError) {
-      return res.status(error.statusCode).json({ success: false, error: error.message });
-    }
-    console.error('Create report error:', error);
-    res.status(500).json({ success: false, error: 'Failed to create report' });
+    console.error('Error fetching properties:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch properties' });
   }
 };
 
-export const getReportsByProperty = async (req: Request, res: Response) => {
+export const uploadReport = async (req: AuthRequest, res: Response) => {
   try {
-    const propertyId = paramStr(req.params.propertyId);
+    const supervisorId = req.authenticatedUser?.id;
+    const { propertyId, title } = req.body;
+    const file = req.file;
+    
+    if (!supervisorId) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+    
+    if (!propertyId) {
+      return res.status(400).json({ success: false, error: 'Property ID is required' });
+    }
+    
+    if (!file) {
+      return res.status(400).json({ success: false, error: 'Report file is required' });
+    }
+    
+    const report = await reportService.uploadReport(supervisorId, propertyId, file, title);
+    
+    res.json({
+      success: true,
+      message: 'Report uploaded successfully',
+      data: report
+    });
+  } catch (error: any) {
+    console.error('Error uploading report:', error);
+    res.status(400).json({ success: false, error: error.message });
+  }
+};
 
-    const reports = await reportService.getReportsByProperty(propertyId);
-
+export const getReports = async (req: AuthRequest, res: Response) => {
+  try {
+    const supervisorId = req.authenticatedUser?.id;
+    
+    if (!supervisorId) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+    
+    const reports = await reportService.getReportsBySupervisor(supervisorId);
+    
     res.json({
       success: true,
       data: reports
     });
   } catch (error) {
-    if (error instanceof AppError) {
-      return res.status(error.statusCode).json({ success: false, error: error.message });
-    }
-    console.error('Get reports error:', error);
+    console.error('Error fetching reports:', error);
     res.status(500).json({ success: false, error: 'Failed to fetch reports' });
   }
 };
 
-export const getReportById = async (req: Request, res: Response) => {
-  try {
-    const reportId = paramStr(req.params.reportId);
+// ============ CONTROLLER FUNCTIONS FOR CLIENTS ============
 
-    const report = await reportService.getReportById(reportId);
-
-    res.json({
-      success: true,
-      data: report
-    });
-  } catch (error) {
-    if (error instanceof AppError) {
-      return res.status(error.statusCode).json({ success: false, error: error.message });
-    }
-    console.error('Get report error:', error);
-    res.status(500).json({ success: false, error: 'Failed to fetch report' });
-  }
-};
-
-export const updateReport = async (req: AuthRequest, res: Response) => {
+// Get reports by property ID (for clients to view their property reports)
+export const getReportsByProperty = async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.authenticatedUser?.id;
-    const reportId = paramStr(req.params.reportId);
-    const { title, content, isPublished } = req.body;
-
+    const userRole = req.authenticatedUser?.role;
+    const { propertyId } = req.params;
+    
     if (!userId) {
       return res.status(401).json({ success: false, error: 'Unauthorized' });
     }
-
-    const report = await reportService.updateReport(reportId, userId, {
-      title,
-      content,
-      isPublished
-    });
-
+    
+    // Ensure propertyId is a string (not array)
+    const propertyIdStr = Array.isArray(propertyId) ? propertyId[0] : propertyId;
+    
+    if (!propertyIdStr) {
+      return res.status(400).json({ success: false, error: 'Property ID is required' });
+    }
+    
+    const reports = await reportService.getReportsByProperty(propertyIdStr, userId, userRole || 'CLIENT');
+    
     res.json({
       success: true,
-      message: 'Report updated successfully',
+      data: reports
+    });
+  } catch (error: any) {
+    console.error('Error fetching property reports:', error);
+    res.status(400).json({ success: false, error: error.message });
+  }
+};
+
+// Get single report by ID (for clients to view specific report)
+export const getReportById = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.authenticatedUser?.id;
+    const userRole = req.authenticatedUser?.role;
+    const { reportId } = req.params;
+    
+    if (!userId) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+    
+    // Ensure reportId is a string (not array)
+    const reportIdStr = Array.isArray(reportId) ? reportId[0] : reportId;
+    
+    if (!reportIdStr) {
+      return res.status(400).json({ success: false, error: 'Report ID is required' });
+    }
+    
+    const report = await reportService.getReportById(reportIdStr, userId, userRole || 'CLIENT');
+    
+    res.json({
+      success: true,
       data: report
     });
-  } catch (error) {
-    if (error instanceof AppError) {
-      return res.status(error.statusCode).json({ success: false, error: error.message });
+  } catch (error: any) {
+    console.error('Error fetching report:', error);
+    res.status(400).json({ success: false, error: error.message });
+  }
+};
+
+// Download report PDF (for clients to download their reports)
+export const downloadReportPDF = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.authenticatedUser?.id;
+    const userRole = req.authenticatedUser?.role;
+    const { reportId } = req.params;
+    
+    if (!userId) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
     }
-    console.error('Update report error:', error);
-    res.status(500).json({ success: false, error: 'Failed to update report' });
+    
+    // Ensure reportId is a string (not array)
+    const reportIdStr = Array.isArray(reportId) ? reportId[0] : reportId;
+    
+    if (!reportIdStr) {
+      return res.status(400).json({ success: false, error: 'Report ID is required' });
+    }
+    
+    const { buffer, filename, mimeType } = await reportService.downloadReport(reportIdStr, userId, userRole || 'CLIENT');
+    
+    res.setHeader('Content-Type', mimeType);
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.send(buffer);
+  } catch (error: any) {
+    console.error('Error downloading report:', error);
+    res.status(400).json({ success: false, error: error.message });
+  }
+};
+
+// Get all reports for client (their properties' reports)
+export const getClientReports = async (req: AuthRequest, res: Response) => {
+  try {
+    const clientId = req.authenticatedUser?.id;
+    
+    if (!clientId) {
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+    
+    const reports = await reportService.getClientReports(clientId);
+    
+    res.json({
+      success: true,
+      data: reports
+    });
+  } catch (error) {
+    console.error('Error fetching client reports:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch reports' });
   }
 };
 
 export const deleteReport = async (req: AuthRequest, res: Response) => {
   try {
-    const userId = req.authenticatedUser?.id;
-    const reportId = paramStr(req.params.reportId);
-
-    if (!userId) {
+    const supervisorId = req.authenticatedUser?.id;
+    let { id } = req.params;
+    
+    if (Array.isArray(id)) {
+      id = id[0];
+    }
+    
+    if (!supervisorId) {
       return res.status(401).json({ success: false, error: 'Unauthorized' });
     }
-
-    await reportService.deleteReport(reportId, userId);
-
+    
+    await reportService.deleteReport(id, supervisorId);
+    
     res.json({
       success: true,
       message: 'Report deleted successfully'
     });
-  } catch (error) {
-    if (error instanceof AppError) {
-      return res.status(error.statusCode).json({ success: false, error: error.message });
-    }
-    console.error('Delete report error:', error);
-    res.status(500).json({ success: false, error: 'Failed to delete report' });
-  }
-};
-
-export const downloadReportPDF = async (req: Request, res: Response) => {
-  try {
-    const reportId = paramStr(req.params.reportId);
-
-    const pdfBuffer = await reportService.generatePDF(reportId);
-
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename=report_${reportId}.pdf`);
-    res.setHeader('Content-Length', pdfBuffer.length);
-
-    res.send(pdfBuffer);
-  } catch (error) {
-    if (error instanceof AppError) {
-      return res.status(error.statusCode).json({ success: false, error: error.message });
-    }
-    console.error('Download PDF error:', error);
-    res.status(500).json({ success: false, error: 'Failed to generate PDF' });
+  } catch (error: any) {
+    console.error('Error deleting report:', error);
+    res.status(400).json({ success: false, error: error.message });
   }
 };

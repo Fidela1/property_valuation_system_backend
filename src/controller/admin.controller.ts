@@ -345,3 +345,49 @@ export const deleteInvitation = async (req: AuthRequest, res: Response) => {
     });
   }
 };
+
+// In your toggle user status API route
+export const toggleUserStatus = async (req: AuthRequest, res: Response) => {
+  try {
+    const userIdParam = Array.isArray(req.params.userId) ? req.params.userId[0] : req.params.userId;
+    const userId: string = userIdParam;
+    const adminId = req.authenticatedUser?.id;
+    
+    if (!adminId) {
+      return res.status(401).json({
+        success: false,
+        error: 'Unauthorized'
+      });
+    }
+    
+    const result = await adminService.toggleUserStatus(userId, adminId);
+    
+    res.json({
+      success: true,
+      message: result.message,
+      data: result.user
+    });
+    
+  } catch (error: any) {
+    console.error('Toggle user status error:', error);
+    
+    if (error.message === 'You cannot deactivate your own account') {
+      return res.status(400).json({
+        success: false,
+        error: error.message
+      });
+    }
+    
+    if (error.message === 'User not found') {
+      return res.status(404).json({
+        success: false,
+        error: error.message
+      });
+    }
+    
+    res.status(500).json({
+      success: false,
+      error: 'Failed to update user status'
+    });
+  }
+};

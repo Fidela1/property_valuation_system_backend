@@ -501,3 +501,91 @@ export const sendPasswordResetEmail = async (email: string, resetToken: string, 
   
   await transporter.sendMail(mailOptions);
 };
+
+export async function sendStatusChangeEmail(
+  userEmail: string,
+  userName: string,
+  isActive: boolean,
+  adminName: string
+) {
+  const status = isActive ? 'activated' : 'deactivated';
+  const subject = `Account ${status.charAt(0).toUpperCase() + status.slice(1)} - PropertyVal`;
+  
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <div style="background: linear-gradient(135deg, #1B3A5C 0%, #2C5F8A 100%); padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+        <h1 style="color: white; margin: 0;">PropertyVal</h1>
+      </div>
+      
+      <div style="background: #ffffff; padding: 30px; border: 1px solid #e0e0e0; border-top: none; border-radius: 0 0 10px 10px;">
+        <h2 style="color: #333; margin-top: 0;">Hello ${userName},</h2>
+        
+        <p style="color: #555; line-height: 1.6;">
+          Your PropertyVal account has been <strong style="color: ${isActive ? '#10B981' : '#EF4444'}">${status}</strong> by administrator <strong>${adminName}</strong>.
+        </p>
+        
+        ${isActive ? `
+          <div style="background: #F0FDF4; border-left: 4px solid #10B981; padding: 15px; margin: 20px 0;">
+            <p style="margin: 0; color: #166534;">
+              ✓ You can now log in to your account and access all features.
+            </p>
+          </div>
+        ` : `
+          <div style="background: #FEF2F2; border-left: 4px solid #EF4444; padding: 15px; margin: 20px 0;">
+            <p style="margin: 0; color: #991B1B;">
+              ⚠️ You cannot access your account until an administrator reactivates it.
+            </p>
+            <p style="margin: 10px 0 0 0; color: #991B1B;">
+              Please contact support if you believe this is a mistake.
+            </p>
+          </div>
+        `}
+        
+        <div style="background: #F3F4F6; padding: 15px; border-radius: 5px; margin: 20px 0;">
+          <p style="margin: 0 0 5px 0; color: #374151;"><strong>Account Details:</strong></p>
+          <p style="margin: 0; color: #6B7280;">Email: ${userEmail}</p>
+          <p style="margin: 5px 0 0 0; color: #6B7280;">Status: ${isActive ? 'Active' : 'Inactive'}</p>
+        </div>
+        
+        <p style="color: #555; margin-top: 20px;">
+          If you have any questions, please contact our support team.
+        </p>
+        
+        <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 20px 0;" />
+        
+        <p style="color: #999; font-size: 12px; margin: 0;">
+          This is an automated message from PropertyVal. Please do not reply to this email.
+        </p>
+      </div>
+    </div>
+  `;
+  
+  const text = `
+    PropertyVal Account ${status}
+    
+    Hello ${userName},
+    
+    Your PropertyVal account has been ${status} by administrator ${adminName}.
+    
+    ${isActive ? 
+      'You can now log in to your account and access all features.' : 
+      'You cannot access your account until an administrator reactivates it. Please contact support if you believe this is a mistake.'
+    }
+    
+    Account Details:
+    Email: ${userEmail}
+    Status: ${isActive ? 'Active' : 'Inactive'}
+    
+    If you have any questions, please contact our support team.
+    
+    This is an automated message from PropertyVal. Please do not reply to this email.
+  `;
+  
+  await transporter.sendMail({
+    from: `"PropertyVal" <${process.env.SMTP_FROM_EMAIL}>`,
+    to: userEmail,
+    subject: subject,
+    text: text,
+    html: html,
+  });
+}

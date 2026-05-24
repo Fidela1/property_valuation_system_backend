@@ -18,5 +18,6 @@ router.post('/dashboard/properties/:id/assign', supervisorController.assignDataC
 router.post('/dashboard/properties/:id/approve', supervisorController.approveProperty);
 router.post('/dashboard/properties/:id/reject', supervisorController.rejectProperty);
 router.post('/dashboard/properties/:id/publish', supervisorController.publishProperty);
+router.get('/dashboard/properties/report-dropdown', supervisorController.getPropertiesForReportDropdown);
 
 export default router;
