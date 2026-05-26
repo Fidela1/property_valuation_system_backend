@@ -24,22 +24,29 @@ const allowedOrigins = [
   'http://localhost:3000',
 ].filter(Boolean); // Remove any undefined values
 
+// Simplified CORS configuration
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps or curl requests)
+      // Allow requests with no origin
       if (!origin) return callback(null, true);
       
-      if (allowedOrigins.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        console.log('Blocked origin:', origin);
-        callback(new Error('Not allowed by CORS'));
+      // Allow all Vercel deployments (production and preview)
+      if (origin.includes('vercel.app')) {
+        return callback(null, true);
       }
+      
+      // Allow local development
+      if (origin.includes('localhost')) {
+        return callback(null, true);
+      }
+      
+      console.log('Blocked origin:', origin);
+      callback(new Error('Not allowed by CORS'));
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
   })
 );
 
