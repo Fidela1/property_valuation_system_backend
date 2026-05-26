@@ -5,6 +5,7 @@ import * as adminController from '../controller/admin.controller';
 const router = Router();
 
 router.use(authenticate);
+
 router.use(authorize('ADMIN'));
 
 router.post('/dashboard/invitations', adminController.createInvitation);
@@ -17,5 +18,7 @@ router.get('/activities', adminController.getRecentActivities);
 router.put('/dashboard/manage-users/:userId', adminController.updateUserByAdmin);
 router.put('/dashboard/manage-users/:userId/toggle-status', authorize('ADMIN'), adminController.toggleUserStatus);
 router.delete('/dashboard/manage-users/:userId', adminController.deleteUserByAdmin);
+router.delete('/dashboard/manage-users/:userId/permanent', adminController.permanentDeleteUser);
+
 
 export default router;

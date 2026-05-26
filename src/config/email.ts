@@ -589,3 +589,50 @@ export async function sendStatusChangeEmail(
     html: html,
   });
 }
+
+export const getAccountPermanentlyDeletedEmailTemplate = (userName: string): string => {
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Account Permanently Deleted</title>
+      <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #dc2626; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+        .content { background-color: #f9fafb; padding: 30px; border-radius: 0 0 8px 8px; }
+        .warning { background-color: #fee2e2; border-left: 4px solid #dc2626; padding: 15px; margin: 20px 0; border-radius: 4px; }
+        .footer { margin-top: 30px; text-align: center; font-size: 12px; color: #6b7280; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>Account Permanently Deleted</h1>
+        </div>
+        <div class="content">
+          <h2>Hello ${userName},</h2>
+          <p>We are writing to inform you that your Property Valuation System account has been <strong>permanently deleted</strong> by an administrator.</p>
+          
+          <div class="warning">
+            <p><strong>⚠️ Important:</strong> This action is irreversible. All your associated data has been permanently removed from our system.</p>
+          </div>
+          
+          <p>If you believe this was done in error or have any questions, please contact our support team.</p>
+          
+          <p>Thank you for your time with Property Valuation System.</p>
+          
+          <p>Best regards,<br>
+          <strong>Property Valuation System Team</strong></p>
+        </div>
+        <div class="footer">
+          <p>This is an automated message. Please do not reply to this email.</p>
+          <p>&copy; ${new Date().getFullYear()} Property Valuation System. All rights reserved.</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+};

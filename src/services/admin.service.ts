@@ -4,7 +4,7 @@ import { AppError } from '../utils/AppError';
 import { randomBytes } from 'crypto';
 import { sendEmail, getInvitationEmailTemplate,getRoleUpdateEmailTemplate, 
   getAccountStatusEmailTemplate, getAccountDeletedEmailTemplate, 
-  sendStatusChangeEmail } from '../config/email';
+  sendStatusChangeEmail, getAccountPermanentlyDeletedEmailTemplate } from '../config/email';
 type Role = 'ADMIN' | 'DATA_COLLECTOR' | 'SUPERVISOR';
 
 export const countUsers = async () => {
@@ -647,4 +647,130 @@ export const toggleUserStatus = async (userId: string, adminId: string) => {
     message: user.isActive ? 'User deactivated successfully. Email notification sent.' : 'User activated successfully. Email notification sent.',
     user: updatedUser
   };
+};
+
+// Permanent delete - will delete user even if they have associated data
+export const permanentDeleteUser = async (userId: string, adminId: string, forceDelete: boolean = false) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    include: {
+      properties: { select: { id: true } },
+      assignments: { select: { id: true } },
+      invitationsCreated: { select: { id: true } }
+    }
+  });
+  
+  if (!user) {
+    throw new AppError('User not found', 404);
+  }
+
+  // Prevent self-deletion
+  if (user.id === adminId) {
+    throw new AppError('You cannot delete your own account', 400);
+  }
+
+  // Prevent deleting the last admin
+  if (user.role === 'ADMIN') {
+    const adminCount = await prisma.user.count({ where: { role: 'ADMIN' } });
+    if (adminCount <= 1) {
+      throw new AppError('Cannot delete the last admin user', 400);
+    }
+  }
+
+  // Check for associated data
+  const hasProperties = user.properties.length > 0;
+  const hasAssignments = user.assignments.length > 0;
+  const hasInvitations = user.invitationsCreated.length > 0;
+
+  // If user has associated data and forceDelete is not true, throw error
+  if ((hasProperties || hasAssignments || hasInvitations) && !forceDelete) {
+    throw new AppError(
+      `User has associated data (Properties: ${user.properties.length}, Assignments: ${user.assignments.length}, Invitations: ${user.invitationsCreated.length}). Use forceDelete: true to permanently delete all associated data.`,
+      400
+    );
+  }
+
+  const userEmail = user.email;
+  const userName = user.name || 'User';
+
+  try {
+    // Use transaction to ensure all operations succeed or fail together
+    await prisma.$transaction(async (tx) => {
+      // 1. Delete all properties owned by the user
+      if (hasProperties) {
+        await tx.property.deleteMany({
+          where: { clientId: userId }
+        });
+        console.log(`Deleted ${user.properties.length} properties for user ${userId}`);
+      }
+
+      // 2. Delete all assignments for the user
+      if (hasAssignments) {
+        await tx.assignment.deleteMany({
+          where: { collectorId: userId }
+        });
+        console.log(`Deleted ${user.assignments.length} assignments for user ${userId}`);
+      }
+
+      // 3. Delete all invitations created by the user
+      if (hasInvitations) {
+        await tx.invitation.deleteMany({
+          where: { createdById: userId }
+        });
+        console.log(`Deleted ${user.invitationsCreated.length} invitations for user ${userId}`);
+      }
+
+      // 4. Delete the user
+      await tx.user.delete({
+        where: { id: userId }
+      });
+    });
+
+    // Send email notification
+    try {
+      const emailHtml = getAccountPermanentlyDeletedEmailTemplate(userName);
+      await sendEmail({
+        to: userEmail,
+        subject: 'Account Permanently Deleted - Property Valuation System',
+        html: emailHtml
+      });
+      console.log(`Permanent deletion email sent to ${userEmail}`);
+    } catch (emailError) {
+      console.error('Failed to send deletion email:', emailError);
+    }
+
+    // Log the action - FIXED: Added userId
+    await prisma.auditLog.create({
+      data: {
+        userId: adminId,  // ← THIS WAS MISSING
+        action: 'USER_PERMANENTLY_DELETED',
+        entityType: 'User',
+        entityId: userId,
+        details: {
+          deletedUserEmail: userEmail,
+          deletedUserName: userName,
+          deletedUserRole: user.role,
+          deletedPropertiesCount: user.properties.length,
+          deletedAssignmentsCount: user.assignments.length,
+          deletedInvitationsCount: user.invitationsCreated.length,
+          forceDeleted: true
+        }
+      }
+    });
+
+    return { 
+      success: true, 
+      permanentDeleted: true, 
+      message: `User ${userName} permanently deleted along with all associated data.`,
+      deletedData: {
+        properties: user.properties.length,
+        assignments: user.assignments.length,
+        invitations: user.invitationsCreated.length
+      }
+    };
+
+  } catch (error) {
+    console.error('Error in permanent delete:', error);
+    throw new AppError('Failed to permanently delete user', 500);
+  }
 };

@@ -22,7 +22,6 @@ const allowedOrigins = [
   process.env.FRONTEND_URL,
   'https://property-valuation-system-frontend.vercel.app',
   'http://localhost:3000',
-  'http://localhost:3001',
 ].filter(Boolean); // Remove any undefined values
 
 app.use(
@@ -65,5 +64,18 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join('/tmp', 'uploads')));
 
 app.use('/api/v1', mainRoute);
+
+// ========== ADD THIS SERVER START CODE ==========
+const PORT = process.env.PORT || 3030;
+
+// Only start the server if this file is run directly (not imported in tests)
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(` Server is running on port ${PORT}`);
+    console.log(`Local: http://localhost:${PORT}`);
+    console.log(`API: http://localhost:${PORT}/api/v1`);
+    console.log(`CORS enabled for: ${allowedOrigins.join(', ')}`);
+  });
+}
 
 export default app;

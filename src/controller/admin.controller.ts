@@ -391,3 +391,33 @@ export const toggleUserStatus = async (req: AuthRequest, res: Response) => {
     });
   }
 };
+
+export const permanentDeleteUser = async (req: Request, res: Response) => {
+  try {
+     const userIdParam = Array.isArray(req.params.userId) ? req.params.userId[0] : req.params.userId;
+    const userId: string = userIdParam;
+    const { forceDelete } = req.query;
+    const adminId = (req as any).user?.id;
+
+
+    const force = forceDelete === 'true';
+    const result = await adminService.permanentDeleteUser(userId, adminId, force);
+
+    return res.status(200).json({
+      success: true,
+      data: result
+    });
+  } catch (error) {
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json({
+        success: false,
+        error: error.message
+      });
+    }
+    console.error('Permanent delete user error:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to permanently delete user'
+    });
+  }
+};
