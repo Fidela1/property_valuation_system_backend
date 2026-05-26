@@ -139,6 +139,13 @@ export const createInvitation = async (
   const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
   const invitationLink = `${frontendUrl}/accept-invitation?token=${token}`;
 
+   console.log('=== INVITATION DEBUG ===');
+  console.log('FRONTEND_URL from env:', process.env.FRONTEND_URL);
+  console.log('Used frontendUrl:', frontendUrl);
+  console.log('Generated invitationLink:', invitationLink);
+  console.log('All env vars keys:', Object.keys(process.env));
+  console.log('VERCEL_ENV:', process.env.VERCEL_ENV);
+  console.log('VERCEL_URL:', process.env.VERCEL_URL);
   try {
     const roleDisplayName = getRoleDisplayName(data.role);
 
