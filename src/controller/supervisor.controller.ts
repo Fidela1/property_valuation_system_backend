@@ -213,6 +213,7 @@ export const getPropertyForReview = async (req: AuthRequest, res: Response) => {
       });
     }
     
+    console.log('PROPERTY ID:', id);
     const property = await supervisorService.getPropertyForReview(id);
     
     res.json({

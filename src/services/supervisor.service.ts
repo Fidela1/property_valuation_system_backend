@@ -227,16 +227,20 @@ export const assignDataCollector = async (
 };
 
 export const getPropertyForReview = async (propertyId: string) => {
+  const cleanId = String(propertyId).trim();
+
   const property = await prisma.property.findUnique({
-    where: { id: propertyId },
+    where: {
+      id: cleanId,
+    },
     include: {
       client: {
         select: {
           id: true,
           name: true,
           email: true,
-          phone: true
-        }
+          phone: true,
+        },
       },
       assignment: {
         include: {
@@ -245,31 +249,32 @@ export const getPropertyForReview = async (propertyId: string) => {
               id: true,
               name: true,
               email: true,
-              phone: true
-            }
+              phone: true,
+            },
           },
           assignedBy: {
             select: {
               name: true,
-              email: true
-            }
-          }
-        }
+              email: true,
+            },
+          },
+        },
       },
       fieldData: true,
       images: {
-        orderBy: { order: 'asc' }
-      }
-    }
+        orderBy: {
+          order: 'asc',
+        },
+      },
+    },
   });
-  
+
   if (!property) {
     throw new AppError('Property not found', 404);
   }
-  
+
   return property;
 };
-
 export const approveProperty = async (
   propertyId: string,
   supervisorId: string,
