@@ -1,0 +1,4 @@
+landSize,buildingSize,yearBuilt,propertyAge,bedrooms,bathrooms,parkingSpaces,hasElectricity,hasWaterSupply,hasWaterTank,floodRisk,propertyType,propertyCategory,landSlope,floorMaterial,roofType,roadAccessType,nearestSchoolKm,nearestHospitalKm,nearestTransportKm,nearestMarketKm,totalRooms,roomDensity,amenitiesScore,districtEncoded,label
+600,250,2024,2,2,1,2,1,1,0,0,1,0,0,0,0,3,0.8,1.2,0.3,0.5,3,83.33333333333333,7,5,65600000
+4,7,2018,8,4,2,3,1,1,0,0,1,0,0,0,0,3,2.4,0.5,3,0.3,6,1.1666666666666667,8,5,7500000
+3,3,2020,6,1,2,3,1,1,0,0,1,0,0,0,0,3,0.2,3,2,3,3,1,4,5,189999998

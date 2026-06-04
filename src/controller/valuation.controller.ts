@@ -1,371 +1,288 @@
 import { Request, Response } from 'express';
-import * as valuationService from '../services/valuation.service';
-import { AppError } from '../utils/AppError';
+import { calculateValuation } from '../services/valuation.service';
 import prisma from '../config/prisma';
-import { RATES } from '../services/valuation.service';
-
-interface AuthRequest extends Request {
-  authenticatedUser?: {
-    id: string;
-    email: string;
-    role: string;
-  };
-}
-
-const paramStr = (val: string | string[]): string =>
-  Array.isArray(val) ? val[0] : val;
-
-export const liveValuation = async (req: Request, res: Response) => {
-  try {
-    const {
-
-      landSize,
-      buildingSize,
-      yearBuilt,
-      propertyType,
-      propertyCategory,
-      bedrooms,
-      bathrooms,
-      gardenSize,
-      fenceHeight,
-      gateType,
-      parkingSpaces,
-      hasElectricity,
-      hasWaterSupply,
-      hasWaterTank,
-      floodRisk,
-      landSlope,
-      floorMaterial,
-      roofType,
-      district,
-      nearestSchoolKm,
-      nearestHospitalKm,
-      nearestTransportKm,
-      nearestMarketKm,
-      roadAccessType
-    } = req.body;
-
-    const missingFields = [];
-    if (!landSize) missingFields.push('landSize');
-    if (!buildingSize && propertyCategory !== 'LAND') missingFields.push('buildingSize');
-    if (!yearBuilt && propertyCategory !== 'LAND') missingFields.push('yearBuilt');
-    if (!propertyType && propertyCategory !== 'LAND') missingFields.push('propertyType');
-    if (!propertyCategory) missingFields.push('propertyCategory');
-    
-    if (missingFields.length > 0) {
-      return res.status(400).json({
-        success: false,
-        error: `Missing required fields: ${missingFields.join(', ')}`
-      });
-    }
-
-    if (Number(landSize) <= 0) {
-      return res.status(400).json({
-        success: false,
-        error: 'landSize must be greater than 0'
-      });
-    }
-
-    const validPropertyTypes = ['BASIC', 'STANDARD', 'LUXURY'];
-    const normalizedPropertyType = String(propertyType || 'BASIC').toUpperCase();
-    if (!validPropertyTypes.includes(normalizedPropertyType)) {
-      return res.status(400).json({
-        success: false,
-        error: `propertyType must be one of: ${validPropertyTypes.join(', ')}`
-      });
-    }
-
-    const validPropertyCategories = ['RESIDENTIAL', 'COMMERCIAL', 'LAND', 'AGRICULTURAL'];
-    const normalizedPropertyCategory = String(propertyCategory).toUpperCase();
-    if (!validPropertyCategories.includes(normalizedPropertyCategory)) {
-      return res.status(400).json({
-        success: false,
-        error: `propertyCategory must be one of: ${validPropertyCategories.join(', ')}`
-      });
-    }
-
-    const validRoadTypes = ['PAVED', 'UNPAVED', 'DIRT', 'UNDER_CONSTRUCTION'];
-    const normalizedRoadType = String(roadAccessType || 'UNPAVED').toUpperCase();
-    if (!validRoadTypes.includes(normalizedRoadType)) {
-      return res.status(400).json({
-        success: false,
-        error: `roadAccessType must be one of: ${validRoadTypes.join(', ')}`
-      });
-    }
-
-    const validGateTypes = ['AUTOMATIC', 'SLIDING', 'SWING', 'MANUAL'];
-    let normalizedGateType: string | null = gateType
-      ? String(gateType).toUpperCase()
-      : null;
-    if (normalizedGateType === 'NONE') normalizedGateType = null;
-    if (normalizedGateType && !validGateTypes.includes(normalizedGateType)) {
-      return res.status(400).json({
-        success: false,
-        error: `gateType must be one of: ${validGateTypes.join(', ')} or null`
-      });
-    }
-
-    const validLandSlopes = ['Flat', 'Gentle', 'Steep', 'Hilly'];
-    const normalizedLandSlope = landSlope || 'Flat';
-    if (!validLandSlopes.includes(normalizedLandSlope)) {
-      return res.status(400).json({
-        success: false,
-        error: `landSlope must be one of: ${validLandSlopes.join(', ')}`
-      });
-    }
-
-    const validFloorMaterials = ['Marble', 'Tiles', 'Wood', 'Cement'];
-    const normalizedFloorMaterial = floorMaterial || 'Cement';
-    if (!validFloorMaterials.includes(normalizedFloorMaterial)) {
-      return res.status(400).json({
-        success: false,
-        error: `floorMaterial must be one of: ${validFloorMaterials.join(', ')}`
-      });
-    }
-
-    const validRoofTypes = ['Concrete', 'Tiles', 'Iron sheets', 'Thatched'];
-    const normalizedRoofType = roofType || 'Concrete';
-    if (!validRoofTypes.includes(normalizedRoofType)) {
-      return res.status(400).json({
-        success: false,
-        error: `roofType must be one of: ${validRoofTypes.join(', ')}`
-      });
-    }
-
-    const valuation = valuationService.calculateLiveValuation({
-      landSize:           Number(landSize),
-      buildingSize:       Number(buildingSize) || 0,
-      yearBuilt:          Number(yearBuilt) || 2000,
-      propertyType:       normalizedPropertyType as any,
-      propertyCategory:   normalizedPropertyCategory as any,
-      bedrooms:           Number(bedrooms) || 2,
-      bathrooms:          Number(bathrooms) || 1,
-      gardenSize:         Number(gardenSize) || 0,
-      fenceHeight:        Number(fenceHeight) || 0,
-      gateType:           normalizedGateType as any,
-      parkingSpaces:      Number(parkingSpaces) || 0,
-      hasElectricity:     hasElectricity === true || hasElectricity === 'true',
-      hasWaterSupply:     hasWaterSupply === true || hasWaterSupply === 'true',
-      hasWaterTank:       hasWaterTank === true || hasWaterTank === 'true',
-      floodRisk:          floodRisk === true || floodRisk === 'true',
-      landSlope:          normalizedLandSlope as any,
-      floorMaterial:      normalizedFloorMaterial as any,
-      roofType:           normalizedRoofType as any,
-      district:           district || 'default',
-      nearestSchoolKm:    Number(nearestSchoolKm) || 5,
-      nearestHospitalKm:  Number(nearestHospitalKm) || 5,
-      nearestTransportKm: Number(nearestTransportKm) || 5,
-      nearestMarketKm:    Number(nearestMarketKm) || 5,
-      roadAccessType:     normalizedRoadType as any,
-    });
-
-    return res.status(200).json({ success: true, data: valuation });
-
-  } catch (error) {
-    console.error('liveValuation error:', error);
-    return res.status(500).json({ success: false, error: 'Failed to calculate valuation' });
-  }
-};
-
-export const saveValuation = async (req: AuthRequest, res: Response) => {
-  try {
-    const propertyId = paramStr(req.params.propertyId);
-    const userId = req.authenticatedUser?.id;
-
-    if (!userId) {
-      return res.status(401).json({ success: false, error: 'Unauthorized' });
-    }
-
-    const property = await prisma.property.findUnique({
-      where: { id: propertyId },
-      include: { fieldData: true }
-    });
-
-    if (!property) {
-      return res.status(404).json({ success: false, error: 'Property not found' });
-    }
-
-    if (!property.fieldData) {
-      return res.status(404).json({
-        success: false,
-        error: 'Field data not found — data collector must submit field data first'
-      });
-    }
-
-    const fd = property.fieldData;
-
-    const valuation = valuationService.calculateLiveValuation({
-      landSize:           fd.landSize ?? 0,
-      buildingSize:       fd.buildingSize ?? 0,
-      yearBuilt:          fd.yearBuilt ?? 2000,
-      propertyType:       (fd.propertyType as any) ?? 'STANDARD',
-      propertyCategory:   (fd.propertyCategory as any) ?? 'RESIDENTIAL',
-      bedrooms:           fd.bedrooms ?? 2,
-      bathrooms:          fd.bathrooms ?? 1,
-      gardenSize:         fd.gardenSize ?? 0,
-      fenceHeight:        fd.fenceHeight ?? 0,
-      gateType:           (fd.gateType as any) ?? null,
-      parkingSpaces:      fd.parkingSpaces ?? 0,
-      hasElectricity:     fd.hasElectricity ?? true,
-      hasWaterSupply:     fd.hasWaterSupply ?? true,
-      hasWaterTank:       fd.hasWaterTank ?? false,
-      floodRisk:          fd.floodRisk ?? false,
-      landSlope:          (fd.landSlope as any) ?? 'Flat',
-      floorMaterial:      (fd.floorMaterial as any) ?? 'Cement',
-      roofType:           (fd.roofType as any) ?? 'Concrete',
-      district:           property.district,
-      nearestSchoolKm:    fd.nearestSchoolKm ?? 5,
-      nearestHospitalKm:  fd.nearestHospitalKm ?? 5,
-      nearestTransportKm: fd.nearestTransportKm ?? 5,
-      nearestMarketKm:    fd.nearestMarketKm ?? 5,
-      roadAccessType:     (fd.roadAccessType as any) ?? 'UNPAVED',
-    });
-
-    const updatedProperty = await prisma.property.update({
-      where: { id: propertyId },
-      data: {
-        aiValuation:  valuation.estimatedValue,
-        aiConfidence: valuation.confidenceScore,
-        aiFactors:    valuation.breakdown as any,
-        status:       'UNDER_REVIEW'
-      }
-    });
-
-    await prisma.auditLog.create({
-      data: {
-        userId,
-        action:     'VALUATION_COMPUTED',
-        entityType: 'Property',
-        entityId:   propertyId,
-        newStatus:  'UNDER_REVIEW',
-        details: {
-          estimatedValue: valuation.estimatedValue,
-          confidenceScore: valuation.confidenceScore
-        }
-      }
-    });
-
-    return res.status(200).json({
-      success: true,
-      message: 'Valuation computed and saved successfully',
-      data: { property: updatedProperty, valuation }
-    });
-
-  } catch (error) {
-    if (error instanceof AppError) {
-      return res.status(error.statusCode).json({ success: false, error: error.message });
-    }
-    console.error('saveValuation error:', error);
-    return res.status(500).json({ success: false, error: 'Failed to save valuation' });
-  }
-};
+import { AppError } from '../utils/AppError';
 
 export const getValuation = async (req: Request, res: Response) => {
   try {
-    const propertyId = paramStr(req.params.propertyId);
-
-    const property = await prisma.property.findUnique({
-      where: { id: propertyId },
-      include: { fieldData: true }
-    });
-
-    if (!property) {
-      return res.status(404).json({ success: false, error: 'Property not found' });
+    const valuationInput = req.body;
+    
+    // Validate required fields
+    const requiredFields = ['landSize', 'buildingSize', 'propertyType', 'district'];
+    for (const field of requiredFields) {
+      if (!valuationInput[field]) {
+        throw new AppError(`Missing required field: ${field}`, 400);
+      }
     }
-
-    if (!property.fieldData) {
-      return res.status(404).json({
-        success: false,
-        error: 'No field data available — valuation cannot be computed yet'
-      });
-    }
-
-    const fd = property.fieldData;
-
-    const valuation = valuationService.calculateLiveValuation({
-      landSize:           fd.landSize ?? 0,
-      buildingSize:       fd.buildingSize ?? 0,
-      yearBuilt:          fd.yearBuilt ?? 2000,
-      propertyType:       (fd.propertyType as any) ?? 'STANDARD',
-      propertyCategory:   (fd.propertyCategory as any) ?? 'RESIDENTIAL',
-      bedrooms:           fd.bedrooms ?? 2,
-      bathrooms:          fd.bathrooms ?? 1,
-      gardenSize:         fd.gardenSize ?? 0,
-      fenceHeight:        fd.fenceHeight ?? 0,
-      gateType:           (fd.gateType as any) ?? null,
-      parkingSpaces:      fd.parkingSpaces ?? 0,
-      hasElectricity:     fd.hasElectricity ?? true,
-      hasWaterSupply:     fd.hasWaterSupply ?? true,
-      hasWaterTank:       fd.hasWaterTank ?? false,
-      floodRisk:          fd.floodRisk ?? false,
-      landSlope:          (fd.landSlope as any) ?? 'Flat',
-      floorMaterial:      (fd.floorMaterial as any) ?? 'Cement',
-      roofType:           (fd.roofType as any) ?? 'Concrete',
-      district:           property.district,
-      nearestSchoolKm:    fd.nearestSchoolKm ?? 5,
-      nearestHospitalKm:  fd.nearestHospitalKm ?? 5,
-      nearestTransportKm: fd.nearestTransportKm ?? 5,
-      nearestMarketKm:    fd.nearestMarketKm ?? 5,
-      roadAccessType:     (fd.roadAccessType as any) ?? 'UNPAVED',
-    });
-
-    return res.status(200).json({
+    
+    const valuation = await calculateValuation(valuationInput);
+    
+    res.json({
       success: true,
-      data: {
-        property: {
-          id:           property.id,
-          upiNumber:    property.upiNumber,
-          ownerName:    property.ownerName,
-          district:     property.district,
-          status:       property.status,
-          aiValuation:  property.aiValuation,
-          aiConfidence: property.aiConfidence,
-        },
-        valuation
+      data: valuation,
+      meta: {
+        model: valuation.modelUsed,
+        timestamp: new Date().toISOString()
       }
     });
-
   } catch (error) {
-    if (error instanceof AppError) {
-      return res.status(error.statusCode).json({ success: false, error: error.message });
-    }
-    console.error('getValuation error:', error);
-    return res.status(500).json({ success: false, error: 'Failed to get valuation' });
+    console.error('Valuation error:', error);
+    res.status(error instanceof AppError ? error.statusCode : 500).json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Valuation failed'
+    });
   }
 };
 
-export const previewValuation = async (req: Request, res: Response) => {
+export const getPropertyValuation = async (req: Request, res: Response) => {
   try {
-    const { landSize, buildingSize, district } = req.body;
-
-    if (!landSize || !buildingSize) {
-      return res.status(400).json({
-        success: false,
-        error: 'Missing required fields: landSize, buildingSize'
-      });
+    let propertyId = req.params.propertyId;
+    if (Array.isArray(propertyId)) {
+      propertyId = propertyId[0];
     }
-
-    const landRate = RATES.land[district as keyof typeof RATES.land] ?? RATES.land.default;
-    const buildingRate = RATES.building['STANDARD'];
-
-    const landValue = Number(landSize) * landRate;
-    const buildingValue = Number(buildingSize) * buildingRate;
-    const estimatedValue = Math.round((landValue + buildingValue) / 100000) * 100000;
-
-    return res.status(200).json({
-      success: true,
-      data: {
-        estimatedValue,
-        landValue: Math.round(landValue),
-        buildingValue: Math.round(buildingValue),
-        landRate,
-        buildingRate,
-        note: 'This is a basic preview. Full valuation requires complete field data.'
+    
+    if (!propertyId) {
+      throw new AppError('Property ID is required', 400);
+    }
+    
+    const property = await prisma.property.findUnique({
+      where: { id: propertyId },
+      include: { 
+        fieldData: true
       }
     });
-
+    
+    if (!property) {
+      throw new AppError('Property not found', 404);
+    }
+    
+    if (!property.fieldData) {
+      throw new AppError('Property has no field data', 400);
+    }
+    
+    const valuationInput = {
+      landSize: property.fieldData.landSize ?? 0,
+      buildingSize: property.fieldData.buildingSize ?? 0,
+      yearBuilt: property.fieldData.yearBuilt ?? new Date().getFullYear(),
+      propertyType: (property.fieldData.propertyType as any) ?? 'STANDARD',
+      propertyCategory: (property.fieldData.propertyCategory as any) ?? 'RESIDENTIAL',
+      bedrooms: property.fieldData.bedrooms ?? 0,
+      bathrooms: property.fieldData.bathrooms ?? 0,
+      gardenSize: property.fieldData.gardenSize ?? 0,
+      fenceHeight: property.fieldData.fenceHeight ?? 0,
+      gateType: (property.fieldData.gateType as any) ?? null,
+      parkingSpaces: property.fieldData.parkingSpaces ?? 0,
+      hasElectricity: property.fieldData.hasElectricity ?? true,
+      hasWaterSupply: property.fieldData.hasWaterSupply ?? true,
+      hasWaterTank: property.fieldData.hasWaterTank ?? false,
+      floodRisk: property.fieldData.floodRisk ?? false,
+      landSlope: (property.fieldData.landSlope as any) ?? 'Flat',
+      floorMaterial: (property.fieldData.floorMaterial as any) ?? 'Cement',
+      roofType: (property.fieldData.roofType as any) ?? 'Concrete',
+      district: property.district,
+      nearestSchoolKm: property.fieldData.nearestSchoolKm ?? 0,
+      nearestHospitalKm: property.fieldData.nearestHospitalKm ?? 0,
+      nearestTransportKm: property.fieldData.nearestTransportKm ?? 0,
+      nearestMarketKm: property.fieldData.nearestMarketKm ?? 0,
+      roadAccessType: (property.fieldData.roadAccessType as any) ?? 'UNPAVED',
+      hasSwimmingPool: property.fieldData.hasSwimmingPool ?? false,
+      hasGym: property.fieldData.hasGym ?? false,
+      hasSmartHome: property.fieldData.hasSmartHome ?? false,
+      hasSolarPanels: property.fieldData.hasSolarPanels ?? false,
+      hasBackupGenerator: property.fieldData.hasBackupGenerator ?? false,
+      hasSecuritySystem: property.fieldData.hasSecuritySystem ?? false,
+      hasLandscapedGarden: property.fieldData.hasLandscapedGarden ?? false,
+      hasModernKitchen: property.fieldData.hasModernKitchen ?? false,
+      hasAirConditioning: property.fieldData.hasAirConditioning ?? false,
+      hasFireplace: property.fieldData.hasFireplace ?? false,
+      hasBalcony: property.fieldData.hasBalcony ?? false,
+      hasGarage: property.fieldData.hasGarage ?? false,
+      hasStaffQuarters: property.fieldData.hasStaffQuarters ?? false,
+      hasStorageRoom: property.fieldData.hasStorageRoom ?? false,
+      hasWaterHeater: property.fieldData.hasWaterHeater ?? false,
+      hasIntercom: property.fieldData.hasIntercom ?? false,
+      viewType: (property.fieldData.viewType as any) ?? 'None',
+      condition: (property.fieldData.condition as any) ?? 'GOOD'
+    };
+    
+    const valuation = await calculateValuation(valuationInput);
+    
+    res.json({
+      success: true,
+      data: valuation,
+      property: {
+        id: property.id,
+        upiNumber: property.upiNumber,
+        district: property.district
+      }
+    });
   } catch (error) {
-    console.error('previewValuation error:', error);
-    return res.status(500).json({ success: false, error: 'Failed to calculate preview' });
+    console.error('Get property valuation error:', error);
+    res.status(error instanceof AppError ? error.statusCode : 500).json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to get valuation'
+    });
+  }
+};
+
+export const saveValuation = async (req: Request, res: Response) => {
+  try {
+    let propertyId = req.params.propertyId;
+    if (Array.isArray(propertyId)) {
+      propertyId = propertyId[0];
+    }
+    
+    if (!propertyId) {
+      throw new AppError('Property ID is required', 400);
+    }
+    
+    const property = await prisma.property.findUnique({
+      where: { id: propertyId },
+      include: { 
+        fieldData: true
+      }
+    });
+    
+    if (!property) {
+      throw new AppError('Property not found', 404);
+    }
+    
+    if (!property.fieldData) {
+      throw new AppError('Property has no field data', 400);
+    }
+    
+    const { overrideExisting = false } = req.body;
+    if (property.aiValuation && !overrideExisting) {
+      throw new AppError('Property already has a valuation. Use overrideExisting=true to override', 400);
+    }
+    
+    const valuationInput = {
+      landSize: property.fieldData.landSize ?? 0,
+      buildingSize: property.fieldData.buildingSize ?? 0,
+      yearBuilt: property.fieldData.yearBuilt ?? new Date().getFullYear(),
+      propertyType: (property.fieldData.propertyType as any) ?? 'STANDARD',
+      propertyCategory: (property.fieldData.propertyCategory as any) ?? 'RESIDENTIAL',
+      bedrooms: property.fieldData.bedrooms ?? 0,
+      bathrooms: property.fieldData.bathrooms ?? 0,
+      gardenSize: property.fieldData.gardenSize ?? 0,
+      fenceHeight: property.fieldData.fenceHeight ?? 0,
+      gateType: (property.fieldData.gateType as any) ?? null,
+      parkingSpaces: property.fieldData.parkingSpaces ?? 0,
+      hasElectricity: property.fieldData.hasElectricity ?? true,
+      hasWaterSupply: property.fieldData.hasWaterSupply ?? true,
+      hasWaterTank: property.fieldData.hasWaterTank ?? false,
+      floodRisk: property.fieldData.floodRisk ?? false,
+      landSlope: (property.fieldData.landSlope as any) ?? 'Flat',
+      floorMaterial: (property.fieldData.floorMaterial as any) ?? 'Cement',
+      roofType: (property.fieldData.roofType as any) ?? 'Concrete',
+      district: property.district,
+      nearestSchoolKm: property.fieldData.nearestSchoolKm ?? 0,
+      nearestHospitalKm: property.fieldData.nearestHospitalKm ?? 0,
+      nearestTransportKm: property.fieldData.nearestTransportKm ?? 0,
+      nearestMarketKm: property.fieldData.nearestMarketKm ?? 0,
+      roadAccessType: (property.fieldData.roadAccessType as any) ?? 'UNPAVED',
+      hasSwimmingPool: property.fieldData.hasSwimmingPool ?? false,
+      hasGym: property.fieldData.hasGym ?? false,
+      hasSmartHome: property.fieldData.hasSmartHome ?? false,
+      hasSolarPanels: property.fieldData.hasSolarPanels ?? false,
+      hasBackupGenerator: property.fieldData.hasBackupGenerator ?? false,
+      hasSecuritySystem: property.fieldData.hasSecuritySystem ?? false,
+      hasLandscapedGarden: property.fieldData.hasLandscapedGarden ?? false,
+      hasModernKitchen: property.fieldData.hasModernKitchen ?? false,
+      hasAirConditioning: property.fieldData.hasAirConditioning ?? false,
+      hasFireplace: property.fieldData.hasFireplace ?? false,
+      hasBalcony: property.fieldData.hasBalcony ?? false,
+      hasGarage: property.fieldData.hasGarage ?? false,
+      hasStaffQuarters: property.fieldData.hasStaffQuarters ?? false,
+      hasStorageRoom: property.fieldData.hasStorageRoom ?? false,
+      hasWaterHeater: property.fieldData.hasWaterHeater ?? false,
+      hasIntercom: property.fieldData.hasIntercom ?? false,
+      viewType: (property.fieldData.viewType as any) ?? 'None',
+      condition: (property.fieldData.condition as any) ?? 'GOOD'
+    };
+    
+    const valuation = await calculateValuation(valuationInput);
+    
+    await prisma.property.update({
+      where: { id: propertyId },
+      data: {
+        aiValuation: valuation.estimatedValue,
+        aiConfidence: valuation.confidenceScore,
+        aiFactors: valuation.features as any,
+        updatedAt: new Date()
+      }
+    });
+    
+    // Get userId from request user (using type assertion)
+    const userReq = req as any;
+    const userId = userReq.user?.userId || userReq.user?.id || 'system';
+    
+    await prisma.auditLog.create({
+      data: {
+        userId: userId,
+        action: 'VALUATION_SAVED',
+        entityType: 'Property',
+        entityId: propertyId,
+        oldStatus: property.aiValuation?.toString(),
+        newStatus: valuation.estimatedValue.toString(),
+        details: {
+          modelUsed: valuation.modelUsed,
+          confidenceScore: valuation.confidenceScore
+        },
+        ipAddress: req.ip
+      }
+    });
+    
+    res.json({
+      success: true,
+      message: 'Valuation saved successfully',
+      data: {
+        propertyId,
+        estimatedValue: valuation.estimatedValue,
+        confidenceScore: valuation.confidenceScore,
+        modelUsed: valuation.modelUsed,
+        savedAt: new Date().toISOString()
+      }
+    });
+  } catch (error) {
+    console.error('Save valuation error:', error);
+    res.status(error instanceof AppError ? error.statusCode : 500).json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to save valuation'
+    });
+  }
+};
+
+export const compareValuations = async (req: Request, res: Response) => {
+  try {
+    const valuationInput = req.body;
+    
+    const requiredFields = ['landSize', 'buildingSize', 'propertyType', 'district'];
+    for (const field of requiredFields) {
+      if (!valuationInput[field]) {
+        throw new AppError(`Missing required field: ${field}`, 400);
+      }
+    }
+    
+    const valuation = await calculateValuation(valuationInput);
+    
+    res.json({
+      success: true,
+      data: {
+        mlValuation: {
+          value: valuation.estimatedValue,
+          confidence: valuation.confidenceScore,
+          priceRange: valuation.priceRange,
+          modelUsed: valuation.modelUsed
+        },
+        note: "Rule-based valuation has been replaced by ML model for better accuracy"
+      }
+    });
+  } catch (error) {
+    console.error('Compare valuations error:', error);
+    res.status(500).json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Comparison failed'
+    });
   }
 };

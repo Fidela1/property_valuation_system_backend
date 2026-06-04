@@ -390,6 +390,7 @@ export const ModelName = {
   Property: 'Property',
   Assignment: 'Assignment',
   FieldData: 'FieldData',
+  PropertySale: 'PropertySale',
   Review: 'Review',
   SavedProperty: 'SavedProperty',
   Inquiry: 'Inquiry',
@@ -410,7 +411,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "invitation" | "image" | "property" | "assignment" | "fieldData" | "review" | "savedProperty" | "inquiry" | "auditLog" | "report"
+    modelProps: "user" | "invitation" | "image" | "property" | "assignment" | "fieldData" | "propertySale" | "review" | "savedProperty" | "inquiry" | "auditLog" | "report"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -855,6 +856,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.FieldDataCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.FieldDataCountAggregateOutputType> | number
+        }
+      }
+    }
+    PropertySale: {
+      payload: Prisma.$PropertySalePayload<ExtArgs>
+      fields: Prisma.PropertySaleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PropertySaleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertySalePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PropertySaleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertySalePayload>
+        }
+        findFirst: {
+          args: Prisma.PropertySaleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertySalePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PropertySaleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertySalePayload>
+        }
+        findMany: {
+          args: Prisma.PropertySaleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertySalePayload>[]
+        }
+        create: {
+          args: Prisma.PropertySaleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertySalePayload>
+        }
+        createMany: {
+          args: Prisma.PropertySaleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PropertySaleCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertySalePayload>[]
+        }
+        delete: {
+          args: Prisma.PropertySaleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertySalePayload>
+        }
+        update: {
+          args: Prisma.PropertySaleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertySalePayload>
+        }
+        deleteMany: {
+          args: Prisma.PropertySaleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PropertySaleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PropertySaleUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertySalePayload>[]
+        }
+        upsert: {
+          args: Prisma.PropertySaleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertySalePayload>
+        }
+        aggregate: {
+          args: Prisma.PropertySaleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePropertySale>
+        }
+        groupBy: {
+          args: Prisma.PropertySaleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PropertySaleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PropertySaleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PropertySaleCountAggregateOutputType> | number
         }
       }
     }
@@ -1366,6 +1441,11 @@ export const FieldDataScalarFieldEnum = {
   id: 'id',
   latitude: 'latitude',
   longitude: 'longitude',
+  microZone: 'microZone',
+  neighborhood: 'neighborhood',
+  urbanDensity: 'urbanDensity',
+  safetyIndex: 'safetyIndex',
+  noiseLevel: 'noiseLevel',
   gpsCapturedAt: 'gpsCapturedAt',
   gpsAccuracy: 'gpsAccuracy',
   propertyType: 'propertyType',
@@ -1393,16 +1473,45 @@ export const FieldDataScalarFieldEnum = {
   hasElectricity: 'hasElectricity',
   hasWaterSupply: 'hasWaterSupply',
   hasWaterTank: 'hasWaterTank',
+  hasSwimmingPool: 'hasSwimmingPool',
+  hasGym: 'hasGym',
+  hasSmartHome: 'hasSmartHome',
+  hasSolarPanels: 'hasSolarPanels',
+  hasBackupGenerator: 'hasBackupGenerator',
+  hasSecuritySystem: 'hasSecuritySystem',
+  hasLandscapedGarden: 'hasLandscapedGarden',
+  hasModernKitchen: 'hasModernKitchen',
+  hasAirConditioning: 'hasAirConditioning',
+  hasFireplace: 'hasFireplace',
+  hasBalcony: 'hasBalcony',
+  hasGarage: 'hasGarage',
+  hasStaffQuarters: 'hasStaffQuarters',
+  hasStorageRoom: 'hasStorageRoom',
+  hasWaterHeater: 'hasWaterHeater',
+  hasIntercom: 'hasIntercom',
+  viewType: 'viewType',
   floodRisk: 'floodRisk',
   landSlope: 'landSlope',
   floorMaterial: 'floorMaterial',
   roofType: 'roofType',
   propertyCategory: 'propertyCategory',
+  listingDate: 'listingDate',
+  daysOnMarket: 'daysOnMarket',
+  marketTrend: 'marketTrend',
+  pricePerSqm: 'pricePerSqm',
+  lastSoldNearbyPrice: 'lastSoldNearbyPrice',
   nearestSchoolKm: 'nearestSchoolKm',
   nearestHospitalKm: 'nearestHospitalKm',
   nearestTransportKm: 'nearestTransportKm',
   nearestMarketKm: 'nearestMarketKm',
   roadAccessType: 'roadAccessType',
+  viewQualityScore: 'viewQualityScore',
+  luxuryScore: 'luxuryScore',
+  renovationLevel: 'renovationLevel',
+  furnishingStatus: 'furnishingStatus',
+  interestCount: 'interestCount',
+  saveCount: 'saveCount',
+  inquiryCount: 'inquiryCount',
   valuationAmount: 'valuationAmount',
   valuationConfidence: 'valuationConfidence',
   valuationMethod: 'valuationMethod',
@@ -1413,6 +1522,35 @@ export const FieldDataScalarFieldEnum = {
 } as const
 
 export type FieldDataScalarFieldEnum = (typeof FieldDataScalarFieldEnum)[keyof typeof FieldDataScalarFieldEnum]
+
+
+export const PropertySaleScalarFieldEnum = {
+  id: 'id',
+  district: 'district',
+  sector: 'sector',
+  cell: 'cell',
+  landSize: 'landSize',
+  buildingSize: 'buildingSize',
+  bedrooms: 'bedrooms',
+  bathrooms: 'bathrooms',
+  propertyType: 'propertyType',
+  category: 'category',
+  yearBuilt: 'yearBuilt',
+  floorMaterial: 'floorMaterial',
+  roofType: 'roofType',
+  hasGarden: 'hasGarden',
+  hasFence: 'hasFence',
+  hasGate: 'hasGate',
+  roadAccessType: 'roadAccessType',
+  nearestSchoolKm: 'nearestSchoolKm',
+  nearestHospitalKm: 'nearestHospitalKm',
+  nearestMarketKm: 'nearestMarketKm',
+  soldPrice: 'soldPrice',
+  soldAt: 'soldAt',
+  createdAt: 'createdAt'
+} as const
+
+export type PropertySaleScalarFieldEnum = (typeof PropertySaleScalarFieldEnum)[keyof typeof PropertySaleScalarFieldEnum]
 
 
 export const ReviewScalarFieldEnum = {
@@ -1839,6 +1977,7 @@ export type GlobalOmitConfig = {
   property?: Prisma.PropertyOmit
   assignment?: Prisma.AssignmentOmit
   fieldData?: Prisma.FieldDataOmit
+  propertySale?: Prisma.PropertySaleOmit
   review?: Prisma.ReviewOmit
   savedProperty?: Prisma.SavedPropertyOmit
   inquiry?: Prisma.InquiryOmit

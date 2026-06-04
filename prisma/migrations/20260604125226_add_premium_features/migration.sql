@@ -1,0 +1,17 @@
+-- AlterTable
+ALTER TABLE "field_data" ADD COLUMN     "hasAirConditioning" BOOLEAN DEFAULT false,
+ADD COLUMN     "hasBackupGenerator" BOOLEAN DEFAULT false,
+ADD COLUMN     "hasBalcony" BOOLEAN DEFAULT false,
+ADD COLUMN     "hasFireplace" BOOLEAN DEFAULT false,
+ADD COLUMN     "hasGarage" BOOLEAN DEFAULT false,
+ADD COLUMN     "hasGym" BOOLEAN DEFAULT false,
+ADD COLUMN     "hasIntercom" BOOLEAN DEFAULT false,
+ADD COLUMN     "hasLandscapedGarden" BOOLEAN DEFAULT false,
+ADD COLUMN     "hasModernKitchen" BOOLEAN DEFAULT false,
+ADD COLUMN     "hasSecuritySystem" BOOLEAN DEFAULT false,
+ADD COLUMN     "hasSmartHome" BOOLEAN DEFAULT false,
+ADD COLUMN     "hasSolarPanels" BOOLEAN DEFAULT false,
+ADD COLUMN     "hasStaffQuarters" BOOLEAN DEFAULT false,
+ADD COLUMN     "hasStorageRoom" BOOLEAN DEFAULT false,
+ADD COLUMN     "hasSwimmingPool" BOOLEAN DEFAULT false,
+ADD COLUMN     "hasWaterHeater" BOOLEAN DEFAULT false;

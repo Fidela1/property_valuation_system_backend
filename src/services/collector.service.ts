@@ -1,6 +1,6 @@
 import prisma from '../config/prisma';
 import { AppError } from '../utils/AppError';
-import { calculateLiveValuation, saveValuationToProperty } from './valuation.service';
+import { calculateValuation } from './valuation.service';
 import path from 'path';
 
 export const getCollectorStats = async (collectorId: string) => {
@@ -213,7 +213,7 @@ export const acceptAssignment = async (collectorId: string, propertyId: string) 
 
   const updatedProperty = await prisma.property.update({
     where: { id: propertyId },
-    data: { status: 'UNDER_REVIEW' }
+    data: { status: 'IN_FIELDWORK' }
   });
 
   await prisma.auditLog.create({
@@ -363,48 +363,48 @@ export const submitFieldData = async (
   console.log('Field data saved. ID:', fieldData.id);
 
   if (data.images && data.images.length > 0) {
-  console.log(`Processing ${data.images.length} images`);
-  console.log('Raw images data:', JSON.stringify(data.images, null, 2));
+    console.log(`Processing ${data.images.length} images`);
+    console.log('Raw images data:', JSON.stringify(data.images, null, 2));
 
-  await prisma.image.deleteMany({ where: { propertyId: data.propertyId } });
+    await prisma.image.deleteMany({ where: { propertyId: data.propertyId } });
 
-  const processedImages = data.images.map((img, index) => {
-    let normalizedUrl = img.url;
+    const processedImages = data.images.map((img, index) => {
+      let normalizedUrl = img.url;
 
-    if (normalizedUrl.startsWith('http://') || normalizedUrl.startsWith('https://')) {
-      try {
-        const urlObj = new URL(normalizedUrl);
-        normalizedUrl = urlObj.pathname; 
-      } catch (e) {
-        console.error('Failed to parse URL:', normalizedUrl);
+      if (normalizedUrl.startsWith('http://') || normalizedUrl.startsWith('https://')) {
+        try {
+          const urlObj = new URL(normalizedUrl);
+          normalizedUrl = urlObj.pathname; 
+        } catch (e) {
+          console.error('Failed to parse URL:', normalizedUrl);
+        }
       }
-    }
 
-    if (!normalizedUrl.startsWith('/uploads/')) {
-      if (normalizedUrl.startsWith('uploads/')) {
-        normalizedUrl = '/' + normalizedUrl;
-      } else {
-        normalizedUrl = `/uploads/properties/${normalizedUrl.replace(/^\/+/, '')}`;
+      if (!normalizedUrl.startsWith('/uploads/')) {
+        if (normalizedUrl.startsWith('uploads/')) {
+          normalizedUrl = '/' + normalizedUrl;
+        } else {
+          normalizedUrl = `/uploads/properties/${normalizedUrl.replace(/^\/+/, '')}`;
+        }
       }
-    }
+      
+      console.log(`Image ${index}: Original URL: ${img.url} -> Normalized URL: ${normalizedUrl}`);
+      
+      return {
+        propertyId: data.propertyId,
+        url: normalizedUrl,
+        publicId: img.publicId || path.basename(normalizedUrl),
+        order: index,
+        isFeatured: index === 0,
+        uploadedBy: collectorId
+      };
+    });
     
-    console.log(`Image ${index}: Original URL: ${img.url} -> Normalized URL: ${normalizedUrl}`);
-    
-    return {
-      propertyId: data.propertyId,
-      url: normalizedUrl,
-      publicId: img.publicId || path.basename(normalizedUrl),
-      order: index,
-      isFeatured: index === 0,
-      uploadedBy: collectorId
-    };
-  });
-  
-  await prisma.image.createMany({
-    data: processedImages
-  });
-  console.log('Images saved with normalized URLs');
-}
+    await prisma.image.createMany({
+      data: processedImages
+    });
+    console.log('Images saved with normalized URLs');
+  }
 
   console.log('=== STARTING AI VALUATION CALCULATION ===');
 
@@ -462,8 +462,9 @@ export const submitFieldData = async (
     roadAccessType: (fieldData.roadAccessType as 'PAVED' | 'UNPAVED' | 'DIRT' | 'UNDER_CONSTRUCTION') || 'UNPAVED',
   };
 
-  const valuation = calculateLiveValuation(valuationInput);
-  
+  // ✅ FIX: Added await here
+  const valuation = await calculateValuation(valuationInput);
+
   const estimatedValue = valuation?.estimatedValue || 0;
   const confidenceScore = valuation?.confidenceScore || 0;
 
@@ -473,7 +474,7 @@ export const submitFieldData = async (
       status: isFirstSubmission ? 'UNDER_REVIEW' : property.status,
       aiValuation: estimatedValue,
       aiConfidence: confidenceScore,
-      aiFactors: valuation?.breakdown as any 
+      aiFactors: valuation?.features as any
     }
   });
 
@@ -492,18 +493,23 @@ export const submitFieldData = async (
       }
     }
   });
+
   return {
     fieldData,
     property: updatedProperty,
     aiValuation: {
       estimatedValue: estimatedValue,
       confidenceScore: confidenceScore,
-      priceRange: valuation?.priceRange,
-      breakdown: valuation?.breakdown
+      priceRange: valuation?.priceRange || {
+        min: Math.round(estimatedValue * 0.9),
+        max: Math.round(estimatedValue * 1.1),
+      },
+      breakdown: valuation?.features
     },
     isUpdate: !!existingFieldData
   };
 };
+
 export const getFieldDataById = async (fieldDataId: string, collectorId: string) => {
   const fieldData = await prisma.fieldData.findFirst({
     where: {
@@ -543,6 +549,7 @@ export const getFieldDataById = async (fieldDataId: string, collectorId: string)
   
   return fieldData;
 };
+
 export const updateFieldData = async (
   collectorId: string,
   fieldDataId: string,
@@ -579,7 +586,7 @@ export const updateFieldData = async (
     roadAccessType?: string;
     valuationAmount?: number;
     notes?: string;
-    images?: Array<{ url: string; publicId: string }>;  // ✅ Add this line
+    images?: Array<{ url: string; publicId: string }>;
   }
 ) => {
 
@@ -663,7 +670,7 @@ export const updateFieldData = async (
     data: { ...updateData, updatedAt: new Date() }
   });
   
-  // ✅ Handle images if provided
+  // Handle images if provided
   if (data.images && Array.isArray(data.images) && data.images.length > 0) {
     // Delete existing images
     await prisma.image.deleteMany({

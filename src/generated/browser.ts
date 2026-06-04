@@ -48,6 +48,11 @@ export type Assignment = Prisma.AssignmentModel
  */
 export type FieldData = Prisma.FieldDataModel
 /**
+ * Model PropertySale
+ * 
+ */
+export type PropertySale = Prisma.PropertySaleModel
+/**
  * Model Review
  * 
  */

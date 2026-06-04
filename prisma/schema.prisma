@@ -243,66 +243,163 @@ model Assignment {
 // FIELD DATA
 
 model FieldData {
-  id                  String          @id @default(cuid())
+  id String @id @default(cuid())
 
-  latitude            Float
-  longitude           Float
-  gpsCapturedAt       DateTime?
-  gpsAccuracy         Float?
+  // location
+  latitude Float
+  longitude Float
+  microZone String?
+  neighborhood String?
+  urbanDensity String?
+  safetyIndex Float?
+  noiseLevel String?
 
-  propertyType        PropertyType?
-  condition           Condition?
-  bedrooms            Int?
-  bathrooms           Float?
-  landSize            Float?
-  buildingSize        Float?
-  yearBuilt           Int?
-  parkingSpaces       Int?            @default(0)
+  gpsCapturedAt DateTime?
+  gpsAccuracy Float?
 
- hasGarden           Boolean?  @default(false)
-  gardenSize          Float?                        
-  gardenType          String?                       
-  hasAnnex            Boolean?  @default(false)
-  annexType           String?                      
-  annexSize           Float?                        
-  annexBedrooms       Int?
-  annexBathrooms      Float?
-  hasGate             Boolean?  @default(false)
-  gateType            String?                       
-  gateMaterial        String?                       
-  hasFence            Boolean?  @default(false)
-  fenceType           String?                      
-  fenceHeight         Float?    
-  hasElectricity    Boolean? @default(true)
-  hasWaterSupply    Boolean? @default(true)
-  hasWaterTank      Boolean? @default(false)
-  floodRisk         Boolean? @default(false)
-  landSlope         String?   
-  floorMaterial     String?   
-  roofType          String?   
+  // core structure
+  propertyType PropertyType?
+  condition Condition?
+  bedrooms Int?
+  bathrooms Float?
+  landSize Float?
+  buildingSize Float?
+  yearBuilt Int?
+  parkingSpaces Int? @default(0)
 
-  propertyCategory  String?   
-  nearestSchoolKm     Float?
-  nearestHospitalKm   Float?
-  nearestTransportKm  Float?
-  nearestMarketKm     Float?
-  roadAccessType      RoadAccessType?
+  // amenities
+  hasGarden Boolean? @default(false)
+  gardenSize Float?
+  gardenType String?
 
-  valuationAmount     Float?
+  hasAnnex Boolean? @default(false)
+  annexType String?
+  annexSize Float?
+  annexBedrooms Int?
+  annexBathrooms Float?
+
+  hasGate Boolean? @default(false)
+  gateType String?
+  gateMaterial String?
+
+  hasFence Boolean? @default(false)
+  fenceType String?
+  fenceHeight Float?
+
+  // utilities
+  hasElectricity Boolean? @default(true)
+  hasWaterSupply Boolean? @default(true)
+  hasWaterTank Boolean? @default(false)
+
+ hasSwimmingPool     Boolean?        @default(false)
+  hasGym              Boolean?        @default(false)
+  hasSmartHome        Boolean?        @default(false)
+  hasSolarPanels      Boolean?        @default(false)
+  hasBackupGenerator  Boolean?        @default(false)
+  hasSecuritySystem   Boolean?        @default(false)
+  hasLandscapedGarden Boolean?        @default(false)
+  hasModernKitchen    Boolean?        @default(false)
+  hasAirConditioning  Boolean?        @default(false)
+  hasFireplace        Boolean?        @default(false)
+  hasBalcony          Boolean?        @default(false)
+  hasGarage           Boolean?        @default(false)
+  hasStaffQuarters    Boolean?        @default(false)
+  hasStorageRoom      Boolean?        @default(false)
+  hasWaterHeater      Boolean?        @default(false)
+  hasIntercom         Boolean?        @default(false)
+  viewType            String?         @default("None")
+  
+  // land characteristics
+  floodRisk Boolean? @default(false)
+  landSlope String?
+
+  // building
+  floorMaterial String?
+  roofType String?
+  propertyCategory String?
+
+  // market timing
+  listingDate DateTime?
+  daysOnMarket Int?
+  marketTrend String?
+  pricePerSqm Float?
+  lastSoldNearbyPrice Float?
+
+  // infrastructure
+  nearestSchoolKm Float?
+  nearestHospitalKm Float?
+  nearestTransportKm Float?
+  nearestMarketKm Float?
+  roadAccessType RoadAccessType?
+
+  // demand signals
+  viewQualityScore Float?
+  luxuryScore Float?
+  renovationLevel Float?
+  furnishingStatus String?
+
+  interestCount Int? @default(0)
+  saveCount Int? @default(0)
+  inquiryCount Int? @default(0)
+
+  // AI results
+  valuationAmount Float?
   valuationConfidence Float?
-  valuationMethod     ValuationMethod?
+  valuationMethod ValuationMethod?
 
-  notes               String?
+  notes String?
 
-  submittedAt         DateTime        @default(now())
-  updatedAt           DateTime        @updatedAt
+  submittedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  property            Property        @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-  propertyId          String          @unique
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId String @unique
 
   @@index([propertyId])
-  @@index([submittedAt])
+  @@index([latitude, longitude])
+  @@index([microZone])
+  @@index([listingDate])
   @@map("field_data")
+}
+
+model PropertySale {
+  id            String   @id @default(cuid())
+
+  district      String
+  sector        String?
+  cell          String?
+
+  landSize      Float
+  buildingSize  Float?
+
+  bedrooms      Int?
+  bathrooms     Float?
+
+  propertyType  String
+  category      String
+
+  yearBuilt     Int?
+
+  floorMaterial String?
+  roofType      String?
+
+  hasGarden     Boolean?
+  hasFence      Boolean?
+  hasGate       Boolean?
+
+  roadAccessType String
+
+  nearestSchoolKm   Float?
+  nearestHospitalKm  Float?
+  nearestMarketKm    Float?
+
+  soldPrice     Float
+  soldAt        DateTime @default(now())
+
+  createdAt     DateTime @default(now())
+
+  @@index([district])
+  @@index([soldAt])
 }
 
 // REVIEW MODEL

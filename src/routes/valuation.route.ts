@@ -4,16 +4,19 @@ import * as valuationController from '../controller/valuation.controller';
 
 const router = Router();
 
-router.post('/live', valuationController.liveValuation);
+// Public routes (no authentication required)
+router.post('/live', valuationController.getValuation);
+router.post('/property/:propertyId', valuationController.getPropertyValuation);
+router.post('/compare', valuationController.compareValuations);
 
-router.post('/preview', valuationController.previewValuation);
-
-router.get('/property/:propertyId', authenticate, valuationController.getValuation);
+// Protected routes - wrap the controller function to avoid type issues
 router.post(
   '/property/:propertyId/save',
   authenticate,
   authorize('SUPERVISOR', 'ADMIN'),
-  valuationController.saveValuation
+  (req, res, next) => {
+    valuationController.saveValuation(req, res).catch(next);
+  }
 );
 
 export default router;

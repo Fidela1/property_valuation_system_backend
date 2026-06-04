@@ -29,6 +29,7 @@ export type AggregateFieldData = {
 export type FieldDataAvgAggregateOutputType = {
   latitude: number | null
   longitude: number | null
+  safetyIndex: number | null
   gpsAccuracy: number | null
   bedrooms: number | null
   bathrooms: number | null
@@ -41,10 +42,19 @@ export type FieldDataAvgAggregateOutputType = {
   annexBedrooms: number | null
   annexBathrooms: number | null
   fenceHeight: number | null
+  daysOnMarket: number | null
+  pricePerSqm: number | null
+  lastSoldNearbyPrice: number | null
   nearestSchoolKm: number | null
   nearestHospitalKm: number | null
   nearestTransportKm: number | null
   nearestMarketKm: number | null
+  viewQualityScore: number | null
+  luxuryScore: number | null
+  renovationLevel: number | null
+  interestCount: number | null
+  saveCount: number | null
+  inquiryCount: number | null
   valuationAmount: number | null
   valuationConfidence: number | null
 }
@@ -52,6 +62,7 @@ export type FieldDataAvgAggregateOutputType = {
 export type FieldDataSumAggregateOutputType = {
   latitude: number | null
   longitude: number | null
+  safetyIndex: number | null
   gpsAccuracy: number | null
   bedrooms: number | null
   bathrooms: number | null
@@ -64,10 +75,19 @@ export type FieldDataSumAggregateOutputType = {
   annexBedrooms: number | null
   annexBathrooms: number | null
   fenceHeight: number | null
+  daysOnMarket: number | null
+  pricePerSqm: number | null
+  lastSoldNearbyPrice: number | null
   nearestSchoolKm: number | null
   nearestHospitalKm: number | null
   nearestTransportKm: number | null
   nearestMarketKm: number | null
+  viewQualityScore: number | null
+  luxuryScore: number | null
+  renovationLevel: number | null
+  interestCount: number | null
+  saveCount: number | null
+  inquiryCount: number | null
   valuationAmount: number | null
   valuationConfidence: number | null
 }
@@ -76,6 +96,11 @@ export type FieldDataMinAggregateOutputType = {
   id: string | null
   latitude: number | null
   longitude: number | null
+  microZone: string | null
+  neighborhood: string | null
+  urbanDensity: string | null
+  safetyIndex: number | null
+  noiseLevel: string | null
   gpsCapturedAt: Date | null
   gpsAccuracy: number | null
   propertyType: $Enums.PropertyType | null
@@ -103,16 +128,45 @@ export type FieldDataMinAggregateOutputType = {
   hasElectricity: boolean | null
   hasWaterSupply: boolean | null
   hasWaterTank: boolean | null
+  hasSwimmingPool: boolean | null
+  hasGym: boolean | null
+  hasSmartHome: boolean | null
+  hasSolarPanels: boolean | null
+  hasBackupGenerator: boolean | null
+  hasSecuritySystem: boolean | null
+  hasLandscapedGarden: boolean | null
+  hasModernKitchen: boolean | null
+  hasAirConditioning: boolean | null
+  hasFireplace: boolean | null
+  hasBalcony: boolean | null
+  hasGarage: boolean | null
+  hasStaffQuarters: boolean | null
+  hasStorageRoom: boolean | null
+  hasWaterHeater: boolean | null
+  hasIntercom: boolean | null
+  viewType: string | null
   floodRisk: boolean | null
   landSlope: string | null
   floorMaterial: string | null
   roofType: string | null
   propertyCategory: string | null
+  listingDate: Date | null
+  daysOnMarket: number | null
+  marketTrend: string | null
+  pricePerSqm: number | null
+  lastSoldNearbyPrice: number | null
   nearestSchoolKm: number | null
   nearestHospitalKm: number | null
   nearestTransportKm: number | null
   nearestMarketKm: number | null
   roadAccessType: $Enums.RoadAccessType | null
+  viewQualityScore: number | null
+  luxuryScore: number | null
+  renovationLevel: number | null
+  furnishingStatus: string | null
+  interestCount: number | null
+  saveCount: number | null
+  inquiryCount: number | null
   valuationAmount: number | null
   valuationConfidence: number | null
   valuationMethod: $Enums.ValuationMethod | null
@@ -126,6 +180,11 @@ export type FieldDataMaxAggregateOutputType = {
   id: string | null
   latitude: number | null
   longitude: number | null
+  microZone: string | null
+  neighborhood: string | null
+  urbanDensity: string | null
+  safetyIndex: number | null
+  noiseLevel: string | null
   gpsCapturedAt: Date | null
   gpsAccuracy: number | null
   propertyType: $Enums.PropertyType | null
@@ -153,16 +212,45 @@ export type FieldDataMaxAggregateOutputType = {
   hasElectricity: boolean | null
   hasWaterSupply: boolean | null
   hasWaterTank: boolean | null
+  hasSwimmingPool: boolean | null
+  hasGym: boolean | null
+  hasSmartHome: boolean | null
+  hasSolarPanels: boolean | null
+  hasBackupGenerator: boolean | null
+  hasSecuritySystem: boolean | null
+  hasLandscapedGarden: boolean | null
+  hasModernKitchen: boolean | null
+  hasAirConditioning: boolean | null
+  hasFireplace: boolean | null
+  hasBalcony: boolean | null
+  hasGarage: boolean | null
+  hasStaffQuarters: boolean | null
+  hasStorageRoom: boolean | null
+  hasWaterHeater: boolean | null
+  hasIntercom: boolean | null
+  viewType: string | null
   floodRisk: boolean | null
   landSlope: string | null
   floorMaterial: string | null
   roofType: string | null
   propertyCategory: string | null
+  listingDate: Date | null
+  daysOnMarket: number | null
+  marketTrend: string | null
+  pricePerSqm: number | null
+  lastSoldNearbyPrice: number | null
   nearestSchoolKm: number | null
   nearestHospitalKm: number | null
   nearestTransportKm: number | null
   nearestMarketKm: number | null
   roadAccessType: $Enums.RoadAccessType | null
+  viewQualityScore: number | null
+  luxuryScore: number | null
+  renovationLevel: number | null
+  furnishingStatus: string | null
+  interestCount: number | null
+  saveCount: number | null
+  inquiryCount: number | null
   valuationAmount: number | null
   valuationConfidence: number | null
   valuationMethod: $Enums.ValuationMethod | null
@@ -176,6 +264,11 @@ export type FieldDataCountAggregateOutputType = {
   id: number
   latitude: number
   longitude: number
+  microZone: number
+  neighborhood: number
+  urbanDensity: number
+  safetyIndex: number
+  noiseLevel: number
   gpsCapturedAt: number
   gpsAccuracy: number
   propertyType: number
@@ -203,16 +296,45 @@ export type FieldDataCountAggregateOutputType = {
   hasElectricity: number
   hasWaterSupply: number
   hasWaterTank: number
+  hasSwimmingPool: number
+  hasGym: number
+  hasSmartHome: number
+  hasSolarPanels: number
+  hasBackupGenerator: number
+  hasSecuritySystem: number
+  hasLandscapedGarden: number
+  hasModernKitchen: number
+  hasAirConditioning: number
+  hasFireplace: number
+  hasBalcony: number
+  hasGarage: number
+  hasStaffQuarters: number
+  hasStorageRoom: number
+  hasWaterHeater: number
+  hasIntercom: number
+  viewType: number
   floodRisk: number
   landSlope: number
   floorMaterial: number
   roofType: number
   propertyCategory: number
+  listingDate: number
+  daysOnMarket: number
+  marketTrend: number
+  pricePerSqm: number
+  lastSoldNearbyPrice: number
   nearestSchoolKm: number
   nearestHospitalKm: number
   nearestTransportKm: number
   nearestMarketKm: number
   roadAccessType: number
+  viewQualityScore: number
+  luxuryScore: number
+  renovationLevel: number
+  furnishingStatus: number
+  interestCount: number
+  saveCount: number
+  inquiryCount: number
   valuationAmount: number
   valuationConfidence: number
   valuationMethod: number
@@ -227,6 +349,7 @@ export type FieldDataCountAggregateOutputType = {
 export type FieldDataAvgAggregateInputType = {
   latitude?: true
   longitude?: true
+  safetyIndex?: true
   gpsAccuracy?: true
   bedrooms?: true
   bathrooms?: true
@@ -239,10 +362,19 @@ export type FieldDataAvgAggregateInputType = {
   annexBedrooms?: true
   annexBathrooms?: true
   fenceHeight?: true
+  daysOnMarket?: true
+  pricePerSqm?: true
+  lastSoldNearbyPrice?: true
   nearestSchoolKm?: true
   nearestHospitalKm?: true
   nearestTransportKm?: true
   nearestMarketKm?: true
+  viewQualityScore?: true
+  luxuryScore?: true
+  renovationLevel?: true
+  interestCount?: true
+  saveCount?: true
+  inquiryCount?: true
   valuationAmount?: true
   valuationConfidence?: true
 }
@@ -250,6 +382,7 @@ export type FieldDataAvgAggregateInputType = {
 export type FieldDataSumAggregateInputType = {
   latitude?: true
   longitude?: true
+  safetyIndex?: true
   gpsAccuracy?: true
   bedrooms?: true
   bathrooms?: true
@@ -262,10 +395,19 @@ export type FieldDataSumAggregateInputType = {
   annexBedrooms?: true
   annexBathrooms?: true
   fenceHeight?: true
+  daysOnMarket?: true
+  pricePerSqm?: true
+  lastSoldNearbyPrice?: true
   nearestSchoolKm?: true
   nearestHospitalKm?: true
   nearestTransportKm?: true
   nearestMarketKm?: true
+  viewQualityScore?: true
+  luxuryScore?: true
+  renovationLevel?: true
+  interestCount?: true
+  saveCount?: true
+  inquiryCount?: true
   valuationAmount?: true
   valuationConfidence?: true
 }
@@ -274,6 +416,11 @@ export type FieldDataMinAggregateInputType = {
   id?: true
   latitude?: true
   longitude?: true
+  microZone?: true
+  neighborhood?: true
+  urbanDensity?: true
+  safetyIndex?: true
+  noiseLevel?: true
   gpsCapturedAt?: true
   gpsAccuracy?: true
   propertyType?: true
@@ -301,16 +448,45 @@ export type FieldDataMinAggregateInputType = {
   hasElectricity?: true
   hasWaterSupply?: true
   hasWaterTank?: true
+  hasSwimmingPool?: true
+  hasGym?: true
+  hasSmartHome?: true
+  hasSolarPanels?: true
+  hasBackupGenerator?: true
+  hasSecuritySystem?: true
+  hasLandscapedGarden?: true
+  hasModernKitchen?: true
+  hasAirConditioning?: true
+  hasFireplace?: true
+  hasBalcony?: true
+  hasGarage?: true
+  hasStaffQuarters?: true
+  hasStorageRoom?: true
+  hasWaterHeater?: true
+  hasIntercom?: true
+  viewType?: true
   floodRisk?: true
   landSlope?: true
   floorMaterial?: true
   roofType?: true
   propertyCategory?: true
+  listingDate?: true
+  daysOnMarket?: true
+  marketTrend?: true
+  pricePerSqm?: true
+  lastSoldNearbyPrice?: true
   nearestSchoolKm?: true
   nearestHospitalKm?: true
   nearestTransportKm?: true
   nearestMarketKm?: true
   roadAccessType?: true
+  viewQualityScore?: true
+  luxuryScore?: true
+  renovationLevel?: true
+  furnishingStatus?: true
+  interestCount?: true
+  saveCount?: true
+  inquiryCount?: true
   valuationAmount?: true
   valuationConfidence?: true
   valuationMethod?: true
@@ -324,6 +500,11 @@ export type FieldDataMaxAggregateInputType = {
   id?: true
   latitude?: true
   longitude?: true
+  microZone?: true
+  neighborhood?: true
+  urbanDensity?: true
+  safetyIndex?: true
+  noiseLevel?: true
   gpsCapturedAt?: true
   gpsAccuracy?: true
   propertyType?: true
@@ -351,16 +532,45 @@ export type FieldDataMaxAggregateInputType = {
   hasElectricity?: true
   hasWaterSupply?: true
   hasWaterTank?: true
+  hasSwimmingPool?: true
+  hasGym?: true
+  hasSmartHome?: true
+  hasSolarPanels?: true
+  hasBackupGenerator?: true
+  hasSecuritySystem?: true
+  hasLandscapedGarden?: true
+  hasModernKitchen?: true
+  hasAirConditioning?: true
+  hasFireplace?: true
+  hasBalcony?: true
+  hasGarage?: true
+  hasStaffQuarters?: true
+  hasStorageRoom?: true
+  hasWaterHeater?: true
+  hasIntercom?: true
+  viewType?: true
   floodRisk?: true
   landSlope?: true
   floorMaterial?: true
   roofType?: true
   propertyCategory?: true
+  listingDate?: true
+  daysOnMarket?: true
+  marketTrend?: true
+  pricePerSqm?: true
+  lastSoldNearbyPrice?: true
   nearestSchoolKm?: true
   nearestHospitalKm?: true
   nearestTransportKm?: true
   nearestMarketKm?: true
   roadAccessType?: true
+  viewQualityScore?: true
+  luxuryScore?: true
+  renovationLevel?: true
+  furnishingStatus?: true
+  interestCount?: true
+  saveCount?: true
+  inquiryCount?: true
   valuationAmount?: true
   valuationConfidence?: true
   valuationMethod?: true
@@ -374,6 +584,11 @@ export type FieldDataCountAggregateInputType = {
   id?: true
   latitude?: true
   longitude?: true
+  microZone?: true
+  neighborhood?: true
+  urbanDensity?: true
+  safetyIndex?: true
+  noiseLevel?: true
   gpsCapturedAt?: true
   gpsAccuracy?: true
   propertyType?: true
@@ -401,16 +616,45 @@ export type FieldDataCountAggregateInputType = {
   hasElectricity?: true
   hasWaterSupply?: true
   hasWaterTank?: true
+  hasSwimmingPool?: true
+  hasGym?: true
+  hasSmartHome?: true
+  hasSolarPanels?: true
+  hasBackupGenerator?: true
+  hasSecuritySystem?: true
+  hasLandscapedGarden?: true
+  hasModernKitchen?: true
+  hasAirConditioning?: true
+  hasFireplace?: true
+  hasBalcony?: true
+  hasGarage?: true
+  hasStaffQuarters?: true
+  hasStorageRoom?: true
+  hasWaterHeater?: true
+  hasIntercom?: true
+  viewType?: true
   floodRisk?: true
   landSlope?: true
   floorMaterial?: true
   roofType?: true
   propertyCategory?: true
+  listingDate?: true
+  daysOnMarket?: true
+  marketTrend?: true
+  pricePerSqm?: true
+  lastSoldNearbyPrice?: true
   nearestSchoolKm?: true
   nearestHospitalKm?: true
   nearestTransportKm?: true
   nearestMarketKm?: true
   roadAccessType?: true
+  viewQualityScore?: true
+  luxuryScore?: true
+  renovationLevel?: true
+  furnishingStatus?: true
+  interestCount?: true
+  saveCount?: true
+  inquiryCount?: true
   valuationAmount?: true
   valuationConfidence?: true
   valuationMethod?: true
@@ -511,6 +755,11 @@ export type FieldDataGroupByOutputType = {
   id: string
   latitude: number
   longitude: number
+  microZone: string | null
+  neighborhood: string | null
+  urbanDensity: string | null
+  safetyIndex: number | null
+  noiseLevel: string | null
   gpsCapturedAt: Date | null
   gpsAccuracy: number | null
   propertyType: $Enums.PropertyType | null
@@ -538,16 +787,45 @@ export type FieldDataGroupByOutputType = {
   hasElectricity: boolean | null
   hasWaterSupply: boolean | null
   hasWaterTank: boolean | null
+  hasSwimmingPool: boolean | null
+  hasGym: boolean | null
+  hasSmartHome: boolean | null
+  hasSolarPanels: boolean | null
+  hasBackupGenerator: boolean | null
+  hasSecuritySystem: boolean | null
+  hasLandscapedGarden: boolean | null
+  hasModernKitchen: boolean | null
+  hasAirConditioning: boolean | null
+  hasFireplace: boolean | null
+  hasBalcony: boolean | null
+  hasGarage: boolean | null
+  hasStaffQuarters: boolean | null
+  hasStorageRoom: boolean | null
+  hasWaterHeater: boolean | null
+  hasIntercom: boolean | null
+  viewType: string | null
   floodRisk: boolean | null
   landSlope: string | null
   floorMaterial: string | null
   roofType: string | null
   propertyCategory: string | null
+  listingDate: Date | null
+  daysOnMarket: number | null
+  marketTrend: string | null
+  pricePerSqm: number | null
+  lastSoldNearbyPrice: number | null
   nearestSchoolKm: number | null
   nearestHospitalKm: number | null
   nearestTransportKm: number | null
   nearestMarketKm: number | null
   roadAccessType: $Enums.RoadAccessType | null
+  viewQualityScore: number | null
+  luxuryScore: number | null
+  renovationLevel: number | null
+  furnishingStatus: string | null
+  interestCount: number | null
+  saveCount: number | null
+  inquiryCount: number | null
   valuationAmount: number | null
   valuationConfidence: number | null
   valuationMethod: $Enums.ValuationMethod | null
@@ -584,6 +862,11 @@ export type FieldDataWhereInput = {
   id?: Prisma.StringFilter<"FieldData"> | string
   latitude?: Prisma.FloatFilter<"FieldData"> | number
   longitude?: Prisma.FloatFilter<"FieldData"> | number
+  microZone?: Prisma.StringNullableFilter<"FieldData"> | string | null
+  neighborhood?: Prisma.StringNullableFilter<"FieldData"> | string | null
+  urbanDensity?: Prisma.StringNullableFilter<"FieldData"> | string | null
+  safetyIndex?: Prisma.FloatNullableFilter<"FieldData"> | number | null
+  noiseLevel?: Prisma.StringNullableFilter<"FieldData"> | string | null
   gpsCapturedAt?: Prisma.DateTimeNullableFilter<"FieldData"> | Date | string | null
   gpsAccuracy?: Prisma.FloatNullableFilter<"FieldData"> | number | null
   propertyType?: Prisma.EnumPropertyTypeNullableFilter<"FieldData"> | $Enums.PropertyType | null
@@ -611,16 +894,45 @@ export type FieldDataWhereInput = {
   hasElectricity?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
   hasWaterSupply?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
   hasWaterTank?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasSwimmingPool?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasGym?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasSmartHome?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasSolarPanels?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasBackupGenerator?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasSecuritySystem?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasLandscapedGarden?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasModernKitchen?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasAirConditioning?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasFireplace?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasBalcony?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasGarage?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasStaffQuarters?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasStorageRoom?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasWaterHeater?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasIntercom?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  viewType?: Prisma.StringNullableFilter<"FieldData"> | string | null
   floodRisk?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
   landSlope?: Prisma.StringNullableFilter<"FieldData"> | string | null
   floorMaterial?: Prisma.StringNullableFilter<"FieldData"> | string | null
   roofType?: Prisma.StringNullableFilter<"FieldData"> | string | null
   propertyCategory?: Prisma.StringNullableFilter<"FieldData"> | string | null
+  listingDate?: Prisma.DateTimeNullableFilter<"FieldData"> | Date | string | null
+  daysOnMarket?: Prisma.IntNullableFilter<"FieldData"> | number | null
+  marketTrend?: Prisma.StringNullableFilter<"FieldData"> | string | null
+  pricePerSqm?: Prisma.FloatNullableFilter<"FieldData"> | number | null
+  lastSoldNearbyPrice?: Prisma.FloatNullableFilter<"FieldData"> | number | null
   nearestSchoolKm?: Prisma.FloatNullableFilter<"FieldData"> | number | null
   nearestHospitalKm?: Prisma.FloatNullableFilter<"FieldData"> | number | null
   nearestTransportKm?: Prisma.FloatNullableFilter<"FieldData"> | number | null
   nearestMarketKm?: Prisma.FloatNullableFilter<"FieldData"> | number | null
   roadAccessType?: Prisma.EnumRoadAccessTypeNullableFilter<"FieldData"> | $Enums.RoadAccessType | null
+  viewQualityScore?: Prisma.FloatNullableFilter<"FieldData"> | number | null
+  luxuryScore?: Prisma.FloatNullableFilter<"FieldData"> | number | null
+  renovationLevel?: Prisma.FloatNullableFilter<"FieldData"> | number | null
+  furnishingStatus?: Prisma.StringNullableFilter<"FieldData"> | string | null
+  interestCount?: Prisma.IntNullableFilter<"FieldData"> | number | null
+  saveCount?: Prisma.IntNullableFilter<"FieldData"> | number | null
+  inquiryCount?: Prisma.IntNullableFilter<"FieldData"> | number | null
   valuationAmount?: Prisma.FloatNullableFilter<"FieldData"> | number | null
   valuationConfidence?: Prisma.FloatNullableFilter<"FieldData"> | number | null
   valuationMethod?: Prisma.EnumValuationMethodNullableFilter<"FieldData"> | $Enums.ValuationMethod | null
@@ -635,6 +947,11 @@ export type FieldDataOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
+  microZone?: Prisma.SortOrderInput | Prisma.SortOrder
+  neighborhood?: Prisma.SortOrderInput | Prisma.SortOrder
+  urbanDensity?: Prisma.SortOrderInput | Prisma.SortOrder
+  safetyIndex?: Prisma.SortOrderInput | Prisma.SortOrder
+  noiseLevel?: Prisma.SortOrderInput | Prisma.SortOrder
   gpsCapturedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   gpsAccuracy?: Prisma.SortOrderInput | Prisma.SortOrder
   propertyType?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -662,16 +979,45 @@ export type FieldDataOrderByWithRelationInput = {
   hasElectricity?: Prisma.SortOrderInput | Prisma.SortOrder
   hasWaterSupply?: Prisma.SortOrderInput | Prisma.SortOrder
   hasWaterTank?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasSwimmingPool?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasGym?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasSmartHome?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasSolarPanels?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasBackupGenerator?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasSecuritySystem?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasLandscapedGarden?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasModernKitchen?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasAirConditioning?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasFireplace?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasBalcony?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasGarage?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasStaffQuarters?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasStorageRoom?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasWaterHeater?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasIntercom?: Prisma.SortOrderInput | Prisma.SortOrder
+  viewType?: Prisma.SortOrderInput | Prisma.SortOrder
   floodRisk?: Prisma.SortOrderInput | Prisma.SortOrder
   landSlope?: Prisma.SortOrderInput | Prisma.SortOrder
   floorMaterial?: Prisma.SortOrderInput | Prisma.SortOrder
   roofType?: Prisma.SortOrderInput | Prisma.SortOrder
   propertyCategory?: Prisma.SortOrderInput | Prisma.SortOrder
+  listingDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  daysOnMarket?: Prisma.SortOrderInput | Prisma.SortOrder
+  marketTrend?: Prisma.SortOrderInput | Prisma.SortOrder
+  pricePerSqm?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastSoldNearbyPrice?: Prisma.SortOrderInput | Prisma.SortOrder
   nearestSchoolKm?: Prisma.SortOrderInput | Prisma.SortOrder
   nearestHospitalKm?: Prisma.SortOrderInput | Prisma.SortOrder
   nearestTransportKm?: Prisma.SortOrderInput | Prisma.SortOrder
   nearestMarketKm?: Prisma.SortOrderInput | Prisma.SortOrder
   roadAccessType?: Prisma.SortOrderInput | Prisma.SortOrder
+  viewQualityScore?: Prisma.SortOrderInput | Prisma.SortOrder
+  luxuryScore?: Prisma.SortOrderInput | Prisma.SortOrder
+  renovationLevel?: Prisma.SortOrderInput | Prisma.SortOrder
+  furnishingStatus?: Prisma.SortOrderInput | Prisma.SortOrder
+  interestCount?: Prisma.SortOrderInput | Prisma.SortOrder
+  saveCount?: Prisma.SortOrderInput | Prisma.SortOrder
+  inquiryCount?: Prisma.SortOrderInput | Prisma.SortOrder
   valuationAmount?: Prisma.SortOrderInput | Prisma.SortOrder
   valuationConfidence?: Prisma.SortOrderInput | Prisma.SortOrder
   valuationMethod?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -690,6 +1036,11 @@ export type FieldDataWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.FieldDataWhereInput | Prisma.FieldDataWhereInput[]
   latitude?: Prisma.FloatFilter<"FieldData"> | number
   longitude?: Prisma.FloatFilter<"FieldData"> | number
+  microZone?: Prisma.StringNullableFilter<"FieldData"> | string | null
+  neighborhood?: Prisma.StringNullableFilter<"FieldData"> | string | null
+  urbanDensity?: Prisma.StringNullableFilter<"FieldData"> | string | null
+  safetyIndex?: Prisma.FloatNullableFilter<"FieldData"> | number | null
+  noiseLevel?: Prisma.StringNullableFilter<"FieldData"> | string | null
   gpsCapturedAt?: Prisma.DateTimeNullableFilter<"FieldData"> | Date | string | null
   gpsAccuracy?: Prisma.FloatNullableFilter<"FieldData"> | number | null
   propertyType?: Prisma.EnumPropertyTypeNullableFilter<"FieldData"> | $Enums.PropertyType | null
@@ -717,16 +1068,45 @@ export type FieldDataWhereUniqueInput = Prisma.AtLeast<{
   hasElectricity?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
   hasWaterSupply?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
   hasWaterTank?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasSwimmingPool?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasGym?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasSmartHome?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasSolarPanels?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasBackupGenerator?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasSecuritySystem?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasLandscapedGarden?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasModernKitchen?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasAirConditioning?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasFireplace?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasBalcony?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasGarage?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasStaffQuarters?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasStorageRoom?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasWaterHeater?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  hasIntercom?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
+  viewType?: Prisma.StringNullableFilter<"FieldData"> | string | null
   floodRisk?: Prisma.BoolNullableFilter<"FieldData"> | boolean | null
   landSlope?: Prisma.StringNullableFilter<"FieldData"> | string | null
   floorMaterial?: Prisma.StringNullableFilter<"FieldData"> | string | null
   roofType?: Prisma.StringNullableFilter<"FieldData"> | string | null
   propertyCategory?: Prisma.StringNullableFilter<"FieldData"> | string | null
+  listingDate?: Prisma.DateTimeNullableFilter<"FieldData"> | Date | string | null
+  daysOnMarket?: Prisma.IntNullableFilter<"FieldData"> | number | null
+  marketTrend?: Prisma.StringNullableFilter<"FieldData"> | string | null
+  pricePerSqm?: Prisma.FloatNullableFilter<"FieldData"> | number | null
+  lastSoldNearbyPrice?: Prisma.FloatNullableFilter<"FieldData"> | number | null
   nearestSchoolKm?: Prisma.FloatNullableFilter<"FieldData"> | number | null
   nearestHospitalKm?: Prisma.FloatNullableFilter<"FieldData"> | number | null
   nearestTransportKm?: Prisma.FloatNullableFilter<"FieldData"> | number | null
   nearestMarketKm?: Prisma.FloatNullableFilter<"FieldData"> | number | null
   roadAccessType?: Prisma.EnumRoadAccessTypeNullableFilter<"FieldData"> | $Enums.RoadAccessType | null
+  viewQualityScore?: Prisma.FloatNullableFilter<"FieldData"> | number | null
+  luxuryScore?: Prisma.FloatNullableFilter<"FieldData"> | number | null
+  renovationLevel?: Prisma.FloatNullableFilter<"FieldData"> | number | null
+  furnishingStatus?: Prisma.StringNullableFilter<"FieldData"> | string | null
+  interestCount?: Prisma.IntNullableFilter<"FieldData"> | number | null
+  saveCount?: Prisma.IntNullableFilter<"FieldData"> | number | null
+  inquiryCount?: Prisma.IntNullableFilter<"FieldData"> | number | null
   valuationAmount?: Prisma.FloatNullableFilter<"FieldData"> | number | null
   valuationConfidence?: Prisma.FloatNullableFilter<"FieldData"> | number | null
   valuationMethod?: Prisma.EnumValuationMethodNullableFilter<"FieldData"> | $Enums.ValuationMethod | null
@@ -740,6 +1120,11 @@ export type FieldDataOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
+  microZone?: Prisma.SortOrderInput | Prisma.SortOrder
+  neighborhood?: Prisma.SortOrderInput | Prisma.SortOrder
+  urbanDensity?: Prisma.SortOrderInput | Prisma.SortOrder
+  safetyIndex?: Prisma.SortOrderInput | Prisma.SortOrder
+  noiseLevel?: Prisma.SortOrderInput | Prisma.SortOrder
   gpsCapturedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   gpsAccuracy?: Prisma.SortOrderInput | Prisma.SortOrder
   propertyType?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -767,16 +1152,45 @@ export type FieldDataOrderByWithAggregationInput = {
   hasElectricity?: Prisma.SortOrderInput | Prisma.SortOrder
   hasWaterSupply?: Prisma.SortOrderInput | Prisma.SortOrder
   hasWaterTank?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasSwimmingPool?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasGym?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasSmartHome?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasSolarPanels?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasBackupGenerator?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasSecuritySystem?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasLandscapedGarden?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasModernKitchen?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasAirConditioning?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasFireplace?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasBalcony?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasGarage?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasStaffQuarters?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasStorageRoom?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasWaterHeater?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasIntercom?: Prisma.SortOrderInput | Prisma.SortOrder
+  viewType?: Prisma.SortOrderInput | Prisma.SortOrder
   floodRisk?: Prisma.SortOrderInput | Prisma.SortOrder
   landSlope?: Prisma.SortOrderInput | Prisma.SortOrder
   floorMaterial?: Prisma.SortOrderInput | Prisma.SortOrder
   roofType?: Prisma.SortOrderInput | Prisma.SortOrder
   propertyCategory?: Prisma.SortOrderInput | Prisma.SortOrder
+  listingDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  daysOnMarket?: Prisma.SortOrderInput | Prisma.SortOrder
+  marketTrend?: Prisma.SortOrderInput | Prisma.SortOrder
+  pricePerSqm?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastSoldNearbyPrice?: Prisma.SortOrderInput | Prisma.SortOrder
   nearestSchoolKm?: Prisma.SortOrderInput | Prisma.SortOrder
   nearestHospitalKm?: Prisma.SortOrderInput | Prisma.SortOrder
   nearestTransportKm?: Prisma.SortOrderInput | Prisma.SortOrder
   nearestMarketKm?: Prisma.SortOrderInput | Prisma.SortOrder
   roadAccessType?: Prisma.SortOrderInput | Prisma.SortOrder
+  viewQualityScore?: Prisma.SortOrderInput | Prisma.SortOrder
+  luxuryScore?: Prisma.SortOrderInput | Prisma.SortOrder
+  renovationLevel?: Prisma.SortOrderInput | Prisma.SortOrder
+  furnishingStatus?: Prisma.SortOrderInput | Prisma.SortOrder
+  interestCount?: Prisma.SortOrderInput | Prisma.SortOrder
+  saveCount?: Prisma.SortOrderInput | Prisma.SortOrder
+  inquiryCount?: Prisma.SortOrderInput | Prisma.SortOrder
   valuationAmount?: Prisma.SortOrderInput | Prisma.SortOrder
   valuationConfidence?: Prisma.SortOrderInput | Prisma.SortOrder
   valuationMethod?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -798,6 +1212,11 @@ export type FieldDataScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"FieldData"> | string
   latitude?: Prisma.FloatWithAggregatesFilter<"FieldData"> | number
   longitude?: Prisma.FloatWithAggregatesFilter<"FieldData"> | number
+  microZone?: Prisma.StringNullableWithAggregatesFilter<"FieldData"> | string | null
+  neighborhood?: Prisma.StringNullableWithAggregatesFilter<"FieldData"> | string | null
+  urbanDensity?: Prisma.StringNullableWithAggregatesFilter<"FieldData"> | string | null
+  safetyIndex?: Prisma.FloatNullableWithAggregatesFilter<"FieldData"> | number | null
+  noiseLevel?: Prisma.StringNullableWithAggregatesFilter<"FieldData"> | string | null
   gpsCapturedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"FieldData"> | Date | string | null
   gpsAccuracy?: Prisma.FloatNullableWithAggregatesFilter<"FieldData"> | number | null
   propertyType?: Prisma.EnumPropertyTypeNullableWithAggregatesFilter<"FieldData"> | $Enums.PropertyType | null
@@ -825,16 +1244,45 @@ export type FieldDataScalarWhereWithAggregatesInput = {
   hasElectricity?: Prisma.BoolNullableWithAggregatesFilter<"FieldData"> | boolean | null
   hasWaterSupply?: Prisma.BoolNullableWithAggregatesFilter<"FieldData"> | boolean | null
   hasWaterTank?: Prisma.BoolNullableWithAggregatesFilter<"FieldData"> | boolean | null
+  hasSwimmingPool?: Prisma.BoolNullableWithAggregatesFilter<"FieldData"> | boolean | null
+  hasGym?: Prisma.BoolNullableWithAggregatesFilter<"FieldData"> | boolean | null
+  hasSmartHome?: Prisma.BoolNullableWithAggregatesFilter<"FieldData"> | boolean | null
+  hasSolarPanels?: Prisma.BoolNullableWithAggregatesFilter<"FieldData"> | boolean | null
+  hasBackupGenerator?: Prisma.BoolNullableWithAggregatesFilter<"FieldData"> | boolean | null
+  hasSecuritySystem?: Prisma.BoolNullableWithAggregatesFilter<"FieldData"> | boolean | null
+  hasLandscapedGarden?: Prisma.BoolNullableWithAggregatesFilter<"FieldData"> | boolean | null
+  hasModernKitchen?: Prisma.BoolNullableWithAggregatesFilter<"FieldData"> | boolean | null
+  hasAirConditioning?: Prisma.BoolNullableWithAggregatesFilter<"FieldData"> | boolean | null
+  hasFireplace?: Prisma.BoolNullableWithAggregatesFilter<"FieldData"> | boolean | null
+  hasBalcony?: Prisma.BoolNullableWithAggregatesFilter<"FieldData"> | boolean | null
+  hasGarage?: Prisma.BoolNullableWithAggregatesFilter<"FieldData"> | boolean | null
+  hasStaffQuarters?: Prisma.BoolNullableWithAggregatesFilter<"FieldData"> | boolean | null
+  hasStorageRoom?: Prisma.BoolNullableWithAggregatesFilter<"FieldData"> | boolean | null
+  hasWaterHeater?: Prisma.BoolNullableWithAggregatesFilter<"FieldData"> | boolean | null
+  hasIntercom?: Prisma.BoolNullableWithAggregatesFilter<"FieldData"> | boolean | null
+  viewType?: Prisma.StringNullableWithAggregatesFilter<"FieldData"> | string | null
   floodRisk?: Prisma.BoolNullableWithAggregatesFilter<"FieldData"> | boolean | null
   landSlope?: Prisma.StringNullableWithAggregatesFilter<"FieldData"> | string | null
   floorMaterial?: Prisma.StringNullableWithAggregatesFilter<"FieldData"> | string | null
   roofType?: Prisma.StringNullableWithAggregatesFilter<"FieldData"> | string | null
   propertyCategory?: Prisma.StringNullableWithAggregatesFilter<"FieldData"> | string | null
+  listingDate?: Prisma.DateTimeNullableWithAggregatesFilter<"FieldData"> | Date | string | null
+  daysOnMarket?: Prisma.IntNullableWithAggregatesFilter<"FieldData"> | number | null
+  marketTrend?: Prisma.StringNullableWithAggregatesFilter<"FieldData"> | string | null
+  pricePerSqm?: Prisma.FloatNullableWithAggregatesFilter<"FieldData"> | number | null
+  lastSoldNearbyPrice?: Prisma.FloatNullableWithAggregatesFilter<"FieldData"> | number | null
   nearestSchoolKm?: Prisma.FloatNullableWithAggregatesFilter<"FieldData"> | number | null
   nearestHospitalKm?: Prisma.FloatNullableWithAggregatesFilter<"FieldData"> | number | null
   nearestTransportKm?: Prisma.FloatNullableWithAggregatesFilter<"FieldData"> | number | null
   nearestMarketKm?: Prisma.FloatNullableWithAggregatesFilter<"FieldData"> | number | null
   roadAccessType?: Prisma.EnumRoadAccessTypeNullableWithAggregatesFilter<"FieldData"> | $Enums.RoadAccessType | null
+  viewQualityScore?: Prisma.FloatNullableWithAggregatesFilter<"FieldData"> | number | null
+  luxuryScore?: Prisma.FloatNullableWithAggregatesFilter<"FieldData"> | number | null
+  renovationLevel?: Prisma.FloatNullableWithAggregatesFilter<"FieldData"> | number | null
+  furnishingStatus?: Prisma.StringNullableWithAggregatesFilter<"FieldData"> | string | null
+  interestCount?: Prisma.IntNullableWithAggregatesFilter<"FieldData"> | number | null
+  saveCount?: Prisma.IntNullableWithAggregatesFilter<"FieldData"> | number | null
+  inquiryCount?: Prisma.IntNullableWithAggregatesFilter<"FieldData"> | number | null
   valuationAmount?: Prisma.FloatNullableWithAggregatesFilter<"FieldData"> | number | null
   valuationConfidence?: Prisma.FloatNullableWithAggregatesFilter<"FieldData"> | number | null
   valuationMethod?: Prisma.EnumValuationMethodNullableWithAggregatesFilter<"FieldData"> | $Enums.ValuationMethod | null
@@ -848,6 +1296,11 @@ export type FieldDataCreateInput = {
   id?: string
   latitude: number
   longitude: number
+  microZone?: string | null
+  neighborhood?: string | null
+  urbanDensity?: string | null
+  safetyIndex?: number | null
+  noiseLevel?: string | null
   gpsCapturedAt?: Date | string | null
   gpsAccuracy?: number | null
   propertyType?: $Enums.PropertyType | null
@@ -875,16 +1328,45 @@ export type FieldDataCreateInput = {
   hasElectricity?: boolean | null
   hasWaterSupply?: boolean | null
   hasWaterTank?: boolean | null
+  hasSwimmingPool?: boolean | null
+  hasGym?: boolean | null
+  hasSmartHome?: boolean | null
+  hasSolarPanels?: boolean | null
+  hasBackupGenerator?: boolean | null
+  hasSecuritySystem?: boolean | null
+  hasLandscapedGarden?: boolean | null
+  hasModernKitchen?: boolean | null
+  hasAirConditioning?: boolean | null
+  hasFireplace?: boolean | null
+  hasBalcony?: boolean | null
+  hasGarage?: boolean | null
+  hasStaffQuarters?: boolean | null
+  hasStorageRoom?: boolean | null
+  hasWaterHeater?: boolean | null
+  hasIntercom?: boolean | null
+  viewType?: string | null
   floodRisk?: boolean | null
   landSlope?: string | null
   floorMaterial?: string | null
   roofType?: string | null
   propertyCategory?: string | null
+  listingDate?: Date | string | null
+  daysOnMarket?: number | null
+  marketTrend?: string | null
+  pricePerSqm?: number | null
+  lastSoldNearbyPrice?: number | null
   nearestSchoolKm?: number | null
   nearestHospitalKm?: number | null
   nearestTransportKm?: number | null
   nearestMarketKm?: number | null
   roadAccessType?: $Enums.RoadAccessType | null
+  viewQualityScore?: number | null
+  luxuryScore?: number | null
+  renovationLevel?: number | null
+  furnishingStatus?: string | null
+  interestCount?: number | null
+  saveCount?: number | null
+  inquiryCount?: number | null
   valuationAmount?: number | null
   valuationConfidence?: number | null
   valuationMethod?: $Enums.ValuationMethod | null
@@ -898,6 +1380,11 @@ export type FieldDataUncheckedCreateInput = {
   id?: string
   latitude: number
   longitude: number
+  microZone?: string | null
+  neighborhood?: string | null
+  urbanDensity?: string | null
+  safetyIndex?: number | null
+  noiseLevel?: string | null
   gpsCapturedAt?: Date | string | null
   gpsAccuracy?: number | null
   propertyType?: $Enums.PropertyType | null
@@ -925,16 +1412,45 @@ export type FieldDataUncheckedCreateInput = {
   hasElectricity?: boolean | null
   hasWaterSupply?: boolean | null
   hasWaterTank?: boolean | null
+  hasSwimmingPool?: boolean | null
+  hasGym?: boolean | null
+  hasSmartHome?: boolean | null
+  hasSolarPanels?: boolean | null
+  hasBackupGenerator?: boolean | null
+  hasSecuritySystem?: boolean | null
+  hasLandscapedGarden?: boolean | null
+  hasModernKitchen?: boolean | null
+  hasAirConditioning?: boolean | null
+  hasFireplace?: boolean | null
+  hasBalcony?: boolean | null
+  hasGarage?: boolean | null
+  hasStaffQuarters?: boolean | null
+  hasStorageRoom?: boolean | null
+  hasWaterHeater?: boolean | null
+  hasIntercom?: boolean | null
+  viewType?: string | null
   floodRisk?: boolean | null
   landSlope?: string | null
   floorMaterial?: string | null
   roofType?: string | null
   propertyCategory?: string | null
+  listingDate?: Date | string | null
+  daysOnMarket?: number | null
+  marketTrend?: string | null
+  pricePerSqm?: number | null
+  lastSoldNearbyPrice?: number | null
   nearestSchoolKm?: number | null
   nearestHospitalKm?: number | null
   nearestTransportKm?: number | null
   nearestMarketKm?: number | null
   roadAccessType?: $Enums.RoadAccessType | null
+  viewQualityScore?: number | null
+  luxuryScore?: number | null
+  renovationLevel?: number | null
+  furnishingStatus?: string | null
+  interestCount?: number | null
+  saveCount?: number | null
+  inquiryCount?: number | null
   valuationAmount?: number | null
   valuationConfidence?: number | null
   valuationMethod?: $Enums.ValuationMethod | null
@@ -948,6 +1464,11 @@ export type FieldDataUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  microZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  neighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  urbanDensity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  safetyIndex?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  noiseLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gpsCapturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsAccuracy?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
@@ -975,16 +1496,45 @@ export type FieldDataUpdateInput = {
   hasElectricity?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   hasWaterSupply?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   hasWaterTank?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasSwimmingPool?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasGym?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasSmartHome?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasSolarPanels?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasBackupGenerator?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasSecuritySystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasLandscapedGarden?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasModernKitchen?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasAirConditioning?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasFireplace?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasBalcony?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasGarage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasStaffQuarters?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasStorageRoom?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasWaterHeater?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasIntercom?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  viewType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   floodRisk?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   landSlope?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   floorMaterial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roofType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   propertyCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  listingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  daysOnMarket?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  marketTrend?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pricePerSqm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  lastSoldNearbyPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestSchoolKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestHospitalKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestTransportKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestMarketKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   roadAccessType?: Prisma.NullableEnumRoadAccessTypeFieldUpdateOperationsInput | $Enums.RoadAccessType | null
+  viewQualityScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  luxuryScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  renovationLevel?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  furnishingStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  interestCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  saveCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inquiryCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   valuationAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   valuationConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   valuationMethod?: Prisma.NullableEnumValuationMethodFieldUpdateOperationsInput | $Enums.ValuationMethod | null
@@ -998,6 +1548,11 @@ export type FieldDataUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  microZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  neighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  urbanDensity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  safetyIndex?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  noiseLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gpsCapturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsAccuracy?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
@@ -1025,16 +1580,45 @@ export type FieldDataUncheckedUpdateInput = {
   hasElectricity?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   hasWaterSupply?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   hasWaterTank?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasSwimmingPool?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasGym?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasSmartHome?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasSolarPanels?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasBackupGenerator?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasSecuritySystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasLandscapedGarden?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasModernKitchen?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasAirConditioning?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasFireplace?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasBalcony?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasGarage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasStaffQuarters?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasStorageRoom?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasWaterHeater?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasIntercom?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  viewType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   floodRisk?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   landSlope?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   floorMaterial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roofType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   propertyCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  listingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  daysOnMarket?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  marketTrend?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pricePerSqm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  lastSoldNearbyPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestSchoolKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestHospitalKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestTransportKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestMarketKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   roadAccessType?: Prisma.NullableEnumRoadAccessTypeFieldUpdateOperationsInput | $Enums.RoadAccessType | null
+  viewQualityScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  luxuryScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  renovationLevel?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  furnishingStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  interestCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  saveCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inquiryCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   valuationAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   valuationConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   valuationMethod?: Prisma.NullableEnumValuationMethodFieldUpdateOperationsInput | $Enums.ValuationMethod | null
@@ -1048,6 +1632,11 @@ export type FieldDataCreateManyInput = {
   id?: string
   latitude: number
   longitude: number
+  microZone?: string | null
+  neighborhood?: string | null
+  urbanDensity?: string | null
+  safetyIndex?: number | null
+  noiseLevel?: string | null
   gpsCapturedAt?: Date | string | null
   gpsAccuracy?: number | null
   propertyType?: $Enums.PropertyType | null
@@ -1075,16 +1664,45 @@ export type FieldDataCreateManyInput = {
   hasElectricity?: boolean | null
   hasWaterSupply?: boolean | null
   hasWaterTank?: boolean | null
+  hasSwimmingPool?: boolean | null
+  hasGym?: boolean | null
+  hasSmartHome?: boolean | null
+  hasSolarPanels?: boolean | null
+  hasBackupGenerator?: boolean | null
+  hasSecuritySystem?: boolean | null
+  hasLandscapedGarden?: boolean | null
+  hasModernKitchen?: boolean | null
+  hasAirConditioning?: boolean | null
+  hasFireplace?: boolean | null
+  hasBalcony?: boolean | null
+  hasGarage?: boolean | null
+  hasStaffQuarters?: boolean | null
+  hasStorageRoom?: boolean | null
+  hasWaterHeater?: boolean | null
+  hasIntercom?: boolean | null
+  viewType?: string | null
   floodRisk?: boolean | null
   landSlope?: string | null
   floorMaterial?: string | null
   roofType?: string | null
   propertyCategory?: string | null
+  listingDate?: Date | string | null
+  daysOnMarket?: number | null
+  marketTrend?: string | null
+  pricePerSqm?: number | null
+  lastSoldNearbyPrice?: number | null
   nearestSchoolKm?: number | null
   nearestHospitalKm?: number | null
   nearestTransportKm?: number | null
   nearestMarketKm?: number | null
   roadAccessType?: $Enums.RoadAccessType | null
+  viewQualityScore?: number | null
+  luxuryScore?: number | null
+  renovationLevel?: number | null
+  furnishingStatus?: string | null
+  interestCount?: number | null
+  saveCount?: number | null
+  inquiryCount?: number | null
   valuationAmount?: number | null
   valuationConfidence?: number | null
   valuationMethod?: $Enums.ValuationMethod | null
@@ -1098,6 +1716,11 @@ export type FieldDataUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  microZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  neighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  urbanDensity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  safetyIndex?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  noiseLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gpsCapturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsAccuracy?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
@@ -1125,16 +1748,45 @@ export type FieldDataUpdateManyMutationInput = {
   hasElectricity?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   hasWaterSupply?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   hasWaterTank?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasSwimmingPool?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasGym?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasSmartHome?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasSolarPanels?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasBackupGenerator?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasSecuritySystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasLandscapedGarden?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasModernKitchen?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasAirConditioning?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasFireplace?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasBalcony?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasGarage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasStaffQuarters?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasStorageRoom?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasWaterHeater?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasIntercom?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  viewType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   floodRisk?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   landSlope?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   floorMaterial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roofType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   propertyCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  listingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  daysOnMarket?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  marketTrend?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pricePerSqm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  lastSoldNearbyPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestSchoolKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestHospitalKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestTransportKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestMarketKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   roadAccessType?: Prisma.NullableEnumRoadAccessTypeFieldUpdateOperationsInput | $Enums.RoadAccessType | null
+  viewQualityScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  luxuryScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  renovationLevel?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  furnishingStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  interestCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  saveCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inquiryCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   valuationAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   valuationConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   valuationMethod?: Prisma.NullableEnumValuationMethodFieldUpdateOperationsInput | $Enums.ValuationMethod | null
@@ -1147,6 +1799,11 @@ export type FieldDataUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  microZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  neighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  urbanDensity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  safetyIndex?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  noiseLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gpsCapturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsAccuracy?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
@@ -1174,16 +1831,45 @@ export type FieldDataUncheckedUpdateManyInput = {
   hasElectricity?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   hasWaterSupply?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   hasWaterTank?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasSwimmingPool?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasGym?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasSmartHome?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasSolarPanels?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasBackupGenerator?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasSecuritySystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasLandscapedGarden?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasModernKitchen?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasAirConditioning?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasFireplace?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasBalcony?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasGarage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasStaffQuarters?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasStorageRoom?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasWaterHeater?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasIntercom?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  viewType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   floodRisk?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   landSlope?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   floorMaterial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roofType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   propertyCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  listingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  daysOnMarket?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  marketTrend?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pricePerSqm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  lastSoldNearbyPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestSchoolKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestHospitalKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestTransportKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestMarketKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   roadAccessType?: Prisma.NullableEnumRoadAccessTypeFieldUpdateOperationsInput | $Enums.RoadAccessType | null
+  viewQualityScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  luxuryScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  renovationLevel?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  furnishingStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  interestCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  saveCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inquiryCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   valuationAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   valuationConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   valuationMethod?: Prisma.NullableEnumValuationMethodFieldUpdateOperationsInput | $Enums.ValuationMethod | null
@@ -1202,6 +1888,11 @@ export type FieldDataCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
+  microZone?: Prisma.SortOrder
+  neighborhood?: Prisma.SortOrder
+  urbanDensity?: Prisma.SortOrder
+  safetyIndex?: Prisma.SortOrder
+  noiseLevel?: Prisma.SortOrder
   gpsCapturedAt?: Prisma.SortOrder
   gpsAccuracy?: Prisma.SortOrder
   propertyType?: Prisma.SortOrder
@@ -1229,16 +1920,45 @@ export type FieldDataCountOrderByAggregateInput = {
   hasElectricity?: Prisma.SortOrder
   hasWaterSupply?: Prisma.SortOrder
   hasWaterTank?: Prisma.SortOrder
+  hasSwimmingPool?: Prisma.SortOrder
+  hasGym?: Prisma.SortOrder
+  hasSmartHome?: Prisma.SortOrder
+  hasSolarPanels?: Prisma.SortOrder
+  hasBackupGenerator?: Prisma.SortOrder
+  hasSecuritySystem?: Prisma.SortOrder
+  hasLandscapedGarden?: Prisma.SortOrder
+  hasModernKitchen?: Prisma.SortOrder
+  hasAirConditioning?: Prisma.SortOrder
+  hasFireplace?: Prisma.SortOrder
+  hasBalcony?: Prisma.SortOrder
+  hasGarage?: Prisma.SortOrder
+  hasStaffQuarters?: Prisma.SortOrder
+  hasStorageRoom?: Prisma.SortOrder
+  hasWaterHeater?: Prisma.SortOrder
+  hasIntercom?: Prisma.SortOrder
+  viewType?: Prisma.SortOrder
   floodRisk?: Prisma.SortOrder
   landSlope?: Prisma.SortOrder
   floorMaterial?: Prisma.SortOrder
   roofType?: Prisma.SortOrder
   propertyCategory?: Prisma.SortOrder
+  listingDate?: Prisma.SortOrder
+  daysOnMarket?: Prisma.SortOrder
+  marketTrend?: Prisma.SortOrder
+  pricePerSqm?: Prisma.SortOrder
+  lastSoldNearbyPrice?: Prisma.SortOrder
   nearestSchoolKm?: Prisma.SortOrder
   nearestHospitalKm?: Prisma.SortOrder
   nearestTransportKm?: Prisma.SortOrder
   nearestMarketKm?: Prisma.SortOrder
   roadAccessType?: Prisma.SortOrder
+  viewQualityScore?: Prisma.SortOrder
+  luxuryScore?: Prisma.SortOrder
+  renovationLevel?: Prisma.SortOrder
+  furnishingStatus?: Prisma.SortOrder
+  interestCount?: Prisma.SortOrder
+  saveCount?: Prisma.SortOrder
+  inquiryCount?: Prisma.SortOrder
   valuationAmount?: Prisma.SortOrder
   valuationConfidence?: Prisma.SortOrder
   valuationMethod?: Prisma.SortOrder
@@ -1251,6 +1971,7 @@ export type FieldDataCountOrderByAggregateInput = {
 export type FieldDataAvgOrderByAggregateInput = {
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
+  safetyIndex?: Prisma.SortOrder
   gpsAccuracy?: Prisma.SortOrder
   bedrooms?: Prisma.SortOrder
   bathrooms?: Prisma.SortOrder
@@ -1263,10 +1984,19 @@ export type FieldDataAvgOrderByAggregateInput = {
   annexBedrooms?: Prisma.SortOrder
   annexBathrooms?: Prisma.SortOrder
   fenceHeight?: Prisma.SortOrder
+  daysOnMarket?: Prisma.SortOrder
+  pricePerSqm?: Prisma.SortOrder
+  lastSoldNearbyPrice?: Prisma.SortOrder
   nearestSchoolKm?: Prisma.SortOrder
   nearestHospitalKm?: Prisma.SortOrder
   nearestTransportKm?: Prisma.SortOrder
   nearestMarketKm?: Prisma.SortOrder
+  viewQualityScore?: Prisma.SortOrder
+  luxuryScore?: Prisma.SortOrder
+  renovationLevel?: Prisma.SortOrder
+  interestCount?: Prisma.SortOrder
+  saveCount?: Prisma.SortOrder
+  inquiryCount?: Prisma.SortOrder
   valuationAmount?: Prisma.SortOrder
   valuationConfidence?: Prisma.SortOrder
 }
@@ -1275,6 +2005,11 @@ export type FieldDataMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
+  microZone?: Prisma.SortOrder
+  neighborhood?: Prisma.SortOrder
+  urbanDensity?: Prisma.SortOrder
+  safetyIndex?: Prisma.SortOrder
+  noiseLevel?: Prisma.SortOrder
   gpsCapturedAt?: Prisma.SortOrder
   gpsAccuracy?: Prisma.SortOrder
   propertyType?: Prisma.SortOrder
@@ -1302,16 +2037,45 @@ export type FieldDataMaxOrderByAggregateInput = {
   hasElectricity?: Prisma.SortOrder
   hasWaterSupply?: Prisma.SortOrder
   hasWaterTank?: Prisma.SortOrder
+  hasSwimmingPool?: Prisma.SortOrder
+  hasGym?: Prisma.SortOrder
+  hasSmartHome?: Prisma.SortOrder
+  hasSolarPanels?: Prisma.SortOrder
+  hasBackupGenerator?: Prisma.SortOrder
+  hasSecuritySystem?: Prisma.SortOrder
+  hasLandscapedGarden?: Prisma.SortOrder
+  hasModernKitchen?: Prisma.SortOrder
+  hasAirConditioning?: Prisma.SortOrder
+  hasFireplace?: Prisma.SortOrder
+  hasBalcony?: Prisma.SortOrder
+  hasGarage?: Prisma.SortOrder
+  hasStaffQuarters?: Prisma.SortOrder
+  hasStorageRoom?: Prisma.SortOrder
+  hasWaterHeater?: Prisma.SortOrder
+  hasIntercom?: Prisma.SortOrder
+  viewType?: Prisma.SortOrder
   floodRisk?: Prisma.SortOrder
   landSlope?: Prisma.SortOrder
   floorMaterial?: Prisma.SortOrder
   roofType?: Prisma.SortOrder
   propertyCategory?: Prisma.SortOrder
+  listingDate?: Prisma.SortOrder
+  daysOnMarket?: Prisma.SortOrder
+  marketTrend?: Prisma.SortOrder
+  pricePerSqm?: Prisma.SortOrder
+  lastSoldNearbyPrice?: Prisma.SortOrder
   nearestSchoolKm?: Prisma.SortOrder
   nearestHospitalKm?: Prisma.SortOrder
   nearestTransportKm?: Prisma.SortOrder
   nearestMarketKm?: Prisma.SortOrder
   roadAccessType?: Prisma.SortOrder
+  viewQualityScore?: Prisma.SortOrder
+  luxuryScore?: Prisma.SortOrder
+  renovationLevel?: Prisma.SortOrder
+  furnishingStatus?: Prisma.SortOrder
+  interestCount?: Prisma.SortOrder
+  saveCount?: Prisma.SortOrder
+  inquiryCount?: Prisma.SortOrder
   valuationAmount?: Prisma.SortOrder
   valuationConfidence?: Prisma.SortOrder
   valuationMethod?: Prisma.SortOrder
@@ -1325,6 +2089,11 @@ export type FieldDataMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
+  microZone?: Prisma.SortOrder
+  neighborhood?: Prisma.SortOrder
+  urbanDensity?: Prisma.SortOrder
+  safetyIndex?: Prisma.SortOrder
+  noiseLevel?: Prisma.SortOrder
   gpsCapturedAt?: Prisma.SortOrder
   gpsAccuracy?: Prisma.SortOrder
   propertyType?: Prisma.SortOrder
@@ -1352,16 +2121,45 @@ export type FieldDataMinOrderByAggregateInput = {
   hasElectricity?: Prisma.SortOrder
   hasWaterSupply?: Prisma.SortOrder
   hasWaterTank?: Prisma.SortOrder
+  hasSwimmingPool?: Prisma.SortOrder
+  hasGym?: Prisma.SortOrder
+  hasSmartHome?: Prisma.SortOrder
+  hasSolarPanels?: Prisma.SortOrder
+  hasBackupGenerator?: Prisma.SortOrder
+  hasSecuritySystem?: Prisma.SortOrder
+  hasLandscapedGarden?: Prisma.SortOrder
+  hasModernKitchen?: Prisma.SortOrder
+  hasAirConditioning?: Prisma.SortOrder
+  hasFireplace?: Prisma.SortOrder
+  hasBalcony?: Prisma.SortOrder
+  hasGarage?: Prisma.SortOrder
+  hasStaffQuarters?: Prisma.SortOrder
+  hasStorageRoom?: Prisma.SortOrder
+  hasWaterHeater?: Prisma.SortOrder
+  hasIntercom?: Prisma.SortOrder
+  viewType?: Prisma.SortOrder
   floodRisk?: Prisma.SortOrder
   landSlope?: Prisma.SortOrder
   floorMaterial?: Prisma.SortOrder
   roofType?: Prisma.SortOrder
   propertyCategory?: Prisma.SortOrder
+  listingDate?: Prisma.SortOrder
+  daysOnMarket?: Prisma.SortOrder
+  marketTrend?: Prisma.SortOrder
+  pricePerSqm?: Prisma.SortOrder
+  lastSoldNearbyPrice?: Prisma.SortOrder
   nearestSchoolKm?: Prisma.SortOrder
   nearestHospitalKm?: Prisma.SortOrder
   nearestTransportKm?: Prisma.SortOrder
   nearestMarketKm?: Prisma.SortOrder
   roadAccessType?: Prisma.SortOrder
+  viewQualityScore?: Prisma.SortOrder
+  luxuryScore?: Prisma.SortOrder
+  renovationLevel?: Prisma.SortOrder
+  furnishingStatus?: Prisma.SortOrder
+  interestCount?: Prisma.SortOrder
+  saveCount?: Prisma.SortOrder
+  inquiryCount?: Prisma.SortOrder
   valuationAmount?: Prisma.SortOrder
   valuationConfidence?: Prisma.SortOrder
   valuationMethod?: Prisma.SortOrder
@@ -1374,6 +2172,7 @@ export type FieldDataMinOrderByAggregateInput = {
 export type FieldDataSumOrderByAggregateInput = {
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
+  safetyIndex?: Prisma.SortOrder
   gpsAccuracy?: Prisma.SortOrder
   bedrooms?: Prisma.SortOrder
   bathrooms?: Prisma.SortOrder
@@ -1386,10 +2185,19 @@ export type FieldDataSumOrderByAggregateInput = {
   annexBedrooms?: Prisma.SortOrder
   annexBathrooms?: Prisma.SortOrder
   fenceHeight?: Prisma.SortOrder
+  daysOnMarket?: Prisma.SortOrder
+  pricePerSqm?: Prisma.SortOrder
+  lastSoldNearbyPrice?: Prisma.SortOrder
   nearestSchoolKm?: Prisma.SortOrder
   nearestHospitalKm?: Prisma.SortOrder
   nearestTransportKm?: Prisma.SortOrder
   nearestMarketKm?: Prisma.SortOrder
+  viewQualityScore?: Prisma.SortOrder
+  luxuryScore?: Prisma.SortOrder
+  renovationLevel?: Prisma.SortOrder
+  interestCount?: Prisma.SortOrder
+  saveCount?: Prisma.SortOrder
+  inquiryCount?: Prisma.SortOrder
   valuationAmount?: Prisma.SortOrder
   valuationConfidence?: Prisma.SortOrder
 }
@@ -1458,6 +2266,11 @@ export type FieldDataCreateWithoutPropertyInput = {
   id?: string
   latitude: number
   longitude: number
+  microZone?: string | null
+  neighborhood?: string | null
+  urbanDensity?: string | null
+  safetyIndex?: number | null
+  noiseLevel?: string | null
   gpsCapturedAt?: Date | string | null
   gpsAccuracy?: number | null
   propertyType?: $Enums.PropertyType | null
@@ -1485,16 +2298,45 @@ export type FieldDataCreateWithoutPropertyInput = {
   hasElectricity?: boolean | null
   hasWaterSupply?: boolean | null
   hasWaterTank?: boolean | null
+  hasSwimmingPool?: boolean | null
+  hasGym?: boolean | null
+  hasSmartHome?: boolean | null
+  hasSolarPanels?: boolean | null
+  hasBackupGenerator?: boolean | null
+  hasSecuritySystem?: boolean | null
+  hasLandscapedGarden?: boolean | null
+  hasModernKitchen?: boolean | null
+  hasAirConditioning?: boolean | null
+  hasFireplace?: boolean | null
+  hasBalcony?: boolean | null
+  hasGarage?: boolean | null
+  hasStaffQuarters?: boolean | null
+  hasStorageRoom?: boolean | null
+  hasWaterHeater?: boolean | null
+  hasIntercom?: boolean | null
+  viewType?: string | null
   floodRisk?: boolean | null
   landSlope?: string | null
   floorMaterial?: string | null
   roofType?: string | null
   propertyCategory?: string | null
+  listingDate?: Date | string | null
+  daysOnMarket?: number | null
+  marketTrend?: string | null
+  pricePerSqm?: number | null
+  lastSoldNearbyPrice?: number | null
   nearestSchoolKm?: number | null
   nearestHospitalKm?: number | null
   nearestTransportKm?: number | null
   nearestMarketKm?: number | null
   roadAccessType?: $Enums.RoadAccessType | null
+  viewQualityScore?: number | null
+  luxuryScore?: number | null
+  renovationLevel?: number | null
+  furnishingStatus?: string | null
+  interestCount?: number | null
+  saveCount?: number | null
+  inquiryCount?: number | null
   valuationAmount?: number | null
   valuationConfidence?: number | null
   valuationMethod?: $Enums.ValuationMethod | null
@@ -1507,6 +2349,11 @@ export type FieldDataUncheckedCreateWithoutPropertyInput = {
   id?: string
   latitude: number
   longitude: number
+  microZone?: string | null
+  neighborhood?: string | null
+  urbanDensity?: string | null
+  safetyIndex?: number | null
+  noiseLevel?: string | null
   gpsCapturedAt?: Date | string | null
   gpsAccuracy?: number | null
   propertyType?: $Enums.PropertyType | null
@@ -1534,16 +2381,45 @@ export type FieldDataUncheckedCreateWithoutPropertyInput = {
   hasElectricity?: boolean | null
   hasWaterSupply?: boolean | null
   hasWaterTank?: boolean | null
+  hasSwimmingPool?: boolean | null
+  hasGym?: boolean | null
+  hasSmartHome?: boolean | null
+  hasSolarPanels?: boolean | null
+  hasBackupGenerator?: boolean | null
+  hasSecuritySystem?: boolean | null
+  hasLandscapedGarden?: boolean | null
+  hasModernKitchen?: boolean | null
+  hasAirConditioning?: boolean | null
+  hasFireplace?: boolean | null
+  hasBalcony?: boolean | null
+  hasGarage?: boolean | null
+  hasStaffQuarters?: boolean | null
+  hasStorageRoom?: boolean | null
+  hasWaterHeater?: boolean | null
+  hasIntercom?: boolean | null
+  viewType?: string | null
   floodRisk?: boolean | null
   landSlope?: string | null
   floorMaterial?: string | null
   roofType?: string | null
   propertyCategory?: string | null
+  listingDate?: Date | string | null
+  daysOnMarket?: number | null
+  marketTrend?: string | null
+  pricePerSqm?: number | null
+  lastSoldNearbyPrice?: number | null
   nearestSchoolKm?: number | null
   nearestHospitalKm?: number | null
   nearestTransportKm?: number | null
   nearestMarketKm?: number | null
   roadAccessType?: $Enums.RoadAccessType | null
+  viewQualityScore?: number | null
+  luxuryScore?: number | null
+  renovationLevel?: number | null
+  furnishingStatus?: string | null
+  interestCount?: number | null
+  saveCount?: number | null
+  inquiryCount?: number | null
   valuationAmount?: number | null
   valuationConfidence?: number | null
   valuationMethod?: $Enums.ValuationMethod | null
@@ -1572,6 +2448,11 @@ export type FieldDataUpdateWithoutPropertyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  microZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  neighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  urbanDensity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  safetyIndex?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  noiseLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gpsCapturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsAccuracy?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
@@ -1599,16 +2480,45 @@ export type FieldDataUpdateWithoutPropertyInput = {
   hasElectricity?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   hasWaterSupply?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   hasWaterTank?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasSwimmingPool?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasGym?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasSmartHome?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasSolarPanels?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasBackupGenerator?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasSecuritySystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasLandscapedGarden?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasModernKitchen?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasAirConditioning?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasFireplace?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasBalcony?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasGarage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasStaffQuarters?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasStorageRoom?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasWaterHeater?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasIntercom?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  viewType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   floodRisk?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   landSlope?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   floorMaterial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roofType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   propertyCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  listingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  daysOnMarket?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  marketTrend?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pricePerSqm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  lastSoldNearbyPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestSchoolKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestHospitalKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestTransportKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestMarketKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   roadAccessType?: Prisma.NullableEnumRoadAccessTypeFieldUpdateOperationsInput | $Enums.RoadAccessType | null
+  viewQualityScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  luxuryScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  renovationLevel?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  furnishingStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  interestCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  saveCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inquiryCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   valuationAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   valuationConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   valuationMethod?: Prisma.NullableEnumValuationMethodFieldUpdateOperationsInput | $Enums.ValuationMethod | null
@@ -1621,6 +2531,11 @@ export type FieldDataUncheckedUpdateWithoutPropertyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  microZone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  neighborhood?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  urbanDensity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  safetyIndex?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  noiseLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gpsCapturedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsAccuracy?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
@@ -1648,16 +2563,45 @@ export type FieldDataUncheckedUpdateWithoutPropertyInput = {
   hasElectricity?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   hasWaterSupply?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   hasWaterTank?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasSwimmingPool?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasGym?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasSmartHome?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasSolarPanels?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasBackupGenerator?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasSecuritySystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasLandscapedGarden?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasModernKitchen?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasAirConditioning?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasFireplace?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasBalcony?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasGarage?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasStaffQuarters?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasStorageRoom?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasWaterHeater?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  hasIntercom?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  viewType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   floodRisk?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   landSlope?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   floorMaterial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roofType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   propertyCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  listingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  daysOnMarket?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  marketTrend?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pricePerSqm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  lastSoldNearbyPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestSchoolKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestHospitalKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestTransportKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   nearestMarketKm?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   roadAccessType?: Prisma.NullableEnumRoadAccessTypeFieldUpdateOperationsInput | $Enums.RoadAccessType | null
+  viewQualityScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  luxuryScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  renovationLevel?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  furnishingStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  interestCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  saveCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inquiryCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   valuationAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   valuationConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   valuationMethod?: Prisma.NullableEnumValuationMethodFieldUpdateOperationsInput | $Enums.ValuationMethod | null
@@ -1672,6 +2616,11 @@ export type FieldDataSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   id?: boolean
   latitude?: boolean
   longitude?: boolean
+  microZone?: boolean
+  neighborhood?: boolean
+  urbanDensity?: boolean
+  safetyIndex?: boolean
+  noiseLevel?: boolean
   gpsCapturedAt?: boolean
   gpsAccuracy?: boolean
   propertyType?: boolean
@@ -1699,16 +2648,45 @@ export type FieldDataSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   hasElectricity?: boolean
   hasWaterSupply?: boolean
   hasWaterTank?: boolean
+  hasSwimmingPool?: boolean
+  hasGym?: boolean
+  hasSmartHome?: boolean
+  hasSolarPanels?: boolean
+  hasBackupGenerator?: boolean
+  hasSecuritySystem?: boolean
+  hasLandscapedGarden?: boolean
+  hasModernKitchen?: boolean
+  hasAirConditioning?: boolean
+  hasFireplace?: boolean
+  hasBalcony?: boolean
+  hasGarage?: boolean
+  hasStaffQuarters?: boolean
+  hasStorageRoom?: boolean
+  hasWaterHeater?: boolean
+  hasIntercom?: boolean
+  viewType?: boolean
   floodRisk?: boolean
   landSlope?: boolean
   floorMaterial?: boolean
   roofType?: boolean
   propertyCategory?: boolean
+  listingDate?: boolean
+  daysOnMarket?: boolean
+  marketTrend?: boolean
+  pricePerSqm?: boolean
+  lastSoldNearbyPrice?: boolean
   nearestSchoolKm?: boolean
   nearestHospitalKm?: boolean
   nearestTransportKm?: boolean
   nearestMarketKm?: boolean
   roadAccessType?: boolean
+  viewQualityScore?: boolean
+  luxuryScore?: boolean
+  renovationLevel?: boolean
+  furnishingStatus?: boolean
+  interestCount?: boolean
+  saveCount?: boolean
+  inquiryCount?: boolean
   valuationAmount?: boolean
   valuationConfidence?: boolean
   valuationMethod?: boolean
@@ -1723,6 +2701,11 @@ export type FieldDataSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   id?: boolean
   latitude?: boolean
   longitude?: boolean
+  microZone?: boolean
+  neighborhood?: boolean
+  urbanDensity?: boolean
+  safetyIndex?: boolean
+  noiseLevel?: boolean
   gpsCapturedAt?: boolean
   gpsAccuracy?: boolean
   propertyType?: boolean
@@ -1750,16 +2733,45 @@ export type FieldDataSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   hasElectricity?: boolean
   hasWaterSupply?: boolean
   hasWaterTank?: boolean
+  hasSwimmingPool?: boolean
+  hasGym?: boolean
+  hasSmartHome?: boolean
+  hasSolarPanels?: boolean
+  hasBackupGenerator?: boolean
+  hasSecuritySystem?: boolean
+  hasLandscapedGarden?: boolean
+  hasModernKitchen?: boolean
+  hasAirConditioning?: boolean
+  hasFireplace?: boolean
+  hasBalcony?: boolean
+  hasGarage?: boolean
+  hasStaffQuarters?: boolean
+  hasStorageRoom?: boolean
+  hasWaterHeater?: boolean
+  hasIntercom?: boolean
+  viewType?: boolean
   floodRisk?: boolean
   landSlope?: boolean
   floorMaterial?: boolean
   roofType?: boolean
   propertyCategory?: boolean
+  listingDate?: boolean
+  daysOnMarket?: boolean
+  marketTrend?: boolean
+  pricePerSqm?: boolean
+  lastSoldNearbyPrice?: boolean
   nearestSchoolKm?: boolean
   nearestHospitalKm?: boolean
   nearestTransportKm?: boolean
   nearestMarketKm?: boolean
   roadAccessType?: boolean
+  viewQualityScore?: boolean
+  luxuryScore?: boolean
+  renovationLevel?: boolean
+  furnishingStatus?: boolean
+  interestCount?: boolean
+  saveCount?: boolean
+  inquiryCount?: boolean
   valuationAmount?: boolean
   valuationConfidence?: boolean
   valuationMethod?: boolean
@@ -1774,6 +2786,11 @@ export type FieldDataSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   id?: boolean
   latitude?: boolean
   longitude?: boolean
+  microZone?: boolean
+  neighborhood?: boolean
+  urbanDensity?: boolean
+  safetyIndex?: boolean
+  noiseLevel?: boolean
   gpsCapturedAt?: boolean
   gpsAccuracy?: boolean
   propertyType?: boolean
@@ -1801,16 +2818,45 @@ export type FieldDataSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   hasElectricity?: boolean
   hasWaterSupply?: boolean
   hasWaterTank?: boolean
+  hasSwimmingPool?: boolean
+  hasGym?: boolean
+  hasSmartHome?: boolean
+  hasSolarPanels?: boolean
+  hasBackupGenerator?: boolean
+  hasSecuritySystem?: boolean
+  hasLandscapedGarden?: boolean
+  hasModernKitchen?: boolean
+  hasAirConditioning?: boolean
+  hasFireplace?: boolean
+  hasBalcony?: boolean
+  hasGarage?: boolean
+  hasStaffQuarters?: boolean
+  hasStorageRoom?: boolean
+  hasWaterHeater?: boolean
+  hasIntercom?: boolean
+  viewType?: boolean
   floodRisk?: boolean
   landSlope?: boolean
   floorMaterial?: boolean
   roofType?: boolean
   propertyCategory?: boolean
+  listingDate?: boolean
+  daysOnMarket?: boolean
+  marketTrend?: boolean
+  pricePerSqm?: boolean
+  lastSoldNearbyPrice?: boolean
   nearestSchoolKm?: boolean
   nearestHospitalKm?: boolean
   nearestTransportKm?: boolean
   nearestMarketKm?: boolean
   roadAccessType?: boolean
+  viewQualityScore?: boolean
+  luxuryScore?: boolean
+  renovationLevel?: boolean
+  furnishingStatus?: boolean
+  interestCount?: boolean
+  saveCount?: boolean
+  inquiryCount?: boolean
   valuationAmount?: boolean
   valuationConfidence?: boolean
   valuationMethod?: boolean
@@ -1825,6 +2871,11 @@ export type FieldDataSelectScalar = {
   id?: boolean
   latitude?: boolean
   longitude?: boolean
+  microZone?: boolean
+  neighborhood?: boolean
+  urbanDensity?: boolean
+  safetyIndex?: boolean
+  noiseLevel?: boolean
   gpsCapturedAt?: boolean
   gpsAccuracy?: boolean
   propertyType?: boolean
@@ -1852,16 +2903,45 @@ export type FieldDataSelectScalar = {
   hasElectricity?: boolean
   hasWaterSupply?: boolean
   hasWaterTank?: boolean
+  hasSwimmingPool?: boolean
+  hasGym?: boolean
+  hasSmartHome?: boolean
+  hasSolarPanels?: boolean
+  hasBackupGenerator?: boolean
+  hasSecuritySystem?: boolean
+  hasLandscapedGarden?: boolean
+  hasModernKitchen?: boolean
+  hasAirConditioning?: boolean
+  hasFireplace?: boolean
+  hasBalcony?: boolean
+  hasGarage?: boolean
+  hasStaffQuarters?: boolean
+  hasStorageRoom?: boolean
+  hasWaterHeater?: boolean
+  hasIntercom?: boolean
+  viewType?: boolean
   floodRisk?: boolean
   landSlope?: boolean
   floorMaterial?: boolean
   roofType?: boolean
   propertyCategory?: boolean
+  listingDate?: boolean
+  daysOnMarket?: boolean
+  marketTrend?: boolean
+  pricePerSqm?: boolean
+  lastSoldNearbyPrice?: boolean
   nearestSchoolKm?: boolean
   nearestHospitalKm?: boolean
   nearestTransportKm?: boolean
   nearestMarketKm?: boolean
   roadAccessType?: boolean
+  viewQualityScore?: boolean
+  luxuryScore?: boolean
+  renovationLevel?: boolean
+  furnishingStatus?: boolean
+  interestCount?: boolean
+  saveCount?: boolean
+  inquiryCount?: boolean
   valuationAmount?: boolean
   valuationConfidence?: boolean
   valuationMethod?: boolean
@@ -1871,7 +2951,7 @@ export type FieldDataSelectScalar = {
   propertyId?: boolean
 }
 
-export type FieldDataOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "latitude" | "longitude" | "gpsCapturedAt" | "gpsAccuracy" | "propertyType" | "condition" | "bedrooms" | "bathrooms" | "landSize" | "buildingSize" | "yearBuilt" | "parkingSpaces" | "hasGarden" | "gardenSize" | "gardenType" | "hasAnnex" | "annexType" | "annexSize" | "annexBedrooms" | "annexBathrooms" | "hasGate" | "gateType" | "gateMaterial" | "hasFence" | "fenceType" | "fenceHeight" | "hasElectricity" | "hasWaterSupply" | "hasWaterTank" | "floodRisk" | "landSlope" | "floorMaterial" | "roofType" | "propertyCategory" | "nearestSchoolKm" | "nearestHospitalKm" | "nearestTransportKm" | "nearestMarketKm" | "roadAccessType" | "valuationAmount" | "valuationConfidence" | "valuationMethod" | "notes" | "submittedAt" | "updatedAt" | "propertyId", ExtArgs["result"]["fieldData"]>
+export type FieldDataOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "latitude" | "longitude" | "microZone" | "neighborhood" | "urbanDensity" | "safetyIndex" | "noiseLevel" | "gpsCapturedAt" | "gpsAccuracy" | "propertyType" | "condition" | "bedrooms" | "bathrooms" | "landSize" | "buildingSize" | "yearBuilt" | "parkingSpaces" | "hasGarden" | "gardenSize" | "gardenType" | "hasAnnex" | "annexType" | "annexSize" | "annexBedrooms" | "annexBathrooms" | "hasGate" | "gateType" | "gateMaterial" | "hasFence" | "fenceType" | "fenceHeight" | "hasElectricity" | "hasWaterSupply" | "hasWaterTank" | "hasSwimmingPool" | "hasGym" | "hasSmartHome" | "hasSolarPanels" | "hasBackupGenerator" | "hasSecuritySystem" | "hasLandscapedGarden" | "hasModernKitchen" | "hasAirConditioning" | "hasFireplace" | "hasBalcony" | "hasGarage" | "hasStaffQuarters" | "hasStorageRoom" | "hasWaterHeater" | "hasIntercom" | "viewType" | "floodRisk" | "landSlope" | "floorMaterial" | "roofType" | "propertyCategory" | "listingDate" | "daysOnMarket" | "marketTrend" | "pricePerSqm" | "lastSoldNearbyPrice" | "nearestSchoolKm" | "nearestHospitalKm" | "nearestTransportKm" | "nearestMarketKm" | "roadAccessType" | "viewQualityScore" | "luxuryScore" | "renovationLevel" | "furnishingStatus" | "interestCount" | "saveCount" | "inquiryCount" | "valuationAmount" | "valuationConfidence" | "valuationMethod" | "notes" | "submittedAt" | "updatedAt" | "propertyId", ExtArgs["result"]["fieldData"]>
 export type FieldDataInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   property?: boolean | Prisma.PropertyDefaultArgs<ExtArgs>
 }
@@ -1891,6 +2971,11 @@ export type $FieldDataPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     id: string
     latitude: number
     longitude: number
+    microZone: string | null
+    neighborhood: string | null
+    urbanDensity: string | null
+    safetyIndex: number | null
+    noiseLevel: string | null
     gpsCapturedAt: Date | null
     gpsAccuracy: number | null
     propertyType: $Enums.PropertyType | null
@@ -1918,16 +3003,45 @@ export type $FieldDataPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     hasElectricity: boolean | null
     hasWaterSupply: boolean | null
     hasWaterTank: boolean | null
+    hasSwimmingPool: boolean | null
+    hasGym: boolean | null
+    hasSmartHome: boolean | null
+    hasSolarPanels: boolean | null
+    hasBackupGenerator: boolean | null
+    hasSecuritySystem: boolean | null
+    hasLandscapedGarden: boolean | null
+    hasModernKitchen: boolean | null
+    hasAirConditioning: boolean | null
+    hasFireplace: boolean | null
+    hasBalcony: boolean | null
+    hasGarage: boolean | null
+    hasStaffQuarters: boolean | null
+    hasStorageRoom: boolean | null
+    hasWaterHeater: boolean | null
+    hasIntercom: boolean | null
+    viewType: string | null
     floodRisk: boolean | null
     landSlope: string | null
     floorMaterial: string | null
     roofType: string | null
     propertyCategory: string | null
+    listingDate: Date | null
+    daysOnMarket: number | null
+    marketTrend: string | null
+    pricePerSqm: number | null
+    lastSoldNearbyPrice: number | null
     nearestSchoolKm: number | null
     nearestHospitalKm: number | null
     nearestTransportKm: number | null
     nearestMarketKm: number | null
     roadAccessType: $Enums.RoadAccessType | null
+    viewQualityScore: number | null
+    luxuryScore: number | null
+    renovationLevel: number | null
+    furnishingStatus: string | null
+    interestCount: number | null
+    saveCount: number | null
+    inquiryCount: number | null
     valuationAmount: number | null
     valuationConfidence: number | null
     valuationMethod: $Enums.ValuationMethod | null
@@ -2362,6 +3476,11 @@ export interface FieldDataFieldRefs {
   readonly id: Prisma.FieldRef<"FieldData", 'String'>
   readonly latitude: Prisma.FieldRef<"FieldData", 'Float'>
   readonly longitude: Prisma.FieldRef<"FieldData", 'Float'>
+  readonly microZone: Prisma.FieldRef<"FieldData", 'String'>
+  readonly neighborhood: Prisma.FieldRef<"FieldData", 'String'>
+  readonly urbanDensity: Prisma.FieldRef<"FieldData", 'String'>
+  readonly safetyIndex: Prisma.FieldRef<"FieldData", 'Float'>
+  readonly noiseLevel: Prisma.FieldRef<"FieldData", 'String'>
   readonly gpsCapturedAt: Prisma.FieldRef<"FieldData", 'DateTime'>
   readonly gpsAccuracy: Prisma.FieldRef<"FieldData", 'Float'>
   readonly propertyType: Prisma.FieldRef<"FieldData", 'PropertyType'>
@@ -2389,16 +3508,45 @@ export interface FieldDataFieldRefs {
   readonly hasElectricity: Prisma.FieldRef<"FieldData", 'Boolean'>
   readonly hasWaterSupply: Prisma.FieldRef<"FieldData", 'Boolean'>
   readonly hasWaterTank: Prisma.FieldRef<"FieldData", 'Boolean'>
+  readonly hasSwimmingPool: Prisma.FieldRef<"FieldData", 'Boolean'>
+  readonly hasGym: Prisma.FieldRef<"FieldData", 'Boolean'>
+  readonly hasSmartHome: Prisma.FieldRef<"FieldData", 'Boolean'>
+  readonly hasSolarPanels: Prisma.FieldRef<"FieldData", 'Boolean'>
+  readonly hasBackupGenerator: Prisma.FieldRef<"FieldData", 'Boolean'>
+  readonly hasSecuritySystem: Prisma.FieldRef<"FieldData", 'Boolean'>
+  readonly hasLandscapedGarden: Prisma.FieldRef<"FieldData", 'Boolean'>
+  readonly hasModernKitchen: Prisma.FieldRef<"FieldData", 'Boolean'>
+  readonly hasAirConditioning: Prisma.FieldRef<"FieldData", 'Boolean'>
+  readonly hasFireplace: Prisma.FieldRef<"FieldData", 'Boolean'>
+  readonly hasBalcony: Prisma.FieldRef<"FieldData", 'Boolean'>
+  readonly hasGarage: Prisma.FieldRef<"FieldData", 'Boolean'>
+  readonly hasStaffQuarters: Prisma.FieldRef<"FieldData", 'Boolean'>
+  readonly hasStorageRoom: Prisma.FieldRef<"FieldData", 'Boolean'>
+  readonly hasWaterHeater: Prisma.FieldRef<"FieldData", 'Boolean'>
+  readonly hasIntercom: Prisma.FieldRef<"FieldData", 'Boolean'>
+  readonly viewType: Prisma.FieldRef<"FieldData", 'String'>
   readonly floodRisk: Prisma.FieldRef<"FieldData", 'Boolean'>
   readonly landSlope: Prisma.FieldRef<"FieldData", 'String'>
   readonly floorMaterial: Prisma.FieldRef<"FieldData", 'String'>
   readonly roofType: Prisma.FieldRef<"FieldData", 'String'>
   readonly propertyCategory: Prisma.FieldRef<"FieldData", 'String'>
+  readonly listingDate: Prisma.FieldRef<"FieldData", 'DateTime'>
+  readonly daysOnMarket: Prisma.FieldRef<"FieldData", 'Int'>
+  readonly marketTrend: Prisma.FieldRef<"FieldData", 'String'>
+  readonly pricePerSqm: Prisma.FieldRef<"FieldData", 'Float'>
+  readonly lastSoldNearbyPrice: Prisma.FieldRef<"FieldData", 'Float'>
   readonly nearestSchoolKm: Prisma.FieldRef<"FieldData", 'Float'>
   readonly nearestHospitalKm: Prisma.FieldRef<"FieldData", 'Float'>
   readonly nearestTransportKm: Prisma.FieldRef<"FieldData", 'Float'>
   readonly nearestMarketKm: Prisma.FieldRef<"FieldData", 'Float'>
   readonly roadAccessType: Prisma.FieldRef<"FieldData", 'RoadAccessType'>
+  readonly viewQualityScore: Prisma.FieldRef<"FieldData", 'Float'>
+  readonly luxuryScore: Prisma.FieldRef<"FieldData", 'Float'>
+  readonly renovationLevel: Prisma.FieldRef<"FieldData", 'Float'>
+  readonly furnishingStatus: Prisma.FieldRef<"FieldData", 'String'>
+  readonly interestCount: Prisma.FieldRef<"FieldData", 'Int'>
+  readonly saveCount: Prisma.FieldRef<"FieldData", 'Int'>
+  readonly inquiryCount: Prisma.FieldRef<"FieldData", 'Int'>
   readonly valuationAmount: Prisma.FieldRef<"FieldData", 'Float'>
   readonly valuationConfidence: Prisma.FieldRef<"FieldData", 'Float'>
   readonly valuationMethod: Prisma.FieldRef<"FieldData", 'ValuationMethod'>
