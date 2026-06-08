@@ -13,7 +13,8 @@ export const Role = {
   CLIENT: 'CLIENT',
   DATA_COLLECTOR: 'DATA_COLLECTOR',
   SUPERVISOR: 'SUPERVISOR',
-  ADMIN: 'ADMIN'
+  ADMIN: 'ADMIN',
+  FINACIAL_INSTITUTION: 'FINACIAL_INSTITUTION'
 } as const
 
 export type Role = (typeof Role)[keyof typeof Role]
@@ -99,3 +100,13 @@ export const InvitationStatus = {
 } as const
 
 export type InvitationStatus = (typeof InvitationStatus)[keyof typeof InvitationStatus]
+
+
+export const AccessType = {
+  VIEW_ONLY: 'VIEW_ONLY',
+  REQUEST_VALUATION: 'REQUEST_VALUATION',
+  TRACK_PROGRESS: 'TRACK_PROGRESS',
+  FULL_ACCESS: 'FULL_ACCESS'
+} as const
+
+export type AccessType = (typeof AccessType)[keyof typeof AccessType]

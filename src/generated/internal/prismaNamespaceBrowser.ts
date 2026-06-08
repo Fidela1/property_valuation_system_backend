@@ -57,10 +57,12 @@ export const ModelName = {
   Property: 'Property',
   Assignment: 'Assignment',
   FieldData: 'FieldData',
+  PropertySale: 'PropertySale',
   Review: 'Review',
   SavedProperty: 'SavedProperty',
   Inquiry: 'Inquiry',
   AuditLog: 'AuditLog',
+  PropertyAccess: 'PropertyAccess',
   Report: 'Report'
 } as const
 
@@ -93,7 +95,8 @@ export const UserScalarFieldEnum = {
   updatedAt: 'updatedAt',
   addedById: 'addedById',
   passwordResetToken: 'passwordResetToken',
-  passwordResetExpires: 'passwordResetExpires'
+  passwordResetExpires: 'passwordResetExpires',
+  bankId: 'bankId'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -154,7 +157,8 @@ export const PropertyScalarFieldEnum = {
   soldAt: 'soldAt',
   archivedAt: 'archivedAt',
   statusChangedAt: 'statusChangedAt',
-  clientId: 'clientId'
+  clientId: 'clientId',
+  isPublic: 'isPublic'
 } as const
 
 export type PropertyScalarFieldEnum = (typeof PropertyScalarFieldEnum)[keyof typeof PropertyScalarFieldEnum]
@@ -179,6 +183,11 @@ export const FieldDataScalarFieldEnum = {
   id: 'id',
   latitude: 'latitude',
   longitude: 'longitude',
+  microZone: 'microZone',
+  neighborhood: 'neighborhood',
+  urbanDensity: 'urbanDensity',
+  safetyIndex: 'safetyIndex',
+  noiseLevel: 'noiseLevel',
   gpsCapturedAt: 'gpsCapturedAt',
   gpsAccuracy: 'gpsAccuracy',
   propertyType: 'propertyType',
@@ -206,16 +215,45 @@ export const FieldDataScalarFieldEnum = {
   hasElectricity: 'hasElectricity',
   hasWaterSupply: 'hasWaterSupply',
   hasWaterTank: 'hasWaterTank',
+  hasSwimmingPool: 'hasSwimmingPool',
+  hasGym: 'hasGym',
+  hasSmartHome: 'hasSmartHome',
+  hasSolarPanels: 'hasSolarPanels',
+  hasBackupGenerator: 'hasBackupGenerator',
+  hasSecuritySystem: 'hasSecuritySystem',
+  hasLandscapedGarden: 'hasLandscapedGarden',
+  hasModernKitchen: 'hasModernKitchen',
+  hasAirConditioning: 'hasAirConditioning',
+  hasFireplace: 'hasFireplace',
+  hasBalcony: 'hasBalcony',
+  hasGarage: 'hasGarage',
+  hasStaffQuarters: 'hasStaffQuarters',
+  hasStorageRoom: 'hasStorageRoom',
+  hasWaterHeater: 'hasWaterHeater',
+  hasIntercom: 'hasIntercom',
+  viewType: 'viewType',
   floodRisk: 'floodRisk',
   landSlope: 'landSlope',
   floorMaterial: 'floorMaterial',
   roofType: 'roofType',
   propertyCategory: 'propertyCategory',
+  listingDate: 'listingDate',
+  daysOnMarket: 'daysOnMarket',
+  marketTrend: 'marketTrend',
+  pricePerSqm: 'pricePerSqm',
+  lastSoldNearbyPrice: 'lastSoldNearbyPrice',
   nearestSchoolKm: 'nearestSchoolKm',
   nearestHospitalKm: 'nearestHospitalKm',
   nearestTransportKm: 'nearestTransportKm',
   nearestMarketKm: 'nearestMarketKm',
   roadAccessType: 'roadAccessType',
+  viewQualityScore: 'viewQualityScore',
+  luxuryScore: 'luxuryScore',
+  renovationLevel: 'renovationLevel',
+  furnishingStatus: 'furnishingStatus',
+  interestCount: 'interestCount',
+  saveCount: 'saveCount',
+  inquiryCount: 'inquiryCount',
   valuationAmount: 'valuationAmount',
   valuationConfidence: 'valuationConfidence',
   valuationMethod: 'valuationMethod',
@@ -226,6 +264,35 @@ export const FieldDataScalarFieldEnum = {
 } as const
 
 export type FieldDataScalarFieldEnum = (typeof FieldDataScalarFieldEnum)[keyof typeof FieldDataScalarFieldEnum]
+
+
+export const PropertySaleScalarFieldEnum = {
+  id: 'id',
+  district: 'district',
+  sector: 'sector',
+  cell: 'cell',
+  landSize: 'landSize',
+  buildingSize: 'buildingSize',
+  bedrooms: 'bedrooms',
+  bathrooms: 'bathrooms',
+  propertyType: 'propertyType',
+  category: 'category',
+  yearBuilt: 'yearBuilt',
+  floorMaterial: 'floorMaterial',
+  roofType: 'roofType',
+  hasGarden: 'hasGarden',
+  hasFence: 'hasFence',
+  hasGate: 'hasGate',
+  roadAccessType: 'roadAccessType',
+  nearestSchoolKm: 'nearestSchoolKm',
+  nearestHospitalKm: 'nearestHospitalKm',
+  nearestMarketKm: 'nearestMarketKm',
+  soldPrice: 'soldPrice',
+  soldAt: 'soldAt',
+  createdAt: 'createdAt'
+} as const
+
+export type PropertySaleScalarFieldEnum = (typeof PropertySaleScalarFieldEnum)[keyof typeof PropertySaleScalarFieldEnum]
 
 
 export const ReviewScalarFieldEnum = {
@@ -281,6 +348,25 @@ export const AuditLogScalarFieldEnum = {
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const PropertyAccessScalarFieldEnum = {
+  id: 'id',
+  propertyId: 'propertyId',
+  institutionId: 'institutionId',
+  accessType: 'accessType',
+  grantedAt: 'grantedAt',
+  grantedBy: 'grantedBy',
+  expiresAt: 'expiresAt',
+  accessRequestedAt: 'accessRequestedAt',
+  accessApprovedAt: 'accessApprovedAt',
+  clientConsent: 'clientConsent',
+  clientId: 'clientId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PropertyAccessScalarFieldEnum = (typeof PropertyAccessScalarFieldEnum)[keyof typeof PropertyAccessScalarFieldEnum]
 
 
 export const ReportScalarFieldEnum = {

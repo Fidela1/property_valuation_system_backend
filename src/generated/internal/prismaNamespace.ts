@@ -390,10 +390,12 @@ export const ModelName = {
   Property: 'Property',
   Assignment: 'Assignment',
   FieldData: 'FieldData',
+  PropertySale: 'PropertySale',
   Review: 'Review',
   SavedProperty: 'SavedProperty',
   Inquiry: 'Inquiry',
   AuditLog: 'AuditLog',
+  PropertyAccess: 'PropertyAccess',
   Report: 'Report'
 } as const
 
@@ -410,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "invitation" | "image" | "property" | "assignment" | "fieldData" | "review" | "savedProperty" | "inquiry" | "auditLog" | "report"
+    modelProps: "user" | "invitation" | "image" | "property" | "assignment" | "fieldData" | "propertySale" | "review" | "savedProperty" | "inquiry" | "auditLog" | "propertyAccess" | "report"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -858,6 +860,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PropertySale: {
+      payload: Prisma.$PropertySalePayload<ExtArgs>
+      fields: Prisma.PropertySaleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PropertySaleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertySalePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PropertySaleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertySalePayload>
+        }
+        findFirst: {
+          args: Prisma.PropertySaleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertySalePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PropertySaleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertySalePayload>
+        }
+        findMany: {
+          args: Prisma.PropertySaleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertySalePayload>[]
+        }
+        create: {
+          args: Prisma.PropertySaleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertySalePayload>
+        }
+        createMany: {
+          args: Prisma.PropertySaleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PropertySaleCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertySalePayload>[]
+        }
+        delete: {
+          args: Prisma.PropertySaleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertySalePayload>
+        }
+        update: {
+          args: Prisma.PropertySaleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertySalePayload>
+        }
+        deleteMany: {
+          args: Prisma.PropertySaleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PropertySaleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PropertySaleUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertySalePayload>[]
+        }
+        upsert: {
+          args: Prisma.PropertySaleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertySalePayload>
+        }
+        aggregate: {
+          args: Prisma.PropertySaleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePropertySale>
+        }
+        groupBy: {
+          args: Prisma.PropertySaleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PropertySaleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PropertySaleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PropertySaleCountAggregateOutputType> | number
+        }
+      }
+    }
     Review: {
       payload: Prisma.$ReviewPayload<ExtArgs>
       fields: Prisma.ReviewFieldRefs
@@ -1154,6 +1230,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PropertyAccess: {
+      payload: Prisma.$PropertyAccessPayload<ExtArgs>
+      fields: Prisma.PropertyAccessFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PropertyAccessFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyAccessPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PropertyAccessFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyAccessPayload>
+        }
+        findFirst: {
+          args: Prisma.PropertyAccessFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyAccessPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PropertyAccessFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyAccessPayload>
+        }
+        findMany: {
+          args: Prisma.PropertyAccessFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyAccessPayload>[]
+        }
+        create: {
+          args: Prisma.PropertyAccessCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyAccessPayload>
+        }
+        createMany: {
+          args: Prisma.PropertyAccessCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PropertyAccessCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyAccessPayload>[]
+        }
+        delete: {
+          args: Prisma.PropertyAccessDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyAccessPayload>
+        }
+        update: {
+          args: Prisma.PropertyAccessUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyAccessPayload>
+        }
+        deleteMany: {
+          args: Prisma.PropertyAccessDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PropertyAccessUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PropertyAccessUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyAccessPayload>[]
+        }
+        upsert: {
+          args: Prisma.PropertyAccessUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyAccessPayload>
+        }
+        aggregate: {
+          args: Prisma.PropertyAccessAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePropertyAccess>
+        }
+        groupBy: {
+          args: Prisma.PropertyAccessGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PropertyAccessGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PropertyAccessCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PropertyAccessCountAggregateOutputType> | number
+        }
+      }
+    }
     Report: {
       payload: Prisma.$ReportPayload<ExtArgs>
       fields: Prisma.ReportFieldRefs
@@ -1280,7 +1430,8 @@ export const UserScalarFieldEnum = {
   updatedAt: 'updatedAt',
   addedById: 'addedById',
   passwordResetToken: 'passwordResetToken',
-  passwordResetExpires: 'passwordResetExpires'
+  passwordResetExpires: 'passwordResetExpires',
+  bankId: 'bankId'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -1341,7 +1492,8 @@ export const PropertyScalarFieldEnum = {
   soldAt: 'soldAt',
   archivedAt: 'archivedAt',
   statusChangedAt: 'statusChangedAt',
-  clientId: 'clientId'
+  clientId: 'clientId',
+  isPublic: 'isPublic'
 } as const
 
 export type PropertyScalarFieldEnum = (typeof PropertyScalarFieldEnum)[keyof typeof PropertyScalarFieldEnum]
@@ -1366,6 +1518,11 @@ export const FieldDataScalarFieldEnum = {
   id: 'id',
   latitude: 'latitude',
   longitude: 'longitude',
+  microZone: 'microZone',
+  neighborhood: 'neighborhood',
+  urbanDensity: 'urbanDensity',
+  safetyIndex: 'safetyIndex',
+  noiseLevel: 'noiseLevel',
   gpsCapturedAt: 'gpsCapturedAt',
   gpsAccuracy: 'gpsAccuracy',
   propertyType: 'propertyType',
@@ -1393,16 +1550,45 @@ export const FieldDataScalarFieldEnum = {
   hasElectricity: 'hasElectricity',
   hasWaterSupply: 'hasWaterSupply',
   hasWaterTank: 'hasWaterTank',
+  hasSwimmingPool: 'hasSwimmingPool',
+  hasGym: 'hasGym',
+  hasSmartHome: 'hasSmartHome',
+  hasSolarPanels: 'hasSolarPanels',
+  hasBackupGenerator: 'hasBackupGenerator',
+  hasSecuritySystem: 'hasSecuritySystem',
+  hasLandscapedGarden: 'hasLandscapedGarden',
+  hasModernKitchen: 'hasModernKitchen',
+  hasAirConditioning: 'hasAirConditioning',
+  hasFireplace: 'hasFireplace',
+  hasBalcony: 'hasBalcony',
+  hasGarage: 'hasGarage',
+  hasStaffQuarters: 'hasStaffQuarters',
+  hasStorageRoom: 'hasStorageRoom',
+  hasWaterHeater: 'hasWaterHeater',
+  hasIntercom: 'hasIntercom',
+  viewType: 'viewType',
   floodRisk: 'floodRisk',
   landSlope: 'landSlope',
   floorMaterial: 'floorMaterial',
   roofType: 'roofType',
   propertyCategory: 'propertyCategory',
+  listingDate: 'listingDate',
+  daysOnMarket: 'daysOnMarket',
+  marketTrend: 'marketTrend',
+  pricePerSqm: 'pricePerSqm',
+  lastSoldNearbyPrice: 'lastSoldNearbyPrice',
   nearestSchoolKm: 'nearestSchoolKm',
   nearestHospitalKm: 'nearestHospitalKm',
   nearestTransportKm: 'nearestTransportKm',
   nearestMarketKm: 'nearestMarketKm',
   roadAccessType: 'roadAccessType',
+  viewQualityScore: 'viewQualityScore',
+  luxuryScore: 'luxuryScore',
+  renovationLevel: 'renovationLevel',
+  furnishingStatus: 'furnishingStatus',
+  interestCount: 'interestCount',
+  saveCount: 'saveCount',
+  inquiryCount: 'inquiryCount',
   valuationAmount: 'valuationAmount',
   valuationConfidence: 'valuationConfidence',
   valuationMethod: 'valuationMethod',
@@ -1413,6 +1599,35 @@ export const FieldDataScalarFieldEnum = {
 } as const
 
 export type FieldDataScalarFieldEnum = (typeof FieldDataScalarFieldEnum)[keyof typeof FieldDataScalarFieldEnum]
+
+
+export const PropertySaleScalarFieldEnum = {
+  id: 'id',
+  district: 'district',
+  sector: 'sector',
+  cell: 'cell',
+  landSize: 'landSize',
+  buildingSize: 'buildingSize',
+  bedrooms: 'bedrooms',
+  bathrooms: 'bathrooms',
+  propertyType: 'propertyType',
+  category: 'category',
+  yearBuilt: 'yearBuilt',
+  floorMaterial: 'floorMaterial',
+  roofType: 'roofType',
+  hasGarden: 'hasGarden',
+  hasFence: 'hasFence',
+  hasGate: 'hasGate',
+  roadAccessType: 'roadAccessType',
+  nearestSchoolKm: 'nearestSchoolKm',
+  nearestHospitalKm: 'nearestHospitalKm',
+  nearestMarketKm: 'nearestMarketKm',
+  soldPrice: 'soldPrice',
+  soldAt: 'soldAt',
+  createdAt: 'createdAt'
+} as const
+
+export type PropertySaleScalarFieldEnum = (typeof PropertySaleScalarFieldEnum)[keyof typeof PropertySaleScalarFieldEnum]
 
 
 export const ReviewScalarFieldEnum = {
@@ -1468,6 +1683,25 @@ export const AuditLogScalarFieldEnum = {
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const PropertyAccessScalarFieldEnum = {
+  id: 'id',
+  propertyId: 'propertyId',
+  institutionId: 'institutionId',
+  accessType: 'accessType',
+  grantedAt: 'grantedAt',
+  grantedBy: 'grantedBy',
+  expiresAt: 'expiresAt',
+  accessRequestedAt: 'accessRequestedAt',
+  accessApprovedAt: 'accessApprovedAt',
+  clientConsent: 'clientConsent',
+  clientId: 'clientId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PropertyAccessScalarFieldEnum = (typeof PropertyAccessScalarFieldEnum)[keyof typeof PropertyAccessScalarFieldEnum]
 
 
 export const ReportScalarFieldEnum = {
@@ -1738,6 +1972,20 @@ export type EnumInquiryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
 export type ListEnumInquiryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InquiryStatus[]'>
     
 
+
+/**
+ * Reference to a field of type 'AccessType'
+ */
+export type EnumAccessTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AccessType'>
+    
+
+
+/**
+ * Reference to a field of type 'AccessType[]'
+ */
+export type ListEnumAccessTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AccessType[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -1839,10 +2087,12 @@ export type GlobalOmitConfig = {
   property?: Prisma.PropertyOmit
   assignment?: Prisma.AssignmentOmit
   fieldData?: Prisma.FieldDataOmit
+  propertySale?: Prisma.PropertySaleOmit
   review?: Prisma.ReviewOmit
   savedProperty?: Prisma.SavedPropertyOmit
   inquiry?: Prisma.InquiryOmit
   auditLog?: Prisma.AuditLogOmit
+  propertyAccess?: Prisma.PropertyAccessOmit
   report?: Prisma.ReportOmit
 }
 

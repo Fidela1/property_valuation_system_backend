@@ -48,6 +48,11 @@ export type Assignment = Prisma.AssignmentModel
  */
 export type FieldData = Prisma.FieldDataModel
 /**
+ * Model PropertySale
+ * 
+ */
+export type PropertySale = Prisma.PropertySaleModel
+/**
  * Model Review
  * 
  */
@@ -67,6 +72,11 @@ export type Inquiry = Prisma.InquiryModel
  * 
  */
 export type AuditLog = Prisma.AuditLogModel
+/**
+ * Model PropertyAccess
+ * 
+ */
+export type PropertyAccess = Prisma.PropertyAccessModel
 /**
  * Model Report
  * 

@@ -14,7 +14,6 @@ export const createProperty = async (
     sector?: string;
     cell?: string;
     village?: string;
-   
   }
 ) => {
 
@@ -253,7 +252,6 @@ export const updateProperty = async (
       sector: data.sector,
       cell: data.cell,
       village: data.village,
-    
     }
   });
 
@@ -410,5 +408,228 @@ export const getPropertyTimeline = async (userId: string, propertyId: string) =>
   return {
     currentStatus: property.status,
     timeline: timeline.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+  };
+};
+
+// ===== ADD THESE NEW FUNCTIONS FOR ACCESS CONTROL =====
+
+// Get client properties with access requests and institutions
+export const getClientPropertiesWithAccess = async (clientId: string) => {
+  const properties = await prisma.property.findMany({
+    where: { clientId: clientId },
+    include: {
+      sharedWith: {
+        include: {
+          institution: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              phone: true
+            }
+          }
+        }
+      }
+    },
+    orderBy: { createdAt: 'desc' }
+  });
+
+  return properties.map(property => ({
+    id: property.id,
+    upiNumber: property.upiNumber,
+    ownerName: property.ownerName,
+    district: property.district,
+    province: property.province,
+    status: property.status,
+    aiValuation: property.aiValuation,
+    createdAt: property.createdAt,
+    institutions: property.sharedWith
+      .filter(access => access.clientConsent === true)
+      .map(access => ({
+        id: access.institution.id,
+        name: access.institution.name,
+        email: access.institution.email,
+        accessType: access.accessType,
+        grantedAt: access.grantedAt,
+        isPending: false
+      })),
+    pendingRequests: property.sharedWith
+      .filter(access => access.clientConsent === null && access.accessRequestedAt)
+      .map(access => ({
+        id: access.id,
+        institutionId: access.institution.id,
+        institution: {
+          id: access.institution.id,
+          name: access.institution.name,
+          email: access.institution.email
+        },
+        accessType: access.accessType,
+        accessRequestedAt: access.accessRequestedAt
+      }))
+  }));
+};
+
+// Approve access request from institution
+export const approveAccessRequest = async (
+  clientId: string,
+  propertyId: string,
+  institutionId: string,
+  accessType: string = 'VIEW_ONLY'
+) => {
+  const property = await prisma.property.findFirst({
+    where: { id: propertyId, clientId }
+  });
+
+  if (!property) {
+    throw new AppError('Property not found', 404);
+  }
+
+  const access = await prisma.propertyAccess.findUnique({
+    where: {
+      propertyId_institutionId: {
+        propertyId,
+        institutionId
+      }
+    },
+    include: {
+      institution: true,
+      property: true
+    }
+  });
+
+  if (!access) {
+    throw new AppError('Access request not found', 404);
+  }
+
+  if (access.clientConsent === true) {
+    throw new AppError('Access already granted', 400);
+  }
+
+  const updatedAccess = await prisma.propertyAccess.update({
+    where: {
+      propertyId_institutionId: {
+        propertyId,
+        institutionId
+      }
+    },
+    data: {
+      clientConsent: true,
+      accessApprovedAt: new Date(),
+      accessType: accessType as any,
+      grantedAt: new Date()
+    },
+    include: {
+      institution: true,
+      property: true
+    }
+  });
+
+  return {
+    success: true,
+    message: 'Access granted successfully',
+    access: updatedAccess
+  };
+};
+
+// Revoke access from institution
+export const revokeAccess = async (
+  clientId: string,
+  propertyId: string,
+  institutionId: string
+) => {
+  const property = await prisma.property.findFirst({
+    where: { id: propertyId, clientId }
+  });
+
+  if (!property) {
+    throw new AppError('Property not found', 404);
+  }
+
+  const access = await prisma.propertyAccess.findUnique({
+    where: {
+      propertyId_institutionId: {
+        propertyId,
+        institutionId
+      }
+    }
+  });
+
+  if (!access) {
+    throw new AppError('Access not found', 404);
+  }
+
+  await prisma.propertyAccess.delete({
+    where: {
+      propertyId_institutionId: {
+        propertyId,
+        institutionId
+      }
+    }
+  });
+
+  return {
+    success: true,
+    message: 'Access revoked successfully'
+  };
+};
+
+// Add to client.service.ts
+
+export const getAccessRequests = async (clientId: string) => {
+  const accessRequests = await prisma.propertyAccess.findMany({
+    where: {
+      clientId: clientId,
+      clientConsent: null,
+      accessRequestedAt: { not: null }
+    },
+    include: {
+      property: {
+        select: {
+          id: true,
+          upiNumber: true,
+          ownerName: true,
+          district: true,
+          province: true,
+          status: true,
+          aiValuation: true
+        }
+      },
+      institution: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true
+        }
+      }
+    },
+    orderBy: { accessRequestedAt: 'desc' }
+  });
+
+  return accessRequests;
+};
+
+export const rejectAccessRequest = async (clientId: string, requestId: string) => {
+  const accessRequest = await prisma.propertyAccess.findFirst({
+    where: {
+      id: requestId,
+      clientId: clientId,
+      clientConsent: null
+    }
+  });
+
+  if (!accessRequest) {
+    throw new AppError('Access request not found', 404);
+  }
+
+  const updated = await prisma.propertyAccess.update({
+    where: { id: requestId },
+    data: { clientConsent: false }
+  });
+
+  return {
+    success: true,
+    message: 'Access request rejected',
+    access: updated
   };
 };
