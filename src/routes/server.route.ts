@@ -10,6 +10,7 @@ import valuationRoute from "./valuation.route"
 import reportRoute from "./report.route"
 import userAnalyticsRoute from "./analytics.route";
 import propertyRoutes from "./property.route";
+import bankRoute from "./bank.route"
 
 const router = Router();
 
@@ -24,4 +25,5 @@ router.use('/valuation', valuationRoute);
 router.use('/report', reportRoute);
 router.use('/user-analytics', userAnalyticsRoute);
 router.use('/properties', propertyRoutes);
+router.use('/financial_institution', bankRoute)
 export default router;

@@ -636,3 +636,110 @@ export const getAccountPermanentlyDeletedEmailTemplate = (userName: string): str
     </html>
   `;
 };
+
+export const getAccessRequestEmailTemplate = (
+  clientName: string,
+  bankName: string,
+  upiNumber: string,
+  accessType: string,
+  message?: string
+): string => {
+  const accessTypeDisplay = {
+    'VIEW_ONLY': 'View Only - They can see the final valuation',
+    'TRACK_PROGRESS': 'Track Progress - They can follow the valuation process in real-time',
+    'FULL_ACCESS': 'Full Access - They can view all property details and valuation'
+  }[accessType] || accessType;
+
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <div style="background-color: #1B3A5C; padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
+        <h2 style="color: white; margin: 0;">Property Valuation System</h2>
+      </div>
+      <div style="border: 1px solid #e0e0e0; border-top: none; padding: 20px; border-radius: 0 0 8px 8px;">
+        <h3 style="color: #1B3A5C;">Access Request for Your Property</h3>
+        <p>Dear ${clientName},</p>
+        <p><strong>${bankName}</strong> has requested access to view your property valuation for:</p>
+        <div style="background-color: #f5f5f5; padding: 15px; border-radius: 8px; margin: 15px 0;">
+          <p style="margin: 0;"><strong>Property UPI:</strong> ${upiNumber}</p>
+          <p style="margin: 10px 0 0;"><strong>Requested Access Level:</strong> ${accessTypeDisplay}</p>
+          ${message ? `<p style="margin: 10px 0 0;"><strong>Message from ${bankName}:</strong> ${message}</p>` : ''}
+        </div>
+        <p>By granting access, the institution will be able to:</p>
+        <ul>
+          <li>Track the progress of your property valuation</li>
+          <li>View the final valuation report when completed</li>
+          <li>Download the valuation report for their records</li>
+        </ul>
+        <div style="margin: 25px 0; text-align: center;">
+          <a href="${process.env.FRONTEND_URL}/client/access-requests" style="background-color: #1B3A5C; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin: 0 10px;">View Requests</a>
+        </div>
+        <p style="color: #666; font-size: 12px; margin-top: 20px;">You can manage access requests from your property dashboard. If you did not expect this request, please ignore this email.</p>
+      </div>
+    </div>
+  `;
+};
+
+// Email template for access approved notification to bank
+export const getAccessApprovedEmailTemplate = (
+  bankName: string,
+  upiNumber: string,
+  ownerName: string
+): string => {
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <div style="background-color: #1B3A5C; padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
+        <h2 style="color: white; margin: 0;">Property Valuation System</h2>
+      </div>
+      <div style="border: 1px solid #e0e0e0; border-top: none; padding: 20px; border-radius: 0 0 8px 8px;">
+        <h3 style="color: #1B3A5C;">Access Granted to Property</h3>
+        <p>Dear ${bankName},</p>
+        <p>Great news! The property owner has <strong style="color: green;">approved your access request</strong> for:</p>
+        <div style="background-color: #f5f5f5; padding: 15px; border-radius: 8px; margin: 15px 0;">
+          <p style="margin: 0;"><strong>Property UPI:</strong> ${upiNumber}</p>
+          <p style="margin: 10px 0 0;"><strong>Owner:</strong> ${ownerName}</p>
+        </div>
+        <p>You can now:</p>
+        <ul>
+          <li>Track the valuation progress in real-time</li>
+          <li>View the final valuation report when available</li>
+          <li>Download the report for your records</li>
+        </ul>
+        <div style="margin: 25px 0; text-align: center;">
+          <a href="${process.env.FRONTEND_URL}/bank/properties" style="background-color: #1B3A5C; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px;">View Property</a>
+        </div>
+        <p style="color: #666; font-size: 12px; margin-top: 20px;">You can now track this property's valuation from your bank dashboard.</p>
+      </div>
+    </div>
+  `;
+};
+
+// Email sending functions
+export const sendAccessRequestEmail = async (
+  to: string,
+  clientName: string,
+  bankName: string,
+  upiNumber: string,
+  accessType: string,
+  message?: string
+): Promise<void> => {
+  const html = getAccessRequestEmailTemplate(clientName, bankName, upiNumber, accessType, message);
+  await sendEmail({
+    to,
+    subject: `Access Request for Property ${upiNumber} - Property Valuation System`,
+    html
+  });
+};
+
+export const sendAccessApprovedEmail = async (
+  to: string,
+  bankName: string,
+  upiNumber: string,
+  ownerName: string
+): Promise<void> => {
+  const html = getAccessApprovedEmailTemplate(bankName, upiNumber, ownerName);
+  await sendEmail({
+    to,
+    subject: `Access Granted for Property ${upiNumber} - Property Valuation System`,
+    html
+  });
+};

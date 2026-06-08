@@ -58,6 +58,7 @@ export type PropertyMinAggregateOutputType = {
   archivedAt: Date | null
   statusChangedAt: Date | null
   clientId: string | null
+  isPublic: boolean | null
 }
 
 export type PropertyMaxAggregateOutputType = {
@@ -82,6 +83,7 @@ export type PropertyMaxAggregateOutputType = {
   archivedAt: Date | null
   statusChangedAt: Date | null
   clientId: string | null
+  isPublic: boolean | null
 }
 
 export type PropertyCountAggregateOutputType = {
@@ -107,6 +109,7 @@ export type PropertyCountAggregateOutputType = {
   archivedAt: number
   statusChangedAt: number
   clientId: number
+  isPublic: number
   _all: number
 }
 
@@ -143,6 +146,7 @@ export type PropertyMinAggregateInputType = {
   archivedAt?: true
   statusChangedAt?: true
   clientId?: true
+  isPublic?: true
 }
 
 export type PropertyMaxAggregateInputType = {
@@ -167,6 +171,7 @@ export type PropertyMaxAggregateInputType = {
   archivedAt?: true
   statusChangedAt?: true
   clientId?: true
+  isPublic?: true
 }
 
 export type PropertyCountAggregateInputType = {
@@ -192,6 +197,7 @@ export type PropertyCountAggregateInputType = {
   archivedAt?: true
   statusChangedAt?: true
   clientId?: true
+  isPublic?: true
   _all?: true
 }
 
@@ -304,6 +310,7 @@ export type PropertyGroupByOutputType = {
   archivedAt: Date | null
   statusChangedAt: Date | null
   clientId: string
+  isPublic: boolean
   _count: PropertyCountAggregateOutputType | null
   _avg: PropertyAvgAggregateOutputType | null
   _sum: PropertySumAggregateOutputType | null
@@ -352,6 +359,7 @@ export type PropertyWhereInput = {
   archivedAt?: Prisma.DateTimeNullableFilter<"Property"> | Date | string | null
   statusChangedAt?: Prisma.DateTimeNullableFilter<"Property"> | Date | string | null
   clientId?: Prisma.StringFilter<"Property"> | string
+  isPublic?: Prisma.BoolFilter<"Property"> | boolean
   client?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   fieldData?: Prisma.XOR<Prisma.FieldDataNullableScalarRelationFilter, Prisma.FieldDataWhereInput> | null
   assignment?: Prisma.XOR<Prisma.AssignmentNullableScalarRelationFilter, Prisma.AssignmentWhereInput> | null
@@ -360,6 +368,7 @@ export type PropertyWhereInput = {
   savedBy?: Prisma.SavedPropertyListRelationFilter
   inquiries?: Prisma.InquiryListRelationFilter
   reports?: Prisma.ReportListRelationFilter
+  sharedWith?: Prisma.PropertyAccessListRelationFilter
 }
 
 export type PropertyOrderByWithRelationInput = {
@@ -385,6 +394,7 @@ export type PropertyOrderByWithRelationInput = {
   archivedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   statusChangedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   clientId?: Prisma.SortOrder
+  isPublic?: Prisma.SortOrder
   client?: Prisma.UserOrderByWithRelationInput
   fieldData?: Prisma.FieldDataOrderByWithRelationInput
   assignment?: Prisma.AssignmentOrderByWithRelationInput
@@ -393,6 +403,7 @@ export type PropertyOrderByWithRelationInput = {
   savedBy?: Prisma.SavedPropertyOrderByRelationAggregateInput
   inquiries?: Prisma.InquiryOrderByRelationAggregateInput
   reports?: Prisma.ReportOrderByRelationAggregateInput
+  sharedWith?: Prisma.PropertyAccessOrderByRelationAggregateInput
 }
 
 export type PropertyWhereUniqueInput = Prisma.AtLeast<{
@@ -421,6 +432,7 @@ export type PropertyWhereUniqueInput = Prisma.AtLeast<{
   archivedAt?: Prisma.DateTimeNullableFilter<"Property"> | Date | string | null
   statusChangedAt?: Prisma.DateTimeNullableFilter<"Property"> | Date | string | null
   clientId?: Prisma.StringFilter<"Property"> | string
+  isPublic?: Prisma.BoolFilter<"Property"> | boolean
   client?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   fieldData?: Prisma.XOR<Prisma.FieldDataNullableScalarRelationFilter, Prisma.FieldDataWhereInput> | null
   assignment?: Prisma.XOR<Prisma.AssignmentNullableScalarRelationFilter, Prisma.AssignmentWhereInput> | null
@@ -429,6 +441,7 @@ export type PropertyWhereUniqueInput = Prisma.AtLeast<{
   savedBy?: Prisma.SavedPropertyListRelationFilter
   inquiries?: Prisma.InquiryListRelationFilter
   reports?: Prisma.ReportListRelationFilter
+  sharedWith?: Prisma.PropertyAccessListRelationFilter
 }, "id" | "upiNumber">
 
 export type PropertyOrderByWithAggregationInput = {
@@ -454,6 +467,7 @@ export type PropertyOrderByWithAggregationInput = {
   archivedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   statusChangedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   clientId?: Prisma.SortOrder
+  isPublic?: Prisma.SortOrder
   _count?: Prisma.PropertyCountOrderByAggregateInput
   _avg?: Prisma.PropertyAvgOrderByAggregateInput
   _max?: Prisma.PropertyMaxOrderByAggregateInput
@@ -487,6 +501,7 @@ export type PropertyScalarWhereWithAggregatesInput = {
   archivedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Property"> | Date | string | null
   statusChangedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Property"> | Date | string | null
   clientId?: Prisma.StringWithAggregatesFilter<"Property"> | string
+  isPublic?: Prisma.BoolWithAggregatesFilter<"Property"> | boolean
 }
 
 export type PropertyCreateInput = {
@@ -511,6 +526,7 @@ export type PropertyCreateInput = {
   soldAt?: Date | string | null
   archivedAt?: Date | string | null
   statusChangedAt?: Date | string | null
+  isPublic?: boolean
   client: Prisma.UserCreateNestedOneWithoutPropertiesInput
   fieldData?: Prisma.FieldDataCreateNestedOneWithoutPropertyInput
   assignment?: Prisma.AssignmentCreateNestedOneWithoutPropertyInput
@@ -519,6 +535,7 @@ export type PropertyCreateInput = {
   savedBy?: Prisma.SavedPropertyCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryCreateNestedManyWithoutPropertyInput
   reports?: Prisma.ReportCreateNestedManyWithoutPropertyInput
+  sharedWith?: Prisma.PropertyAccessCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateInput = {
@@ -544,6 +561,7 @@ export type PropertyUncheckedCreateInput = {
   archivedAt?: Date | string | null
   statusChangedAt?: Date | string | null
   clientId: string
+  isPublic?: boolean
   fieldData?: Prisma.FieldDataUncheckedCreateNestedOneWithoutPropertyInput
   assignment?: Prisma.AssignmentUncheckedCreateNestedOneWithoutPropertyInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPropertyInput
@@ -551,6 +569,7 @@ export type PropertyUncheckedCreateInput = {
   savedBy?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutPropertyInput
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutPropertyInput
+  sharedWith?: Prisma.PropertyAccessUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUpdateInput = {
@@ -575,6 +594,7 @@ export type PropertyUpdateInput = {
   soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   client?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
   fieldData?: Prisma.FieldDataUpdateOneWithoutPropertyNestedInput
   assignment?: Prisma.AssignmentUpdateOneWithoutPropertyNestedInput
@@ -583,6 +603,7 @@ export type PropertyUpdateInput = {
   savedBy?: Prisma.SavedPropertyUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.ReportUpdateManyWithoutPropertyNestedInput
+  sharedWith?: Prisma.PropertyAccessUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateInput = {
@@ -608,6 +629,7 @@ export type PropertyUncheckedUpdateInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   fieldData?: Prisma.FieldDataUncheckedUpdateOneWithoutPropertyNestedInput
   assignment?: Prisma.AssignmentUncheckedUpdateOneWithoutPropertyNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPropertyNestedInput
@@ -615,6 +637,7 @@ export type PropertyUncheckedUpdateInput = {
   savedBy?: Prisma.SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.ReportUncheckedUpdateManyWithoutPropertyNestedInput
+  sharedWith?: Prisma.PropertyAccessUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyCreateManyInput = {
@@ -640,6 +663,7 @@ export type PropertyCreateManyInput = {
   archivedAt?: Date | string | null
   statusChangedAt?: Date | string | null
   clientId: string
+  isPublic?: boolean
 }
 
 export type PropertyUpdateManyMutationInput = {
@@ -664,6 +688,7 @@ export type PropertyUpdateManyMutationInput = {
   soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type PropertyUncheckedUpdateManyInput = {
@@ -689,6 +714,7 @@ export type PropertyUncheckedUpdateManyInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type PropertyListRelationFilter = {
@@ -729,6 +755,7 @@ export type PropertyCountOrderByAggregateInput = {
   archivedAt?: Prisma.SortOrder
   statusChangedAt?: Prisma.SortOrder
   clientId?: Prisma.SortOrder
+  isPublic?: Prisma.SortOrder
 }
 
 export type PropertyAvgOrderByAggregateInput = {
@@ -758,6 +785,7 @@ export type PropertyMaxOrderByAggregateInput = {
   archivedAt?: Prisma.SortOrder
   statusChangedAt?: Prisma.SortOrder
   clientId?: Prisma.SortOrder
+  isPublic?: Prisma.SortOrder
 }
 
 export type PropertyMinOrderByAggregateInput = {
@@ -782,6 +810,7 @@ export type PropertyMinOrderByAggregateInput = {
   archivedAt?: Prisma.SortOrder
   statusChangedAt?: Prisma.SortOrder
   clientId?: Prisma.SortOrder
+  isPublic?: Prisma.SortOrder
 }
 
 export type PropertySumOrderByAggregateInput = {
@@ -934,6 +963,20 @@ export type PropertyUpdateOneRequiredWithoutInquiriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PropertyUpdateToOneWithWhereWithoutInquiriesInput, Prisma.PropertyUpdateWithoutInquiriesInput>, Prisma.PropertyUncheckedUpdateWithoutInquiriesInput>
 }
 
+export type PropertyCreateNestedOneWithoutSharedWithInput = {
+  create?: Prisma.XOR<Prisma.PropertyCreateWithoutSharedWithInput, Prisma.PropertyUncheckedCreateWithoutSharedWithInput>
+  connectOrCreate?: Prisma.PropertyCreateOrConnectWithoutSharedWithInput
+  connect?: Prisma.PropertyWhereUniqueInput
+}
+
+export type PropertyUpdateOneRequiredWithoutSharedWithNestedInput = {
+  create?: Prisma.XOR<Prisma.PropertyCreateWithoutSharedWithInput, Prisma.PropertyUncheckedCreateWithoutSharedWithInput>
+  connectOrCreate?: Prisma.PropertyCreateOrConnectWithoutSharedWithInput
+  upsert?: Prisma.PropertyUpsertWithoutSharedWithInput
+  connect?: Prisma.PropertyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PropertyUpdateToOneWithWhereWithoutSharedWithInput, Prisma.PropertyUpdateWithoutSharedWithInput>, Prisma.PropertyUncheckedUpdateWithoutSharedWithInput>
+}
+
 export type PropertyCreateNestedOneWithoutReportsInput = {
   create?: Prisma.XOR<Prisma.PropertyCreateWithoutReportsInput, Prisma.PropertyUncheckedCreateWithoutReportsInput>
   connectOrCreate?: Prisma.PropertyCreateOrConnectWithoutReportsInput
@@ -970,6 +1013,7 @@ export type PropertyCreateWithoutClientInput = {
   soldAt?: Date | string | null
   archivedAt?: Date | string | null
   statusChangedAt?: Date | string | null
+  isPublic?: boolean
   fieldData?: Prisma.FieldDataCreateNestedOneWithoutPropertyInput
   assignment?: Prisma.AssignmentCreateNestedOneWithoutPropertyInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutPropertyInput
@@ -977,6 +1021,7 @@ export type PropertyCreateWithoutClientInput = {
   savedBy?: Prisma.SavedPropertyCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryCreateNestedManyWithoutPropertyInput
   reports?: Prisma.ReportCreateNestedManyWithoutPropertyInput
+  sharedWith?: Prisma.PropertyAccessCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutClientInput = {
@@ -1001,6 +1046,7 @@ export type PropertyUncheckedCreateWithoutClientInput = {
   soldAt?: Date | string | null
   archivedAt?: Date | string | null
   statusChangedAt?: Date | string | null
+  isPublic?: boolean
   fieldData?: Prisma.FieldDataUncheckedCreateNestedOneWithoutPropertyInput
   assignment?: Prisma.AssignmentUncheckedCreateNestedOneWithoutPropertyInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPropertyInput
@@ -1008,6 +1054,7 @@ export type PropertyUncheckedCreateWithoutClientInput = {
   savedBy?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutPropertyInput
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutPropertyInput
+  sharedWith?: Prisma.PropertyAccessUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutClientInput = {
@@ -1062,6 +1109,7 @@ export type PropertyScalarWhereInput = {
   archivedAt?: Prisma.DateTimeNullableFilter<"Property"> | Date | string | null
   statusChangedAt?: Prisma.DateTimeNullableFilter<"Property"> | Date | string | null
   clientId?: Prisma.StringFilter<"Property"> | string
+  isPublic?: Prisma.BoolFilter<"Property"> | boolean
 }
 
 export type PropertyCreateWithoutImagesInput = {
@@ -1086,6 +1134,7 @@ export type PropertyCreateWithoutImagesInput = {
   soldAt?: Date | string | null
   archivedAt?: Date | string | null
   statusChangedAt?: Date | string | null
+  isPublic?: boolean
   client: Prisma.UserCreateNestedOneWithoutPropertiesInput
   fieldData?: Prisma.FieldDataCreateNestedOneWithoutPropertyInput
   assignment?: Prisma.AssignmentCreateNestedOneWithoutPropertyInput
@@ -1093,6 +1142,7 @@ export type PropertyCreateWithoutImagesInput = {
   savedBy?: Prisma.SavedPropertyCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryCreateNestedManyWithoutPropertyInput
   reports?: Prisma.ReportCreateNestedManyWithoutPropertyInput
+  sharedWith?: Prisma.PropertyAccessCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutImagesInput = {
@@ -1118,12 +1168,14 @@ export type PropertyUncheckedCreateWithoutImagesInput = {
   archivedAt?: Date | string | null
   statusChangedAt?: Date | string | null
   clientId: string
+  isPublic?: boolean
   fieldData?: Prisma.FieldDataUncheckedCreateNestedOneWithoutPropertyInput
   assignment?: Prisma.AssignmentUncheckedCreateNestedOneWithoutPropertyInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPropertyInput
   savedBy?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutPropertyInput
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutPropertyInput
+  sharedWith?: Prisma.PropertyAccessUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutImagesInput = {
@@ -1164,6 +1216,7 @@ export type PropertyUpdateWithoutImagesInput = {
   soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   client?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
   fieldData?: Prisma.FieldDataUpdateOneWithoutPropertyNestedInput
   assignment?: Prisma.AssignmentUpdateOneWithoutPropertyNestedInput
@@ -1171,6 +1224,7 @@ export type PropertyUpdateWithoutImagesInput = {
   savedBy?: Prisma.SavedPropertyUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.ReportUpdateManyWithoutPropertyNestedInput
+  sharedWith?: Prisma.PropertyAccessUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutImagesInput = {
@@ -1196,12 +1250,14 @@ export type PropertyUncheckedUpdateWithoutImagesInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   fieldData?: Prisma.FieldDataUncheckedUpdateOneWithoutPropertyNestedInput
   assignment?: Prisma.AssignmentUncheckedUpdateOneWithoutPropertyNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPropertyNestedInput
   savedBy?: Prisma.SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.ReportUncheckedUpdateManyWithoutPropertyNestedInput
+  sharedWith?: Prisma.PropertyAccessUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyCreateWithoutAssignmentInput = {
@@ -1226,6 +1282,7 @@ export type PropertyCreateWithoutAssignmentInput = {
   soldAt?: Date | string | null
   archivedAt?: Date | string | null
   statusChangedAt?: Date | string | null
+  isPublic?: boolean
   client: Prisma.UserCreateNestedOneWithoutPropertiesInput
   fieldData?: Prisma.FieldDataCreateNestedOneWithoutPropertyInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutPropertyInput
@@ -1233,6 +1290,7 @@ export type PropertyCreateWithoutAssignmentInput = {
   savedBy?: Prisma.SavedPropertyCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryCreateNestedManyWithoutPropertyInput
   reports?: Prisma.ReportCreateNestedManyWithoutPropertyInput
+  sharedWith?: Prisma.PropertyAccessCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutAssignmentInput = {
@@ -1258,12 +1316,14 @@ export type PropertyUncheckedCreateWithoutAssignmentInput = {
   archivedAt?: Date | string | null
   statusChangedAt?: Date | string | null
   clientId: string
+  isPublic?: boolean
   fieldData?: Prisma.FieldDataUncheckedCreateNestedOneWithoutPropertyInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPropertyInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutPropertyInput
   savedBy?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutPropertyInput
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutPropertyInput
+  sharedWith?: Prisma.PropertyAccessUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutAssignmentInput = {
@@ -1304,6 +1364,7 @@ export type PropertyUpdateWithoutAssignmentInput = {
   soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   client?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
   fieldData?: Prisma.FieldDataUpdateOneWithoutPropertyNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutPropertyNestedInput
@@ -1311,6 +1372,7 @@ export type PropertyUpdateWithoutAssignmentInput = {
   savedBy?: Prisma.SavedPropertyUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.ReportUpdateManyWithoutPropertyNestedInput
+  sharedWith?: Prisma.PropertyAccessUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutAssignmentInput = {
@@ -1336,12 +1398,14 @@ export type PropertyUncheckedUpdateWithoutAssignmentInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   fieldData?: Prisma.FieldDataUncheckedUpdateOneWithoutPropertyNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPropertyNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutPropertyNestedInput
   savedBy?: Prisma.SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.ReportUncheckedUpdateManyWithoutPropertyNestedInput
+  sharedWith?: Prisma.PropertyAccessUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyCreateWithoutFieldDataInput = {
@@ -1366,6 +1430,7 @@ export type PropertyCreateWithoutFieldDataInput = {
   soldAt?: Date | string | null
   archivedAt?: Date | string | null
   statusChangedAt?: Date | string | null
+  isPublic?: boolean
   client: Prisma.UserCreateNestedOneWithoutPropertiesInput
   assignment?: Prisma.AssignmentCreateNestedOneWithoutPropertyInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutPropertyInput
@@ -1373,6 +1438,7 @@ export type PropertyCreateWithoutFieldDataInput = {
   savedBy?: Prisma.SavedPropertyCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryCreateNestedManyWithoutPropertyInput
   reports?: Prisma.ReportCreateNestedManyWithoutPropertyInput
+  sharedWith?: Prisma.PropertyAccessCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutFieldDataInput = {
@@ -1398,12 +1464,14 @@ export type PropertyUncheckedCreateWithoutFieldDataInput = {
   archivedAt?: Date | string | null
   statusChangedAt?: Date | string | null
   clientId: string
+  isPublic?: boolean
   assignment?: Prisma.AssignmentUncheckedCreateNestedOneWithoutPropertyInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPropertyInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutPropertyInput
   savedBy?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutPropertyInput
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutPropertyInput
+  sharedWith?: Prisma.PropertyAccessUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutFieldDataInput = {
@@ -1444,6 +1512,7 @@ export type PropertyUpdateWithoutFieldDataInput = {
   soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   client?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
   assignment?: Prisma.AssignmentUpdateOneWithoutPropertyNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutPropertyNestedInput
@@ -1451,6 +1520,7 @@ export type PropertyUpdateWithoutFieldDataInput = {
   savedBy?: Prisma.SavedPropertyUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.ReportUpdateManyWithoutPropertyNestedInput
+  sharedWith?: Prisma.PropertyAccessUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutFieldDataInput = {
@@ -1476,12 +1546,14 @@ export type PropertyUncheckedUpdateWithoutFieldDataInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   assignment?: Prisma.AssignmentUncheckedUpdateOneWithoutPropertyNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPropertyNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutPropertyNestedInput
   savedBy?: Prisma.SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.ReportUncheckedUpdateManyWithoutPropertyNestedInput
+  sharedWith?: Prisma.PropertyAccessUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyCreateWithoutReviewsInput = {
@@ -1506,6 +1578,7 @@ export type PropertyCreateWithoutReviewsInput = {
   soldAt?: Date | string | null
   archivedAt?: Date | string | null
   statusChangedAt?: Date | string | null
+  isPublic?: boolean
   client: Prisma.UserCreateNestedOneWithoutPropertiesInput
   fieldData?: Prisma.FieldDataCreateNestedOneWithoutPropertyInput
   assignment?: Prisma.AssignmentCreateNestedOneWithoutPropertyInput
@@ -1513,6 +1586,7 @@ export type PropertyCreateWithoutReviewsInput = {
   savedBy?: Prisma.SavedPropertyCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryCreateNestedManyWithoutPropertyInput
   reports?: Prisma.ReportCreateNestedManyWithoutPropertyInput
+  sharedWith?: Prisma.PropertyAccessCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutReviewsInput = {
@@ -1538,12 +1612,14 @@ export type PropertyUncheckedCreateWithoutReviewsInput = {
   archivedAt?: Date | string | null
   statusChangedAt?: Date | string | null
   clientId: string
+  isPublic?: boolean
   fieldData?: Prisma.FieldDataUncheckedCreateNestedOneWithoutPropertyInput
   assignment?: Prisma.AssignmentUncheckedCreateNestedOneWithoutPropertyInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutPropertyInput
   savedBy?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutPropertyInput
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutPropertyInput
+  sharedWith?: Prisma.PropertyAccessUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutReviewsInput = {
@@ -1584,6 +1660,7 @@ export type PropertyUpdateWithoutReviewsInput = {
   soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   client?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
   fieldData?: Prisma.FieldDataUpdateOneWithoutPropertyNestedInput
   assignment?: Prisma.AssignmentUpdateOneWithoutPropertyNestedInput
@@ -1591,6 +1668,7 @@ export type PropertyUpdateWithoutReviewsInput = {
   savedBy?: Prisma.SavedPropertyUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.ReportUpdateManyWithoutPropertyNestedInput
+  sharedWith?: Prisma.PropertyAccessUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutReviewsInput = {
@@ -1616,12 +1694,14 @@ export type PropertyUncheckedUpdateWithoutReviewsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   fieldData?: Prisma.FieldDataUncheckedUpdateOneWithoutPropertyNestedInput
   assignment?: Prisma.AssignmentUncheckedUpdateOneWithoutPropertyNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutPropertyNestedInput
   savedBy?: Prisma.SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.ReportUncheckedUpdateManyWithoutPropertyNestedInput
+  sharedWith?: Prisma.PropertyAccessUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyCreateWithoutSavedByInput = {
@@ -1646,6 +1726,7 @@ export type PropertyCreateWithoutSavedByInput = {
   soldAt?: Date | string | null
   archivedAt?: Date | string | null
   statusChangedAt?: Date | string | null
+  isPublic?: boolean
   client: Prisma.UserCreateNestedOneWithoutPropertiesInput
   fieldData?: Prisma.FieldDataCreateNestedOneWithoutPropertyInput
   assignment?: Prisma.AssignmentCreateNestedOneWithoutPropertyInput
@@ -1653,6 +1734,7 @@ export type PropertyCreateWithoutSavedByInput = {
   images?: Prisma.ImageCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryCreateNestedManyWithoutPropertyInput
   reports?: Prisma.ReportCreateNestedManyWithoutPropertyInput
+  sharedWith?: Prisma.PropertyAccessCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutSavedByInput = {
@@ -1678,12 +1760,14 @@ export type PropertyUncheckedCreateWithoutSavedByInput = {
   archivedAt?: Date | string | null
   statusChangedAt?: Date | string | null
   clientId: string
+  isPublic?: boolean
   fieldData?: Prisma.FieldDataUncheckedCreateNestedOneWithoutPropertyInput
   assignment?: Prisma.AssignmentUncheckedCreateNestedOneWithoutPropertyInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPropertyInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutPropertyInput
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutPropertyInput
+  sharedWith?: Prisma.PropertyAccessUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutSavedByInput = {
@@ -1724,6 +1808,7 @@ export type PropertyUpdateWithoutSavedByInput = {
   soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   client?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
   fieldData?: Prisma.FieldDataUpdateOneWithoutPropertyNestedInput
   assignment?: Prisma.AssignmentUpdateOneWithoutPropertyNestedInput
@@ -1731,6 +1816,7 @@ export type PropertyUpdateWithoutSavedByInput = {
   images?: Prisma.ImageUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.ReportUpdateManyWithoutPropertyNestedInput
+  sharedWith?: Prisma.PropertyAccessUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutSavedByInput = {
@@ -1756,12 +1842,14 @@ export type PropertyUncheckedUpdateWithoutSavedByInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   fieldData?: Prisma.FieldDataUncheckedUpdateOneWithoutPropertyNestedInput
   assignment?: Prisma.AssignmentUncheckedUpdateOneWithoutPropertyNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPropertyNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.ReportUncheckedUpdateManyWithoutPropertyNestedInput
+  sharedWith?: Prisma.PropertyAccessUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyCreateWithoutInquiriesInput = {
@@ -1786,6 +1874,7 @@ export type PropertyCreateWithoutInquiriesInput = {
   soldAt?: Date | string | null
   archivedAt?: Date | string | null
   statusChangedAt?: Date | string | null
+  isPublic?: boolean
   client: Prisma.UserCreateNestedOneWithoutPropertiesInput
   fieldData?: Prisma.FieldDataCreateNestedOneWithoutPropertyInput
   assignment?: Prisma.AssignmentCreateNestedOneWithoutPropertyInput
@@ -1793,6 +1882,7 @@ export type PropertyCreateWithoutInquiriesInput = {
   images?: Prisma.ImageCreateNestedManyWithoutPropertyInput
   savedBy?: Prisma.SavedPropertyCreateNestedManyWithoutPropertyInput
   reports?: Prisma.ReportCreateNestedManyWithoutPropertyInput
+  sharedWith?: Prisma.PropertyAccessCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutInquiriesInput = {
@@ -1818,12 +1908,14 @@ export type PropertyUncheckedCreateWithoutInquiriesInput = {
   archivedAt?: Date | string | null
   statusChangedAt?: Date | string | null
   clientId: string
+  isPublic?: boolean
   fieldData?: Prisma.FieldDataUncheckedCreateNestedOneWithoutPropertyInput
   assignment?: Prisma.AssignmentUncheckedCreateNestedOneWithoutPropertyInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPropertyInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutPropertyInput
   savedBy?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutPropertyInput
+  sharedWith?: Prisma.PropertyAccessUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutInquiriesInput = {
@@ -1864,6 +1956,7 @@ export type PropertyUpdateWithoutInquiriesInput = {
   soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   client?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
   fieldData?: Prisma.FieldDataUpdateOneWithoutPropertyNestedInput
   assignment?: Prisma.AssignmentUpdateOneWithoutPropertyNestedInput
@@ -1871,6 +1964,7 @@ export type PropertyUpdateWithoutInquiriesInput = {
   images?: Prisma.ImageUpdateManyWithoutPropertyNestedInput
   savedBy?: Prisma.SavedPropertyUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.ReportUpdateManyWithoutPropertyNestedInput
+  sharedWith?: Prisma.PropertyAccessUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutInquiriesInput = {
@@ -1896,11 +1990,161 @@ export type PropertyUncheckedUpdateWithoutInquiriesInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   fieldData?: Prisma.FieldDataUncheckedUpdateOneWithoutPropertyNestedInput
   assignment?: Prisma.AssignmentUncheckedUpdateOneWithoutPropertyNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPropertyNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutPropertyNestedInput
   savedBy?: Prisma.SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
+  reports?: Prisma.ReportUncheckedUpdateManyWithoutPropertyNestedInput
+  sharedWith?: Prisma.PropertyAccessUncheckedUpdateManyWithoutPropertyNestedInput
+}
+
+export type PropertyCreateWithoutSharedWithInput = {
+  id?: string
+  upiNumber: string
+  idOrTin: string
+  phoneNumber: string
+  ownerName: string
+  country?: string
+  province: string
+  district: string
+  sector: string
+  cell: string
+  village: string
+  status?: $Enums.PropertyStatus
+  aiValuation?: number | null
+  aiConfidence?: number | null
+  aiFactors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  publishedAt?: Date | string | null
+  soldAt?: Date | string | null
+  archivedAt?: Date | string | null
+  statusChangedAt?: Date | string | null
+  isPublic?: boolean
+  client: Prisma.UserCreateNestedOneWithoutPropertiesInput
+  fieldData?: Prisma.FieldDataCreateNestedOneWithoutPropertyInput
+  assignment?: Prisma.AssignmentCreateNestedOneWithoutPropertyInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutPropertyInput
+  images?: Prisma.ImageCreateNestedManyWithoutPropertyInput
+  savedBy?: Prisma.SavedPropertyCreateNestedManyWithoutPropertyInput
+  inquiries?: Prisma.InquiryCreateNestedManyWithoutPropertyInput
+  reports?: Prisma.ReportCreateNestedManyWithoutPropertyInput
+}
+
+export type PropertyUncheckedCreateWithoutSharedWithInput = {
+  id?: string
+  upiNumber: string
+  idOrTin: string
+  phoneNumber: string
+  ownerName: string
+  country?: string
+  province: string
+  district: string
+  sector: string
+  cell: string
+  village: string
+  status?: $Enums.PropertyStatus
+  aiValuation?: number | null
+  aiConfidence?: number | null
+  aiFactors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  publishedAt?: Date | string | null
+  soldAt?: Date | string | null
+  archivedAt?: Date | string | null
+  statusChangedAt?: Date | string | null
+  clientId: string
+  isPublic?: boolean
+  fieldData?: Prisma.FieldDataUncheckedCreateNestedOneWithoutPropertyInput
+  assignment?: Prisma.AssignmentUncheckedCreateNestedOneWithoutPropertyInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPropertyInput
+  images?: Prisma.ImageUncheckedCreateNestedManyWithoutPropertyInput
+  savedBy?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
+  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutPropertyInput
+  reports?: Prisma.ReportUncheckedCreateNestedManyWithoutPropertyInput
+}
+
+export type PropertyCreateOrConnectWithoutSharedWithInput = {
+  where: Prisma.PropertyWhereUniqueInput
+  create: Prisma.XOR<Prisma.PropertyCreateWithoutSharedWithInput, Prisma.PropertyUncheckedCreateWithoutSharedWithInput>
+}
+
+export type PropertyUpsertWithoutSharedWithInput = {
+  update: Prisma.XOR<Prisma.PropertyUpdateWithoutSharedWithInput, Prisma.PropertyUncheckedUpdateWithoutSharedWithInput>
+  create: Prisma.XOR<Prisma.PropertyCreateWithoutSharedWithInput, Prisma.PropertyUncheckedCreateWithoutSharedWithInput>
+  where?: Prisma.PropertyWhereInput
+}
+
+export type PropertyUpdateToOneWithWhereWithoutSharedWithInput = {
+  where?: Prisma.PropertyWhereInput
+  data: Prisma.XOR<Prisma.PropertyUpdateWithoutSharedWithInput, Prisma.PropertyUncheckedUpdateWithoutSharedWithInput>
+}
+
+export type PropertyUpdateWithoutSharedWithInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  upiNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  idOrTin?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerName?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  province?: Prisma.StringFieldUpdateOperationsInput | string
+  district?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  cell?: Prisma.StringFieldUpdateOperationsInput | string
+  village?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
+  aiValuation?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  aiFactors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  client?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
+  fieldData?: Prisma.FieldDataUpdateOneWithoutPropertyNestedInput
+  assignment?: Prisma.AssignmentUpdateOneWithoutPropertyNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutPropertyNestedInput
+  images?: Prisma.ImageUpdateManyWithoutPropertyNestedInput
+  savedBy?: Prisma.SavedPropertyUpdateManyWithoutPropertyNestedInput
+  inquiries?: Prisma.InquiryUpdateManyWithoutPropertyNestedInput
+  reports?: Prisma.ReportUpdateManyWithoutPropertyNestedInput
+}
+
+export type PropertyUncheckedUpdateWithoutSharedWithInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  upiNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  idOrTin?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerName?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  province?: Prisma.StringFieldUpdateOperationsInput | string
+  district?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  cell?: Prisma.StringFieldUpdateOperationsInput | string
+  village?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
+  aiValuation?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  aiFactors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  fieldData?: Prisma.FieldDataUncheckedUpdateOneWithoutPropertyNestedInput
+  assignment?: Prisma.AssignmentUncheckedUpdateOneWithoutPropertyNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPropertyNestedInput
+  images?: Prisma.ImageUncheckedUpdateManyWithoutPropertyNestedInput
+  savedBy?: Prisma.SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
+  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.ReportUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
@@ -1926,6 +2170,7 @@ export type PropertyCreateWithoutReportsInput = {
   soldAt?: Date | string | null
   archivedAt?: Date | string | null
   statusChangedAt?: Date | string | null
+  isPublic?: boolean
   client: Prisma.UserCreateNestedOneWithoutPropertiesInput
   fieldData?: Prisma.FieldDataCreateNestedOneWithoutPropertyInput
   assignment?: Prisma.AssignmentCreateNestedOneWithoutPropertyInput
@@ -1933,6 +2178,7 @@ export type PropertyCreateWithoutReportsInput = {
   images?: Prisma.ImageCreateNestedManyWithoutPropertyInput
   savedBy?: Prisma.SavedPropertyCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryCreateNestedManyWithoutPropertyInput
+  sharedWith?: Prisma.PropertyAccessCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutReportsInput = {
@@ -1958,12 +2204,14 @@ export type PropertyUncheckedCreateWithoutReportsInput = {
   archivedAt?: Date | string | null
   statusChangedAt?: Date | string | null
   clientId: string
+  isPublic?: boolean
   fieldData?: Prisma.FieldDataUncheckedCreateNestedOneWithoutPropertyInput
   assignment?: Prisma.AssignmentUncheckedCreateNestedOneWithoutPropertyInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPropertyInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutPropertyInput
   savedBy?: Prisma.SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
   inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutPropertyInput
+  sharedWith?: Prisma.PropertyAccessUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutReportsInput = {
@@ -2004,6 +2252,7 @@ export type PropertyUpdateWithoutReportsInput = {
   soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   client?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
   fieldData?: Prisma.FieldDataUpdateOneWithoutPropertyNestedInput
   assignment?: Prisma.AssignmentUpdateOneWithoutPropertyNestedInput
@@ -2011,6 +2260,7 @@ export type PropertyUpdateWithoutReportsInput = {
   images?: Prisma.ImageUpdateManyWithoutPropertyNestedInput
   savedBy?: Prisma.SavedPropertyUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUpdateManyWithoutPropertyNestedInput
+  sharedWith?: Prisma.PropertyAccessUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutReportsInput = {
@@ -2036,12 +2286,14 @@ export type PropertyUncheckedUpdateWithoutReportsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   fieldData?: Prisma.FieldDataUncheckedUpdateOneWithoutPropertyNestedInput
   assignment?: Prisma.AssignmentUncheckedUpdateOneWithoutPropertyNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPropertyNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutPropertyNestedInput
   savedBy?: Prisma.SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutPropertyNestedInput
+  sharedWith?: Prisma.PropertyAccessUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyCreateManyClientInput = {
@@ -2066,6 +2318,7 @@ export type PropertyCreateManyClientInput = {
   soldAt?: Date | string | null
   archivedAt?: Date | string | null
   statusChangedAt?: Date | string | null
+  isPublic?: boolean
 }
 
 export type PropertyUpdateWithoutClientInput = {
@@ -2090,6 +2343,7 @@ export type PropertyUpdateWithoutClientInput = {
   soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   fieldData?: Prisma.FieldDataUpdateOneWithoutPropertyNestedInput
   assignment?: Prisma.AssignmentUpdateOneWithoutPropertyNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutPropertyNestedInput
@@ -2097,6 +2351,7 @@ export type PropertyUpdateWithoutClientInput = {
   savedBy?: Prisma.SavedPropertyUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.ReportUpdateManyWithoutPropertyNestedInput
+  sharedWith?: Prisma.PropertyAccessUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutClientInput = {
@@ -2121,6 +2376,7 @@ export type PropertyUncheckedUpdateWithoutClientInput = {
   soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   fieldData?: Prisma.FieldDataUncheckedUpdateOneWithoutPropertyNestedInput
   assignment?: Prisma.AssignmentUncheckedUpdateOneWithoutPropertyNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPropertyNestedInput
@@ -2128,6 +2384,7 @@ export type PropertyUncheckedUpdateWithoutClientInput = {
   savedBy?: Prisma.SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
   inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.ReportUncheckedUpdateManyWithoutPropertyNestedInput
+  sharedWith?: Prisma.PropertyAccessUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateManyWithoutClientInput = {
@@ -2152,6 +2409,7 @@ export type PropertyUncheckedUpdateManyWithoutClientInput = {
   soldAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   statusChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 
@@ -2165,6 +2423,7 @@ export type PropertyCountOutputType = {
   savedBy: number
   inquiries: number
   reports: number
+  sharedWith: number
 }
 
 export type PropertyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2173,6 +2432,7 @@ export type PropertyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   savedBy?: boolean | PropertyCountOutputTypeCountSavedByArgs
   inquiries?: boolean | PropertyCountOutputTypeCountInquiriesArgs
   reports?: boolean | PropertyCountOutputTypeCountReportsArgs
+  sharedWith?: boolean | PropertyCountOutputTypeCountSharedWithArgs
 }
 
 /**
@@ -2220,6 +2480,13 @@ export type PropertyCountOutputTypeCountReportsArgs<ExtArgs extends runtime.Type
   where?: Prisma.ReportWhereInput
 }
 
+/**
+ * PropertyCountOutputType without action
+ */
+export type PropertyCountOutputTypeCountSharedWithArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PropertyAccessWhereInput
+}
+
 
 export type PropertySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2244,6 +2511,7 @@ export type PropertySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   archivedAt?: boolean
   statusChangedAt?: boolean
   clientId?: boolean
+  isPublic?: boolean
   client?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   fieldData?: boolean | Prisma.Property$fieldDataArgs<ExtArgs>
   assignment?: boolean | Prisma.Property$assignmentArgs<ExtArgs>
@@ -2252,6 +2520,7 @@ export type PropertySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   savedBy?: boolean | Prisma.Property$savedByArgs<ExtArgs>
   inquiries?: boolean | Prisma.Property$inquiriesArgs<ExtArgs>
   reports?: boolean | Prisma.Property$reportsArgs<ExtArgs>
+  sharedWith?: boolean | Prisma.Property$sharedWithArgs<ExtArgs>
   _count?: boolean | Prisma.PropertyCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["property"]>
 
@@ -2278,6 +2547,7 @@ export type PropertySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   archivedAt?: boolean
   statusChangedAt?: boolean
   clientId?: boolean
+  isPublic?: boolean
   client?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["property"]>
 
@@ -2304,6 +2574,7 @@ export type PropertySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   archivedAt?: boolean
   statusChangedAt?: boolean
   clientId?: boolean
+  isPublic?: boolean
   client?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["property"]>
 
@@ -2330,9 +2601,10 @@ export type PropertySelectScalar = {
   archivedAt?: boolean
   statusChangedAt?: boolean
   clientId?: boolean
+  isPublic?: boolean
 }
 
-export type PropertyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "upiNumber" | "idOrTin" | "phoneNumber" | "ownerName" | "country" | "province" | "district" | "sector" | "cell" | "village" | "status" | "aiValuation" | "aiConfidence" | "aiFactors" | "createdAt" | "updatedAt" | "publishedAt" | "soldAt" | "archivedAt" | "statusChangedAt" | "clientId", ExtArgs["result"]["property"]>
+export type PropertyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "upiNumber" | "idOrTin" | "phoneNumber" | "ownerName" | "country" | "province" | "district" | "sector" | "cell" | "village" | "status" | "aiValuation" | "aiConfidence" | "aiFactors" | "createdAt" | "updatedAt" | "publishedAt" | "soldAt" | "archivedAt" | "statusChangedAt" | "clientId" | "isPublic", ExtArgs["result"]["property"]>
 export type PropertyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   client?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   fieldData?: boolean | Prisma.Property$fieldDataArgs<ExtArgs>
@@ -2342,6 +2614,7 @@ export type PropertyInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   savedBy?: boolean | Prisma.Property$savedByArgs<ExtArgs>
   inquiries?: boolean | Prisma.Property$inquiriesArgs<ExtArgs>
   reports?: boolean | Prisma.Property$reportsArgs<ExtArgs>
+  sharedWith?: boolean | Prisma.Property$sharedWithArgs<ExtArgs>
   _count?: boolean | Prisma.PropertyCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PropertyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2362,6 +2635,7 @@ export type $PropertyPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     savedBy: Prisma.$SavedPropertyPayload<ExtArgs>[]
     inquiries: Prisma.$InquiryPayload<ExtArgs>[]
     reports: Prisma.$ReportPayload<ExtArgs>[]
+    sharedWith: Prisma.$PropertyAccessPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2386,6 +2660,7 @@ export type $PropertyPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     archivedAt: Date | null
     statusChangedAt: Date | null
     clientId: string
+    isPublic: boolean
   }, ExtArgs["result"]["property"]>
   composites: {}
 }
@@ -2788,6 +3063,7 @@ export interface Prisma__PropertyClient<T, Null = never, ExtArgs extends runtime
   savedBy<T extends Prisma.Property$savedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$savedByArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SavedPropertyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   inquiries<T extends Prisma.Property$inquiriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$inquiriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InquiryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reports<T extends Prisma.Property$reportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$reportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sharedWith<T extends Prisma.Property$sharedWithArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$sharedWithArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PropertyAccessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2839,6 +3115,7 @@ export interface PropertyFieldRefs {
   readonly archivedAt: Prisma.FieldRef<"Property", 'DateTime'>
   readonly statusChangedAt: Prisma.FieldRef<"Property", 'DateTime'>
   readonly clientId: Prisma.FieldRef<"Property", 'String'>
+  readonly isPublic: Prisma.FieldRef<"Property", 'Boolean'>
 }
     
 
@@ -3395,6 +3672,30 @@ export type Property$reportsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.ReportScalarFieldEnum | Prisma.ReportScalarFieldEnum[]
+}
+
+/**
+ * Property.sharedWith
+ */
+export type Property$sharedWithArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PropertyAccess
+   */
+  select?: Prisma.PropertyAccessSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PropertyAccess
+   */
+  omit?: Prisma.PropertyAccessOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PropertyAccessInclude<ExtArgs> | null
+  where?: Prisma.PropertyAccessWhereInput
+  orderBy?: Prisma.PropertyAccessOrderByWithRelationInput | Prisma.PropertyAccessOrderByWithRelationInput[]
+  cursor?: Prisma.PropertyAccessWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PropertyAccessScalarFieldEnum | Prisma.PropertyAccessScalarFieldEnum[]
 }
 
 /**

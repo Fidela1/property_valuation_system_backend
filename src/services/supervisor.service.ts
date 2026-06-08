@@ -10,6 +10,63 @@ const excludeSynthetic = {
   }
 };
 
+// Helper function to select all field data fields including premium features
+const fieldDataSelect = {
+  propertyType: true,
+  landSize: true,
+  buildingSize: true,
+  bedrooms: true,
+  bathrooms: true,
+  condition: true,
+  yearBuilt: true,
+  valuationAmount: true,
+  notes: true,
+  parkingSpaces: true,
+  gpsAccuracy: true,
+  latitude: true,
+  longitude: true,
+  hasGarden: true,
+  gardenSize: true,
+  gardenType: true,
+  hasAnnex: true,
+  annexType: true,
+  annexSize: true,
+  annexBedrooms: true,
+  annexBathrooms: true,
+  hasGate: true,
+  gateType: true,
+  gateMaterial: true,
+  hasFence: true,
+  fenceType: true,
+  fenceHeight: true,
+  nearestSchoolKm: true,
+  nearestHospitalKm: true,
+  nearestTransportKm: true,
+  nearestMarketKm: true,
+  roadAccessType: true,
+  hasElectricity: true,
+  hasWaterSupply: true,
+  hasWaterTank: true,
+  // Premium features
+  hasSwimmingPool: true,
+  hasGym: true,
+  hasSmartHome: true,
+  hasSolarPanels: true,
+  hasBackupGenerator: true,
+  hasSecuritySystem: true,
+  hasLandscapedGarden: true,
+  hasModernKitchen: true,
+  hasAirConditioning: true,
+  hasFireplace: true,
+  hasBalcony: true,
+  hasGarage: true,
+  hasStaffQuarters: true,
+  hasStorageRoom: true,
+  hasWaterHeater: true,
+  hasIntercom: true,
+  viewType: true
+};
+
 export const getPendingProperties = async (options: {
   page?: number;
   limit?: number;
@@ -21,7 +78,7 @@ export const getPendingProperties = async (options: {
   
   const where: any = { 
     status: 'PENDING',
-    ...excludeSynthetic  // Exclude synthetic properties
+    ...excludeSynthetic
   };
   
   if (options?.search) {
@@ -74,7 +131,7 @@ export const getUnderReviewProperties = async (options: {
   
   const where: any = { 
     status: 'UNDER_REVIEW',
-    ...excludeSynthetic  // Exclude synthetic properties
+    ...excludeSynthetic
   };
   
   if (options?.search) {
@@ -98,7 +155,9 @@ export const getUnderReviewProperties = async (options: {
             phone: true
           }
         },
-        fieldData: true,
+        fieldData: {
+          select: fieldDataSelect
+        },
         assignment: {
           include: {
             collector: {
@@ -144,7 +203,7 @@ export const getInFieldworkProperties = async (options: {
   
   const where: any = { 
     status: 'IN_FIELDWORK',
-    ...excludeSynthetic  // Exclude synthetic properties
+    ...excludeSynthetic
   };
   
   if (options?.search) {
@@ -188,17 +247,7 @@ export const getInFieldworkProperties = async (options: {
           }
         },
         fieldData: {
-          select: {
-            propertyType: true,
-            landSize: true,
-            buildingSize: true,
-            bedrooms: true,
-            bathrooms: true,
-            condition: true,
-            yearBuilt: true,
-            valuationAmount: true,
-            notes: true
-          }
+          select: fieldDataSelect
         },
         images: {
           orderBy: { order: 'asc' },
@@ -231,7 +280,7 @@ export const getAllProperties = async (options: {
   const limit = options?.limit || 10;
   const skip = (page - 1) * limit;
   
-  const where: any = { ...excludeSynthetic };  // Always exclude synthetic properties
+  const where: any = { ...excludeSynthetic };
 
   if (options?.status && options.status !== 'ALL') {
     where.status = options.status;
@@ -279,17 +328,7 @@ export const getAllProperties = async (options: {
           }
         },
         fieldData: {
-          select: {
-            propertyType: true,
-            landSize: true,
-            buildingSize: true,
-            bedrooms: true,
-            bathrooms: true,
-            condition: true,
-            yearBuilt: true,
-            valuationAmount: true,
-            notes: true
-          }
+          select: fieldDataSelect
         },
         images: {
           orderBy: { order: 'asc' },
@@ -312,7 +351,6 @@ export const getAllProperties = async (options: {
   };
 };
 
-// Keep getPropertyForReview as is (it fetches a single property by ID)
 export const getPropertyForReview = async (propertyId: string) => {
   const cleanId = String(propertyId).trim();
 
@@ -347,7 +385,9 @@ export const getPropertyForReview = async (propertyId: string) => {
           },
         },
       },
-      fieldData: true,
+      fieldData: {
+        select: fieldDataSelect
+      },
       images: {
         orderBy: {
           order: 'asc',
@@ -363,7 +403,6 @@ export const getPropertyForReview = async (propertyId: string) => {
   return property;
 };
 
-// Update getSupervisorStats to exclude synthetic properties
 export const getSupervisorStats = async (supervisorId: string) => {
   const baseWhere = { ...excludeSynthetic };
   
@@ -437,14 +476,13 @@ export const getSupervisorStats = async (supervisorId: string) => {
   };
 };
 
-// Update getPropertiesForReportDropdown to exclude synthetic properties
 export const getPropertiesForReportDropdown = async () => {
   const properties = await prisma.property.findMany({
     where: {
       status: {
         in: ['APPROVED', 'PUBLISHED']
       },
-      ...excludeSynthetic  // Exclude synthetic properties
+      ...excludeSynthetic
     },
     select: {
       id: true,
@@ -461,7 +499,6 @@ export const getPropertiesForReportDropdown = async () => {
   return properties;
 };
 
-// Keep these as they are (they don't fetch properties or need modification)
 export const getAvailableDataCollectors = async () => {
   const collectors = await prisma.user.findMany({
     where: {
@@ -502,7 +539,6 @@ export const assignDataCollector = async (
   supervisorId: string,
   notes?: string
 ) => {
-  // Check if property exists and is PENDING
   const property = await prisma.property.findUnique({
     where: { id: propertyId }
   });
@@ -515,7 +551,6 @@ export const assignDataCollector = async (
     throw new AppError(`Cannot assign: Property status is ${property.status}`, 400);
   }
   
-  // Find collector by email instead of ID
   const collector = await prisma.user.findUnique({
     where: { email: collectorEmail.toLowerCase().trim() }
   });

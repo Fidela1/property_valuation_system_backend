@@ -258,6 +258,23 @@ export const submitFieldData = async (
     hasFence?: boolean;
     fenceType?: string;
     fenceHeight?: number;
+    hasSwimmingPool?: boolean;
+    hasGym?: boolean;
+    hasSmartHome?: boolean;
+    hasSolarPanels?: boolean;
+    hasBackupGenerator?: boolean;
+    hasSecuritySystem?: boolean;
+    hasLandscapedGarden?: boolean;
+    hasModernKitchen?: boolean;
+    hasAirConditioning?: boolean;
+    hasFireplace?: boolean;
+    hasBalcony?: boolean;
+    hasGarage?: boolean;
+    hasStaffQuarters?: boolean;
+    hasStorageRoom?: boolean;
+    hasWaterHeater?: boolean;
+    hasIntercom?: boolean;
+    viewType?: string;
     nearestSchoolKm?: number;
     nearestHospitalKm?: number;
     nearestTransportKm?: number;
@@ -337,6 +354,24 @@ export const submitFieldData = async (
     nearestMarketKm: data.nearestMarketKm,
     valuationAmount: data.valuationAmount,
     notes: data.notes,
+
+     hasSwimmingPool: data.hasSwimmingPool || false,
+    hasGym: data.hasGym || false,
+    hasSmartHome: data.hasSmartHome || false,
+    hasSolarPanels: data.hasSolarPanels || false,
+    hasBackupGenerator: data.hasBackupGenerator || false,
+    hasSecuritySystem: data.hasSecuritySystem || false,
+    hasLandscapedGarden: data.hasLandscapedGarden || false,
+    hasModernKitchen: data.hasModernKitchen || false,
+    hasAirConditioning: data.hasAirConditioning || false,
+    hasFireplace: data.hasFireplace || false,
+    hasBalcony: data.hasBalcony || false,
+    hasGarage: data.hasGarage || false,
+    hasStaffQuarters: data.hasStaffQuarters || false,
+    hasStorageRoom: data.hasStorageRoom || false,
+    hasWaterHeater: data.hasWaterHeater || false,
+    hasIntercom: data.hasIntercom || false,
+    viewType: data.viewType || null,
   };
 
   console.log('Field data input prepared:', {

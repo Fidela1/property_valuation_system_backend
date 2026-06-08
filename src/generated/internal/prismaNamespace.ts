@@ -395,6 +395,7 @@ export const ModelName = {
   SavedProperty: 'SavedProperty',
   Inquiry: 'Inquiry',
   AuditLog: 'AuditLog',
+  PropertyAccess: 'PropertyAccess',
   Report: 'Report'
 } as const
 
@@ -411,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "invitation" | "image" | "property" | "assignment" | "fieldData" | "propertySale" | "review" | "savedProperty" | "inquiry" | "auditLog" | "report"
+    modelProps: "user" | "invitation" | "image" | "property" | "assignment" | "fieldData" | "propertySale" | "review" | "savedProperty" | "inquiry" | "auditLog" | "propertyAccess" | "report"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1229,6 +1230,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PropertyAccess: {
+      payload: Prisma.$PropertyAccessPayload<ExtArgs>
+      fields: Prisma.PropertyAccessFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PropertyAccessFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyAccessPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PropertyAccessFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyAccessPayload>
+        }
+        findFirst: {
+          args: Prisma.PropertyAccessFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyAccessPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PropertyAccessFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyAccessPayload>
+        }
+        findMany: {
+          args: Prisma.PropertyAccessFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyAccessPayload>[]
+        }
+        create: {
+          args: Prisma.PropertyAccessCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyAccessPayload>
+        }
+        createMany: {
+          args: Prisma.PropertyAccessCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PropertyAccessCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyAccessPayload>[]
+        }
+        delete: {
+          args: Prisma.PropertyAccessDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyAccessPayload>
+        }
+        update: {
+          args: Prisma.PropertyAccessUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyAccessPayload>
+        }
+        deleteMany: {
+          args: Prisma.PropertyAccessDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PropertyAccessUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PropertyAccessUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyAccessPayload>[]
+        }
+        upsert: {
+          args: Prisma.PropertyAccessUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropertyAccessPayload>
+        }
+        aggregate: {
+          args: Prisma.PropertyAccessAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePropertyAccess>
+        }
+        groupBy: {
+          args: Prisma.PropertyAccessGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PropertyAccessGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PropertyAccessCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PropertyAccessCountAggregateOutputType> | number
+        }
+      }
+    }
     Report: {
       payload: Prisma.$ReportPayload<ExtArgs>
       fields: Prisma.ReportFieldRefs
@@ -1355,7 +1430,8 @@ export const UserScalarFieldEnum = {
   updatedAt: 'updatedAt',
   addedById: 'addedById',
   passwordResetToken: 'passwordResetToken',
-  passwordResetExpires: 'passwordResetExpires'
+  passwordResetExpires: 'passwordResetExpires',
+  bankId: 'bankId'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -1416,7 +1492,8 @@ export const PropertyScalarFieldEnum = {
   soldAt: 'soldAt',
   archivedAt: 'archivedAt',
   statusChangedAt: 'statusChangedAt',
-  clientId: 'clientId'
+  clientId: 'clientId',
+  isPublic: 'isPublic'
 } as const
 
 export type PropertyScalarFieldEnum = (typeof PropertyScalarFieldEnum)[keyof typeof PropertyScalarFieldEnum]
@@ -1606,6 +1683,25 @@ export const AuditLogScalarFieldEnum = {
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const PropertyAccessScalarFieldEnum = {
+  id: 'id',
+  propertyId: 'propertyId',
+  institutionId: 'institutionId',
+  accessType: 'accessType',
+  grantedAt: 'grantedAt',
+  grantedBy: 'grantedBy',
+  expiresAt: 'expiresAt',
+  accessRequestedAt: 'accessRequestedAt',
+  accessApprovedAt: 'accessApprovedAt',
+  clientConsent: 'clientConsent',
+  clientId: 'clientId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PropertyAccessScalarFieldEnum = (typeof PropertyAccessScalarFieldEnum)[keyof typeof PropertyAccessScalarFieldEnum]
 
 
 export const ReportScalarFieldEnum = {
@@ -1876,6 +1972,20 @@ export type EnumInquiryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
 export type ListEnumInquiryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InquiryStatus[]'>
     
 
+
+/**
+ * Reference to a field of type 'AccessType'
+ */
+export type EnumAccessTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AccessType'>
+    
+
+
+/**
+ * Reference to a field of type 'AccessType[]'
+ */
+export type ListEnumAccessTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AccessType[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -1982,6 +2092,7 @@ export type GlobalOmitConfig = {
   savedProperty?: Prisma.SavedPropertyOmit
   inquiry?: Prisma.InquiryOmit
   auditLog?: Prisma.AuditLogOmit
+  propertyAccess?: Prisma.PropertyAccessOmit
   report?: Prisma.ReportOmit
 }
 

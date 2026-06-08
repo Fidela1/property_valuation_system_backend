@@ -15,6 +15,7 @@ enum Role {
   DATA_COLLECTOR
   SUPERVISOR
   ADMIN
+  FINACIAL_INSTITUTION
 }
 
 enum PropertyStatus {
@@ -74,6 +75,13 @@ enum InvitationStatus {
   EXPIRED
   CANCELLED
 }
+enum AccessType {
+  VIEW_ONLY
+  REQUEST_VALUATION
+  TRACK_PROGRESS
+  FULL_ACCESS
+}
+
 
 // USER MODELS
 
@@ -114,6 +122,14 @@ model User {
 
   generatedReports Report[]
   
+  bankId              String?
+  bank                User?         @relation("BankManagesClient", fields: [bankId], references: [id])
+
+    managedClients      User[]        @relation("BankManagesClient")
+  
+ grantedAccess       PropertyAccess[] @relation("InstitutionAccess")  // For banks/institutions receiving access
+  requestedAccess     PropertyAccess[] @relation("ClientConsent")      // For clients giving consent
+
 
   @@index([email])
   @@index([role])
@@ -207,6 +223,9 @@ model Property {
   inquiries     Inquiry[]
   reports       Report[]
 
+sharedWith      PropertyAccess[]
+  isPublic        Boolean   @default(false)
+  
   @@index([status])
   @@index([clientId])
   @@index([province, district])
@@ -482,6 +501,35 @@ model AuditLog {
   @@index([entityType, entityId])
   @@index([createdAt])
   @@map("audit_logs")
+}
+
+model PropertyAccess {
+  id              String   @id @default(cuid())
+  propertyId      String
+  property        Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  
+  institutionId   String
+  institution     User     @relation("InstitutionAccess", fields: [institutionId], references: [id])
+  
+  accessType      AccessType
+  grantedAt       DateTime @default(now())
+  grantedBy       String
+  expiresAt       DateTime?
+  
+  // For pending/under review properties
+  accessRequestedAt DateTime?
+  accessApprovedAt  DateTime?
+  clientConsent     Boolean?  // Client must consent for bank to see
+  
+  // Add relation to client (the property owner)
+  clientId        String?
+  client          User?    @relation("ClientConsent", fields: [clientId], references: [id])
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@unique([propertyId, institutionId])
+  @@map("property_access")
 }
 
 // REPORT MODEL

@@ -62,6 +62,7 @@ export const ModelName = {
   SavedProperty: 'SavedProperty',
   Inquiry: 'Inquiry',
   AuditLog: 'AuditLog',
+  PropertyAccess: 'PropertyAccess',
   Report: 'Report'
 } as const
 
@@ -94,7 +95,8 @@ export const UserScalarFieldEnum = {
   updatedAt: 'updatedAt',
   addedById: 'addedById',
   passwordResetToken: 'passwordResetToken',
-  passwordResetExpires: 'passwordResetExpires'
+  passwordResetExpires: 'passwordResetExpires',
+  bankId: 'bankId'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -155,7 +157,8 @@ export const PropertyScalarFieldEnum = {
   soldAt: 'soldAt',
   archivedAt: 'archivedAt',
   statusChangedAt: 'statusChangedAt',
-  clientId: 'clientId'
+  clientId: 'clientId',
+  isPublic: 'isPublic'
 } as const
 
 export type PropertyScalarFieldEnum = (typeof PropertyScalarFieldEnum)[keyof typeof PropertyScalarFieldEnum]
@@ -345,6 +348,25 @@ export const AuditLogScalarFieldEnum = {
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const PropertyAccessScalarFieldEnum = {
+  id: 'id',
+  propertyId: 'propertyId',
+  institutionId: 'institutionId',
+  accessType: 'accessType',
+  grantedAt: 'grantedAt',
+  grantedBy: 'grantedBy',
+  expiresAt: 'expiresAt',
+  accessRequestedAt: 'accessRequestedAt',
+  accessApprovedAt: 'accessApprovedAt',
+  clientConsent: 'clientConsent',
+  clientId: 'clientId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PropertyAccessScalarFieldEnum = (typeof PropertyAccessScalarFieldEnum)[keyof typeof PropertyAccessScalarFieldEnum]
 
 
 export const ReportScalarFieldEnum = {

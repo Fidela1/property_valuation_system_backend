@@ -421,3 +421,4 @@ export const permanentDeleteUser = async (req: Request, res: Response) => {
     });
   }
 };
+

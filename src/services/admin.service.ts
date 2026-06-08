@@ -2,16 +2,16 @@ import prisma from '../config/prisma';
 import bcrypt from 'bcrypt';
 import { AppError } from '../utils/AppError';
 import { randomBytes } from 'crypto';
-import { sendEmail, getInvitationEmailTemplate,getRoleUpdateEmailTemplate, 
+import { sendEmail, getInvitationEmailTemplate, getRoleUpdateEmailTemplate, 
   getAccountStatusEmailTemplate, getAccountDeletedEmailTemplate, 
   sendStatusChangeEmail, getAccountPermanentlyDeletedEmailTemplate } from '../config/email';
-type Role = 'ADMIN' | 'DATA_COLLECTOR' | 'SUPERVISOR';
+
+// Update Role type to include FINACIAL_INSTITUTION (note the spelling)
+type Role = 'ADMIN' | 'DATA_COLLECTOR' | 'SUPERVISOR' | 'FINACIAL_INSTITUTION';
 
 export const countUsers = async () => {
   return await prisma.user.count();
 };
-
-
 
 export const countEmployees = async () => {
   return await prisma.user.count({
@@ -48,16 +48,13 @@ const generateInvitationToken = (): string => {
   return randomBytes(32).toString('hex');
 };
 
-const generatePlaceholderPassword = (): string => {
-  return randomBytes(12).toString('hex');
-};
-
 const getRoleDescription = (role: string): string => {
   const descriptionMap: Record<string, string> = {
     'CLIENT': 'You can submit properties for valuation and track their status.',
     'DATA_COLLECTOR': 'You will visit properties, capture GPS coordinates, take photos, and record property features.',
     'SUPERVISOR': 'You will review field data submitted by Data Collectors and approve or request changes.',
-    'ADMIN': 'You have full system access to manage users, properties, and all platform settings.'
+    'ADMIN': 'You have full system access to manage users, properties, and all platform settings.',
+    'FINACIAL_INSTITUTION': 'You can search for properties, request access to track valuations, and download reports for loan processing.'
   };
   return descriptionMap[role] || '';
 };
@@ -71,6 +68,11 @@ export const createInvitation = async (
     phone?: string;
   }
 ) => {
+  // Update valid roles to include FINACIAL_INSTITUTION (note spelling)
+  const validRoles = ['CLIENT', 'DATA_COLLECTOR', 'SUPERVISOR', 'ADMIN', 'FINACIAL_INSTITUTION'];
+  if (!validRoles.includes(data.role)) {
+    throw new AppError(`Invalid role. Must be one of: ${validRoles.join(', ')}`, 400);
+  }
 
   const normalizedEmail = data.email.toLowerCase().trim();
 
@@ -139,13 +141,11 @@ export const createInvitation = async (
   const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
   const invitationLink = `${frontendUrl}/accept-invitation?token=${token}`;
 
-   console.log('=== INVITATION DEBUG ===');
+  console.log('=== INVITATION DEBUG ===');
   console.log('FRONTEND_URL from env:', process.env.FRONTEND_URL);
   console.log('Used frontendUrl:', frontendUrl);
   console.log('Generated invitationLink:', invitationLink);
-  console.log('All env vars keys:', Object.keys(process.env));
-  console.log('VERCEL_ENV:', process.env.VERCEL_ENV);
-  console.log('VERCEL_URL:', process.env.VERCEL_URL);
+  
   try {
     const roleDisplayName = getRoleDisplayName(data.role);
 
@@ -154,8 +154,6 @@ export const createInvitation = async (
       subject: `Invitation to join Property Valuation System as ${roleDisplayName}`,
       html: getInvitationEmailTemplate(data.name, roleDisplayName, invitationLink),
     });
-
-    
   } catch (emailError) {
     console.error(`Failed to send invitation email to ${data.email}:`, emailError);
   }
@@ -172,10 +170,12 @@ const getRoleDisplayName = (role: string): string => {
     'CLIENT': 'Property Owner',
     'DATA_COLLECTOR': 'Data Collector',
     'SUPERVISOR': 'Supervisor',
-    'ADMIN': 'Administrator'
+    'ADMIN': 'Administrator',
+    'FINACIAL_INSTITUTION': 'Financial Institution'
   };
   return roleMap[role] || role;
 };
+
 export const getManageUsers = async (
   currentAdminId: string,
   options: {
@@ -183,21 +183,18 @@ export const getManageUsers = async (
     limit: number;
     role?: string;
     search?: string;
-    status?: string; // Add status filter
+    status?: string;
   }) => {
   const { page, limit, role, search, status } = options;
   const skip = (page - 1) * limit;
 
   const where: any = {};
   
-  // Remove the hardcoded isActive: true
-  // Only filter by status if specified
   if (status === 'ACTIVE') {
     where.isActive = true;
   } else if (status === 'INACTIVE') {
     where.isActive = false;
   }
-  // If status is 'ALL' or undefined, don't filter by isActive at all
   
   if (role && role !== 'ALL') {
     where.role = role;
@@ -238,12 +235,13 @@ export const getManageUsers = async (
     prisma.user.count({ where })
   ]);
   
-  // Get summary statistics (all users) - These should ALWAYS count ALL users regardless of filters
+  // Get summary statistics - updated to include FINACIAL_INSTITUTION
   const [
     totalClients,
     totalDataCollectors,
     totalSupervisors,
     totalAdmins,
+    totalBanks,
     activeUsers,
     inactiveUsers,
     totalUsers
@@ -252,6 +250,7 @@ export const getManageUsers = async (
     prisma.user.count({ where: { role: 'DATA_COLLECTOR' } }),
     prisma.user.count({ where: { role: 'SUPERVISOR' } }),
     prisma.user.count({ where: { role: 'ADMIN' } }),
+    prisma.user.count({ where: { role: 'FINACIAL_INSTITUTION' } }),  // FIXED spelling
     prisma.user.count({ where: { isActive: true } }),
     prisma.user.count({ where: { isActive: false } }),
     prisma.user.count() 
@@ -265,12 +264,12 @@ export const getManageUsers = async (
       total,
       totalPages: Math.ceil(total / limit)
     },
-    // These summary stats are for the dashboard cards
     totalUsers, 
     totalClients,
     totalDataCollectors,
     totalSupervisors,
     totalAdmins,
+    totalBanks,
     activeUsers,
     inactiveUsers
   };
@@ -286,7 +285,6 @@ export const updateUserByAdmin = async (
     isActive?: boolean;
   }
 ) => {
-  // Check if user exists
   const user = await prisma.user.findUnique({
     where: { id: userId }
   });
@@ -295,11 +293,9 @@ export const updateUserByAdmin = async (
     throw new AppError('User not found', 404);
   }
 
-  let oldEmail = user.email;
   let roleChanged = false;
   let oldRole = user.role;
   let statusChanged = false;
-  let oldStatus = user.isActive;
   
   if (data.email && data.email !== user.email) {
     const existingUser = await prisma.user.findUnique({
@@ -382,7 +378,6 @@ export const updateUserByAdmin = async (
 };
 
 export const deleteUserByAdmin = async (userId: string, adminId: string) => {
-
   const user = await prisma.user.findUnique({
     where: { id: userId }
   });
@@ -462,7 +457,6 @@ export const deleteUserByAdmin = async (userId: string, adminId: string) => {
 };
 
 export const cancelInvitation = async (invitationId: string, adminId: string) => {
-
   const invitation = await prisma.invitation.findFirst({
     where: {
       id: invitationId,
@@ -512,7 +506,6 @@ export const cancelInvitation = async (invitationId: string, adminId: string) =>
 };
 
 export const deleteInvitation = async (invitationId: string, adminId: string) => {
-
   const invitation = await prisma.invitation.findUnique({
     where: { id: invitationId }
   });
@@ -570,14 +563,11 @@ export const deleteInvitation = async (invitationId: string, adminId: string) =>
   };
 };
 
-
 export const toggleUserStatus = async (userId: string, adminId: string) => {
-  // Check if admin is trying to deactivate themselves
   if (userId === adminId) {
     throw new AppError('You cannot deactivate your own account', 400);
   }
   
-  // Get current user and admin info
   const [user, admin] = await Promise.all([
     prisma.user.findUnique({
       where: { id: userId },
@@ -606,7 +596,6 @@ export const toggleUserStatus = async (userId: string, adminId: string) => {
     throw new AppError('Admin not found', 404);
   }
   
-  // Toggle status
   const updatedUser = await prisma.user.update({
     where: { id: userId },
     data: { isActive: !user.isActive },
@@ -619,21 +608,18 @@ export const toggleUserStatus = async (userId: string, adminId: string) => {
     }
   });
   
-  // Send email notification
   try {
     await sendStatusChangeEmail(
       user.email,
       user.name,
-      updatedUser.isActive, // new status
+      updatedUser.isActive,
       admin.name
     );
     console.log(`Status change email sent to ${user.email}`);
   } catch (emailError) {
     console.error('Failed to send status change email:', emailError);
-    // Don't throw error - the status change was successful, just email failed
   }
   
-  // Log audit
   await prisma.auditLog.create({
     data: {
       userId: adminId,
@@ -656,7 +642,6 @@ export const toggleUserStatus = async (userId: string, adminId: string) => {
   };
 };
 
-// Permanent delete - will delete user even if they have associated data
 export const permanentDeleteUser = async (userId: string, adminId: string, forceDelete: boolean = false) => {
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -671,12 +656,10 @@ export const permanentDeleteUser = async (userId: string, adminId: string, force
     throw new AppError('User not found', 404);
   }
 
-  // Prevent self-deletion
   if (user.id === adminId) {
     throw new AppError('You cannot delete your own account', 400);
   }
 
-  // Prevent deleting the last admin
   if (user.role === 'ADMIN') {
     const adminCount = await prisma.user.count({ where: { role: 'ADMIN' } });
     if (adminCount <= 1) {
@@ -684,12 +667,10 @@ export const permanentDeleteUser = async (userId: string, adminId: string, force
     }
   }
 
-  // Check for associated data
   const hasProperties = user.properties.length > 0;
   const hasAssignments = user.assignments.length > 0;
   const hasInvitations = user.invitationsCreated.length > 0;
 
-  // If user has associated data and forceDelete is not true, throw error
   if ((hasProperties || hasAssignments || hasInvitations) && !forceDelete) {
     throw new AppError(
       `User has associated data (Properties: ${user.properties.length}, Assignments: ${user.assignments.length}, Invitations: ${user.invitationsCreated.length}). Use forceDelete: true to permanently delete all associated data.`,
@@ -701,9 +682,7 @@ export const permanentDeleteUser = async (userId: string, adminId: string, force
   const userName = user.name || 'User';
 
   try {
-    // Use transaction to ensure all operations succeed or fail together
     await prisma.$transaction(async (tx) => {
-      // 1. Delete all properties owned by the user
       if (hasProperties) {
         await tx.property.deleteMany({
           where: { clientId: userId }
@@ -711,7 +690,6 @@ export const permanentDeleteUser = async (userId: string, adminId: string, force
         console.log(`Deleted ${user.properties.length} properties for user ${userId}`);
       }
 
-      // 2. Delete all assignments for the user
       if (hasAssignments) {
         await tx.assignment.deleteMany({
           where: { collectorId: userId }
@@ -719,7 +697,6 @@ export const permanentDeleteUser = async (userId: string, adminId: string, force
         console.log(`Deleted ${user.assignments.length} assignments for user ${userId}`);
       }
 
-      // 3. Delete all invitations created by the user
       if (hasInvitations) {
         await tx.invitation.deleteMany({
           where: { createdById: userId }
@@ -727,13 +704,11 @@ export const permanentDeleteUser = async (userId: string, adminId: string, force
         console.log(`Deleted ${user.invitationsCreated.length} invitations for user ${userId}`);
       }
 
-      // 4. Delete the user
       await tx.user.delete({
         where: { id: userId }
       });
     });
 
-    // Send email notification
     try {
       const emailHtml = getAccountPermanentlyDeletedEmailTemplate(userName);
       await sendEmail({
@@ -746,10 +721,9 @@ export const permanentDeleteUser = async (userId: string, adminId: string, force
       console.error('Failed to send deletion email:', emailError);
     }
 
-    // Log the action - FIXED: Added userId
     await prisma.auditLog.create({
       data: {
-        userId: adminId,  // ← THIS WAS MISSING
+        userId: adminId,
         action: 'USER_PERMANENTLY_DELETED',
         entityType: 'User',
         entityId: userId,
@@ -780,4 +754,88 @@ export const permanentDeleteUser = async (userId: string, adminId: string, force
     console.error('Error in permanent delete:', error);
     throw new AppError('Failed to permanently delete user', 500);
   }
+};
+
+// Add function to associate client with bank
+export const associateClientWithBank = async (clientId: string, bankId: string, adminId: string) => {
+  // Verify client exists
+  const client = await prisma.user.findFirst({
+    where: { id: clientId, role: 'CLIENT' }
+  });
+
+  if (!client) {
+    throw new AppError('Client not found', 404);
+  }
+
+  // Verify bank exists - FIXED spelling
+  const bank = await prisma.user.findFirst({
+    where: { id: bankId, role: 'FINACIAL_INSTITUTION' }
+  });
+
+  if (!bank) {
+    throw new AppError('Bank not found', 404);
+  }
+
+  // Associate client with bank
+  const updatedClient = await prisma.user.update({
+    where: { id: clientId },
+    data: { bankId: bankId }
+  });
+
+  // Log the association
+  await prisma.auditLog.create({
+    data: {
+      userId: adminId,
+      action: 'CLIENT_ASSOCIATED_WITH_BANK',
+      entityType: 'User',
+      entityId: clientId,
+      details: {
+        clientName: client.name,
+        clientEmail: client.email,
+        bankName: bank.name,
+        bankEmail: bank.email
+      }
+    }
+  });
+
+  return {
+    success: true,
+    message: `Client ${client.name} associated with bank ${bank.name}`,
+    client: updatedClient
+  };
+};
+
+// Add function to remove client from bank
+export const removeClientFromBank = async (clientId: string, adminId: string) => {
+  const client = await prisma.user.findFirst({
+    where: { id: clientId, role: 'CLIENT' }
+  });
+
+  if (!client) {
+    throw new AppError('Client not found', 404);
+  }
+
+  const updatedClient = await prisma.user.update({
+    where: { id: clientId },
+    data: { bankId: null }
+  });
+
+  await prisma.auditLog.create({
+    data: {
+      userId: adminId,
+      action: 'CLIENT_REMOVED_FROM_BANK',
+      entityType: 'User',
+      entityId: clientId,
+      details: {
+        clientName: client.name,
+        clientEmail: client.email
+      }
+    }
+  });
+
+  return {
+    success: true,
+    message: `Client ${client.name} removed from bank association`,
+    client: updatedClient
+  };
 };
