@@ -200,6 +200,12 @@ export const assignDataCollector = async (req: AuthRequest, res: Response) => {
 };
 export const getPropertyForReview = async (req: AuthRequest, res: Response) => {
   try {
+     console.log('========== GET PROPERTY FOR REVIEW ==========');
+    console.log('1. Request params:', req.params);
+    console.log('2. Property ID from params:', req.params.id);
+    console.log('3. Property ID type:', typeof req.params.id);
+    console.log('4. Authenticated user:', req.authenticatedUser?.id);
+    console.log('5. User role:', req.authenticatedUser?.role);
     const supervisorId = req.authenticatedUser?.id;
     let { id } = req.params;
     
